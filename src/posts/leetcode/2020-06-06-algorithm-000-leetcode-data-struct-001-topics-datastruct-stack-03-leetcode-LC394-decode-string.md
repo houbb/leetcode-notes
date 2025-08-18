@@ -24,309 +24,290 @@ published: true
 [22.括号生成 generate-parentheses + 20. 有效的括号 valid parentheses + 32. 最长有效括号 Longest Valid Parentheses](https://houbb.github.io/leetcode-notes/posts/leetcode/2020-06-06-algorithm-012-leetcode-22-generate-parentheses.html)
 
 
-# LC155 最小栈 min-stack
+# LC394. 字符串解码 decode-string
 
-设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+给定一个经过编码的字符串，返回它解码后的字符串。
 
-实现 MinStack 类:
+编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
 
-```
-MinStack() 初始化堆栈对象。
-void push(int val) 将元素val推入堆栈。
-void pop() 删除堆栈顶部的元素。
-int top() 获取堆栈顶部的元素。
-int getMin() 获取堆栈中的最小元素。
-```
+你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
 
-示例 1:
+此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
 
-```
-输入：
-["MinStack","push","push","push","getMin","pop","top","getMin"]
-[[],[-2],[0],[-3],[],[],[],[]]
+测试用例保证输出的长度不会超过 105。
 
-输出：
-[null,null,null,null,-3,null,0,-2]
+示例 1：
 
-解释：
-MinStack minStack = new MinStack();
-minStack.push(-2);
-minStack.push(0);
-minStack.push(-3);
-minStack.getMin();   --> 返回 -3.
-minStack.pop();
-minStack.top();      --> 返回 0.
-minStack.getMin();   --> 返回 -2.
-``` 
+输入：s = "3[a]2[bc]"
+输出："aaabcbc"
+示例 2：
+
+输入：s = "3[a2[c]]"
+输出："accaccacc"
+示例 3：
+
+输入：s = "2[abc]3[cd]ef"
+输出："abcabccdcdcdef"
+示例 4：
+
+输入：s = "abc3[cd]xyz"
+输出："abccdcdcdxyz"
+ 
 
 提示：
 
--2^31 <= val <= 2^31 - 1
-pop、top 和 getMin 操作总是在 非空栈 上调用
-push, pop, top, and getMin最多被调用 3 * 10^4 次
+1 <= s.length <= 30
+s 由小写英文字母、数字和方括号 '[]' 组成
+s 保证是一个 有效 的输入。
+s 中所有整数的取值范围为 [1, 300] 
 
 
-
-# v1-双栈
+# v1-DFS 显式栈
 
 ## 思路
 
-本身这一题就是要实现 stack，但是 getMin 这个很明显是无法满足的。
+这是最直观的方式，用两个栈：
 
-那如果我们用2个栈来实现呢？
+数字栈：记录重复次数 k
 
-1个栈保持基本的 stack 特性，另一个 minStack 存储对应的最小值。
+字符串栈：记录当前解析好的字符串
 
 ## 核心流程
 
-一个正常栈 stack 保存所有元素；
+遍历字符串 s，
 
-一个辅助栈 minStack 保存到当前位置的最小值；
+1) 如果是数字，就解析完整的数字（可能多位数，比如 "10[ab]"）。
 
-每次 push 的时候，同时往 minStack 压入「当前最小值」。
+2）如果是字母，就追加到当前 curStr。
 
-这样：
+3）如果遇到 '['：把当前的 curStr 和 num 入栈，重置 curStr = ""，继续。
 
-pop() → 两个栈都弹出；
+4）如果遇到 ']'：从栈中弹出一个数字和之前的字符串， `curStr = prevStr + repeat(num, curStr)`。
 
-top() → 取正常栈的栈顶；
+遍历结束，curStr 就是答案。
 
-getMin() → 取最小栈的栈顶。
+### 疑问1：普通的字母和括号内的字母需要区分吗？
+
+答案是不需要
+
+遍历时，如果读到 字母，不管是不是在括号里，都是直接追加到 curStr。
+
+区别只在遇到 `[` 和 `]` 时：
+
+遇到 `[` → 把 当前已有的字符串 + 数字 保存起来，表示新的一层开始。
+
+遇到 `]` → 说明当前子串结束，拿到前一个保存的状态，进行重复拼接。
+
+### 例子
+
+比如：`2[ab]cd`
+
+* 初始化：`curStr = ""`
+* 读到 `'2'`：`num = 2`
+* 读到 `'['`：
+
+  * 栈保存 `(num=2, str="")`
+  * 重置 `curStr = ""`
+* 读到 `"ab"`：
+
+  * `curStr = "ab"`
+* 读到 `']'`：
+
+  * 栈弹出 `(num=2, str="")`
+  * 新的 `curStr = "" + "ab"*2 = "abab"`
+* 读到 `"c"`：`curStr = "ababc"`
+* 读到 `"d"`：`curStr = "ababcd"`
+
+最终结果：`"ababcd"`。
 
 ## 实现
 
 ```java
-    private Stack<Integer> stack = new Stack<>();
-    private Stack<Integer> minStack = new Stack<>();    
+    public String decodeString(String s) {
+        Stack<Integer> numStack = new Stack<>();
+        Stack<String> strStack = new Stack<>();
+        StringBuilder curStr = new StringBuilder();
+        int num = 0;
 
-    public MinStack() {
-        
-    }
-    
-    public void push(int val) {
-        stack.push(val);
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            //1. 数字
+            if(c >= '0' && c <= '9') {
+                num = num * 10 + (c - '0');
+            } else if(c == '[') {
+                //2. 此时数字结束，curStr 也要结束
+                numStack.push(num);
+                strStack.push(curStr.toString());
 
-        // 如果 minStack 为空，或者 val 更小，就压入 val，否则重复压入当前 min
-        if (minStack.isEmpty() || val <= minStack.peek()) {
-            minStack.push(val);
-        } else {
-            minStack.push(minStack.peek());
-        }
-    }
-    
-    public void pop() {
-        // 同时弹出
-        stack.pop();
-        minStack.pop();
-    }
-    
-    public int top() {
-        return stack.peek();
-    }
-    
-    public int getMin() {
-        return minStack.peek();
+                num = 0;
+                curStr = new StringBuilder();
+            } else if(c == ']') {
+                //3. 此时需要重复的字符遍历结束
+                String pre = strStack.pop();    // 原来的字符串
+                int times = numStack.pop();
+                StringBuilder temp = new StringBuilder(pre);
+
+                for(int j = 0; j < times; j++) {
+                    // 针对 [] 的字符串 repeat
+                    temp.append(curStr);
+                }
+                curStr = temp;
+            } else {
+                curStr.append(c);
+            }
+        }    
+
+        return curStr.toString();
     }
 ```
 
 ## 效果
 
-7ms 击败 6.64%
-
-## 复杂度
-
-SC 空间复杂度 O(2n)
+1ms 击败 74.75%
 
 ## 反思
 
-非常巧妙的解法。
+如何通过 dfs 来解决呢？
 
-我们可以进一步压缩空间吗？
-
-
-# v2-单栈+差值
+# v2-递归
 
 ## 思路
 
-有时候只记录差值，然后通过和 base 值的对比来复原，是减少空间常用的技巧。
+1) 用一个全局下标 i 遍历字符串。
 
-## 核心流程
+2) 定义一个函数 decode(s)：
 
-维护一个变量 min 表示当前栈的最小值。
+从 i 开始，解析出一个子串。
 
-栈里不直接存值，而是存 当前元素与最小值的差值 (val - min)。
+如果遇到 字母，直接拼接到结果。
 
-这样做的好处是：
+如果遇到 数字，解析出完整的数字 num，跳过 [，递归调用 decode(s) 得到括号里的子串。
+然后重复 num 次拼接到结果里。
 
-- 可以在 push 时用差值判断并更新 min；
+如果遇到 ]，说明当前层结束，返回结果。
 
-- getMin 直接返回 min；
-
-- top 通过差值和 min 还原出来。
+3) 外层调用 decode(s) 就能得到最终答案。
 
 ## 实现
 
-```java
-    private Stack<Long> stack = new Stack<>();
-    private long min = 0;    
+某种角度而言，和 stack 很类似。只不过这个栈是系统帮我们隐式处理了而已
 
-    public MinStack() {
-        
+```java
+    private int i = 0; // 用于记录当前遍历到的位置
+
+    public String decodeString(String s) {
+        return helper(s);
     }
-    
-    public void push(int val) {
-        if(stack.isEmpty()) {
-            min = val;
-            // 差值为0
-            stack.push(0L);
-        } else {
-            long differ = val - min;
-            stack.push(differ);
-            if(differ < 0) {
-                min = val;
+
+    // 递归函数：从当前位置开始解码，直到遇到 ']' 或字符串结尾
+    private String helper(String s) {
+        StringBuilder res = new StringBuilder();
+
+        while (i < s.length() && s.charAt(i) != ']') {
+            char c = s.charAt(i);
+
+            // 1如果是字母，直接拼到结果里
+            if (Character.isLetter(c)) {
+                res.append(c);
+                i++;
+            }
+            // 2如果是数字，说明接下来是 k[xxx] 的格式
+            else if (Character.isDigit(c)) {
+                int num = 0;
+                while (i < s.length() && Character.isDigit(s.charAt(i))) {
+                    num = num * 10 + (s.charAt(i) - '0'); // 处理多位数
+                    i++;
+                }
+
+                i++; // 跳过 '['
+                String sub = helper(s); // 递归解码括号里面的内容
+                i++; // 跳过 ']'
+
+                // 把 sub 重复 num 次拼接到结果
+                for (int k = 0; k < num; k++) {
+                    res.append(sub);
+                }
             }
         }
-    }
-    
-    public void pop() {
-        long differ = stack.pop();
-        // 被弹出的值是新的最小值，所以需要恢复之前的 min
-        if(differ < 0) {
-            min -= differ; 
-        }
-    }
-    
-    public int top() {
-        long diff = stack.peek();
-        if (diff >= 0) {
-            return (int)(min + diff);
-        } else {
-            return (int)min; // diff<0 说明栈顶就是当前 min
-        }
-    }
-    
-    public int getMin() {
-        return (int)min;
+
+        return res.toString();
     }
 ```
 
 ## 效果
 
-4ms 击败 97.61
+0ms 100%
 
-## 复杂度
-
-SC 空间复杂度 O(n)
-
-## 反思
-
-空间压缩比较巧妙，但是没有 v1 那么直观，容易写错。
-
-可以作为一种面试之类的加分思路。
-
-# v3-双栈的变种
+# v3-BFS
 
 ## 思路
 
-思路：每次 push 的时候，把 (val, 当前最小值) 作为一个整体压入栈。
+个人感觉BFS解决这一题不适合阅读，不太推荐。只是记录一下。
 
-这样一个栈就够用了，但每个元素占用两个空间。
+1）用 队列 BFS 逐层展开字符串。
 
-查询 getMin() 的时候，直接取栈顶的第二个值。
+2）每次处理最外层的 k[xxx]：
+
+找到数字 k
+
+找到匹配的 [...]
+
+将子串重复 k 次
+
+拼接成新字符串，放回队列继续处理
+
+3） 队列为空时，说明字符串已经完全展开，返回结果。
 
 ## 实现
 
 ```java
-private Stack<int[]> stack = new Stack<>();
+    public String decodeString(String s) {
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(s);
 
-    public MinStack() {
-        
-    }
-    
-    public void push(int val) {
-        if(stack.isEmpty()) {
-            stack.push(new int[]{val, val});
-        } else {
-            int min = Math.min(stack.peek()[1], val);
-            stack.push(new int[]{val, min});
+        while (!queue.isEmpty()) {
+            String curr = queue.poll();
+
+            // 找到最外层的 k[xxx] 模式
+            int start = curr.indexOf('[');
+            if (start == -1) {
+                // 没有 '['，说明已经完全展开
+                return curr;
+            }
+
+            int numStart = start - 1;
+            while (numStart >= 0 && Character.isDigit(curr.charAt(numStart))) {
+                numStart--;
+            }
+            numStart++; // k 的起始位置
+
+            int repeat = Integer.parseInt(curr.substring(numStart, start));
+
+            // 找到匹配的 ']'
+            int end = start;
+            int count = 1;
+            while (count > 0) {
+                end++;
+                char c = curr.charAt(end);
+                if (c == '[') count++;
+                if (c == ']') count--;
+            }
+
+            String sub = curr.substring(start + 1, end); // 子串
+            String repeated = sub.repeat(repeat);       // 重复 k 次
+
+            // 拼接生成新字符串，并放回队列继续处理
+            String next = curr.substring(0, numStart) + repeated + curr.substring(end + 1);
+            queue.offer(next);
         }
-    }
-    
-    public void pop() {
-        stack.pop();
-    }
-    
-    public int top() {
-        return stack.peek()[0];
-    }
-    
-    public int getMin() {
-        return stack.peek()[1];
+
+        return "";
     }
 ```
 
-## 效果
+## 耗时
 
-4ms 击败 97.61%
-
-## 反思
-
-个人很喜欢这种写法，很直观，不容易出错。
-
-而且 SC 和 TC 都很好。
-
-# v4-链表模拟
-
-## 思路
-
-可以自定义一个节点结构：Node(val, min, next)。
-
-每次 push 时，把新节点的 min 设置为 Math.min(val, head.min)，然后更新头指针。
-
-getMin() 就是 head.min。
-
-PS: 这种个人理解和 v3 异曲同工之妙。
-
-## 实现
-
-```java
-    private Node head;
-
-    private static class Node {
-        int val;
-        int min;
-        Node next;
-        Node(int val, int min, Node next) {
-            this.val = val;
-            this.min = min;
-            this.next = next;
-        }
-    }
-
-    public void push(int val) {
-        if (head == null) {
-            head = new Node(val, val, null);
-        } else {
-            head = new Node(val, Math.min(val, head.min), head);
-        }
-    }
-
-    public void pop() {
-        head = head.next;
-    }
-
-    public int top() {
-        return head.val;
-    }
-
-    public int getMin() {
-        return head.min;
-    }
-```
-
-## 效果
-
-3ms 100%
+8ms 10.95%
 
 # 开源项目
 
