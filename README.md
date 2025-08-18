@@ -4,11 +4,15 @@ leetcode 算法解释。
 
 ## 在线阅读
 
-> [https://houbb.github.io/leetcode-notes](https://houbb.github.io/leetcode-notes)
+> [文章笔记](https://houbb.github.io/leetcode-notes)
+
+> [文章检索](https://houbb.github.io/leetcode-notes/leetcode/index/leecode.html)
+
+## 可视化
+
+> [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/index.html)
 
 ## 矩阵
-
-[leetcode-visual 资源可视化](https://github.com/houbb/leetcode-visual)
 
 [leetcode 算法实现源码](https://github.com/houbb/leetcode)
 
