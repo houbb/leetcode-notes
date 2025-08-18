@@ -13,7 +13,7 @@ export default hopeTheme({
 
   logo: "/assets/images/lmxxf.png",
 
-  repo: "houbb/leecode-notes",
+  repo: "houbb/leetcode-notes",
 
   docsDir: "src",
 
