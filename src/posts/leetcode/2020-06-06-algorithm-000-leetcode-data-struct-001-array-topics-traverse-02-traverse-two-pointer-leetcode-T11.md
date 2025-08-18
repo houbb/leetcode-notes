@@ -71,7 +71,7 @@ n == height.length
 
 # 历史回顾
 
-> [【leetcode】009 - 11. 盛最多水的容器 Container With Most Water 双指针法 + 42. 接雨水 Trapping Rain Water + 407. Trapping Rain Water II](https://houbb.github.io/2020/06/08/algorithm-009-leetcode-11-container-with-most-water)
+> [009 - 11. 盛最多水的容器 Container With Most Water 双指针法 + 42. 接雨水 Trapping Rain Water + 407. Trapping Rain Water II](https://houbb.github.io/2020/06/08/algorithm-009-leetcode-11-container-with-most-water)
 
 
 # v1-暴力

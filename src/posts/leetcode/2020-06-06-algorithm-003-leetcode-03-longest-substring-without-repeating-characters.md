@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】03-leetcode 3. 无重复字符的最长子串 Longest Substring Without Repeating Characters
+title: 03-leetcode 3. 无重复字符的最长子串 Longest Substring Without Repeating Characters
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, leetcode, sf]

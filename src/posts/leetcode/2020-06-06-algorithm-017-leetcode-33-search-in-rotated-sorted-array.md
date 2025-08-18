@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】017-33. 搜索旋转排序数组 Search in Rotated Sorted Array + 81. Search in Rotated Sorted Array II + 153. Find Minimum in Rotated Sorted Array 寻找旋转排序数组中的最小值 + 154.Find Minimum in Rotated Sorted Array II
+title: 017-33. 搜索旋转排序数组 Search in Rotated Sorted Array + 81. Search in Rotated Sorted Array II + 153. Find Minimum in Rotated Sorted Array 寻找旋转排序数组中的最小值 + 154.Find Minimum in Rotated Sorted Array II
 date:  2020-06-08 
 categories: [Algorithm]
 tags: [Algorithm, list, leetcode, sf]

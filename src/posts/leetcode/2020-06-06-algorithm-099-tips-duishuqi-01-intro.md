@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣刷题技巧之对数器，如果没有OJ（在线判题系统）怎么办？如何保障本地代码的正确性
+title:  力扣刷题技巧之对数器，如果没有OJ（在线判题系统）怎么办？如何保障本地代码的正确性
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, tips, leetcode]

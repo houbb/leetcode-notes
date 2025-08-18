@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之动态规划 dynamic-programming 11-LC70 爬楼梯 climbing-stairs
+title: 算法篇专题之动态规划 dynamic-programming 11-LC70 爬楼梯 climbing-stairs
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, dynamic-programming, dp, sf]

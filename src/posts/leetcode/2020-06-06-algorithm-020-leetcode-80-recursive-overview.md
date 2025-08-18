@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】80-recursive 递归
+title:  80-recursive 递归
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, greedy, leetcode]

@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】47-Prefix Sum 724. 寻找数组的中心下标 + 1991. 找到数组的中间位置
+title:  47-Prefix Sum 724. 寻找数组的中心下标 + 1991. 找到数组的中间位置
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]

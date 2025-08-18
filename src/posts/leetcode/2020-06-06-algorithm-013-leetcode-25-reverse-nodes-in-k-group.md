@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】013-25.K 个一组翻转链表 Reverse Nodes in k-Group + 24. 两两交换链表中的节点 swap nodes in pairs
+title: 013-25.K 个一组翻转链表 Reverse Nodes in k-Group + 24. 两两交换链表中的节点 swap nodes in pairs
 date:  2020-06-08
 categories: [Algorithm]
 tags: [Algorithm, list, leetcode, sf]

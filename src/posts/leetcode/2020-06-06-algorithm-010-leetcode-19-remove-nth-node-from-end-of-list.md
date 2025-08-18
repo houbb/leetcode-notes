@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】010-19. 删除链表的倒数第 N 个结点 Remove Nth Node From End of List  双指针
+title: 010-19. 删除链表的倒数第 N 个结点 Remove Nth Node From End of List  双指针
 date:  2020-06-08
 categories: [Algorithm]
 tags: [Algorithm, list, leetcode, sf]

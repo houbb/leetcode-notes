@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣 数组 array-02-LC41 缺失的第一个正数 first-missing-positive
+title:  力扣 数组 array-02-LC41 缺失的第一个正数 first-missing-positive
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, array, top100, leetcode]

@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣刷题技巧之结构化练习
+title:  力扣刷题技巧之结构化练习
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, tips, leetcode]

@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之链表 Linkedlist 02-LC19 删除链表的倒数第 N 个结点 remove-nth-node-from-end-of-list
+title: 算法篇专题之链表 Linkedlist 02-LC19 删除链表的倒数第 N 个结点 remove-nth-node-from-end-of-list
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]
@@ -42,7 +42,7 @@ https://leetcode.cn/studyplan/top-100-liked/
 
 ## 历史回顾
 
-[【leetcode】010-19. 删除链表的倒数第 N 个结点 Remove Nth Node From End of List 双指针](https://houbb.github.io/2020/06/08/algorithm-010-leetcode-19-remove-nth-node-from-end-of-list)
+[010-19. 删除链表的倒数第 N 个结点 Remove Nth Node From End of List 双指针](https://houbb.github.io/2020/06/08/algorithm-010-leetcode-19-remove-nth-node-from-end-of-list)
 
 # LC 2 
 

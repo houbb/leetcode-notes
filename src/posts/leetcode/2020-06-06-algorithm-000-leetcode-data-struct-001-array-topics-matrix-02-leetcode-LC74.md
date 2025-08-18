@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣矩阵 matrix -01-LC74. 搜索二维矩阵 search-a-2d-matrix
+title:  力扣矩阵 matrix -01-LC74. 搜索二维矩阵 search-a-2d-matrix
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, matrix, binary-search, leetcode]
@@ -48,7 +48,7 @@ n == matrix[i].length
 
 因为我是先做的 LC240，所以是直接copy过来的。
 
-[【leetcode】力扣矩阵 matrix -01-LC240. 搜索二维矩阵 II search-a-2d-matrix-ii](https://houbb.github.io/2020/06/08/algorithm-000-leetcode-data-struct-001-array-topics-matrix-02-leetcode-LC240)
+[力扣矩阵 matrix -01-LC240. 搜索二维矩阵 II search-a-2d-matrix-ii](https://houbb.github.io/2020/06/08/algorithm-000-leetcode-data-struct-001-array-topics-matrix-02-leetcode-LC240)
 
 # v1-暴力
 

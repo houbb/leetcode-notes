@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之贪心 Greedy 之合并区间 02-LC763. 划分字母区间
+title: 算法篇专题之贪心 Greedy 之合并区间 02-LC763. 划分字母区间
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, greedy, sf]
@@ -40,7 +40,7 @@ published: true
 
 本质：贪心+合并区间
 
-[【leetcode】力扣 数组 array-02-56. 合并区间](https://houbb.github.io/2020/06/08/algorithm-000-leetcode-data-struct-001-array-topics-array-02-leetcode-LC56)
+[力扣 数组 array-02-56. 合并区间](https://houbb.github.io/2020/06/08/algorithm-000-leetcode-data-struct-001-array-topics-array-02-leetcode-LC56)
 
 ## 扫描线专题
 

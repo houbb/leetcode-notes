@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之树 Tree 02-94. 二叉树的中序遍历 binary-tree-inorder-traversal
+title: 算法篇专题之树 Tree 02-94. 二叉树的中序遍历 binary-tree-inorder-traversal
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]

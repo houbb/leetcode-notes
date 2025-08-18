@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 技巧篇专题之哈希 Hashing 02-TOP100 49. 字母异位词分组
+title: 技巧篇专题之哈希 Hashing 02-TOP100 49. 字母异位词分组
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, hashing, top100, sf]

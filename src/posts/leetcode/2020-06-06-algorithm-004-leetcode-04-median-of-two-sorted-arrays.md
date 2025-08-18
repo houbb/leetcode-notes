@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】04-4.median of two sorted arrays 寻找两个正序数组的中位数
+title: 04-4.median of two sorted arrays 寻找两个正序数组的中位数
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, leetcode, sf]

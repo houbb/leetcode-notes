@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣矩阵 matrix -01-LC240. 搜索二维矩阵 II search-a-2d-matrix-ii
+title:  力扣矩阵 matrix -01-LC240. 搜索二维矩阵 II search-a-2d-matrix-ii
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, matrix, leetcode]

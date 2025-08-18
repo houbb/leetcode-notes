@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 技巧篇专题之计数 Counting 01-入门介绍
+title: 技巧篇专题之计数 Counting 01-入门介绍
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, counting, sf]

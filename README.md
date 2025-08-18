@@ -12,7 +12,7 @@ leetcode 算法解释。
 
 > [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/index.html)
 
-## 矩阵
+## 开源项目
 
 [leetcode 算法实现源码](https://github.com/houbb/leetcode)
 

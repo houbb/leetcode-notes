@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之回溯 Backtracking 02-LC39 组合总和 combination-sum
+title: 算法篇专题之回溯 Backtracking 02-LC39 组合总和 combination-sum
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, backtracking, sf]

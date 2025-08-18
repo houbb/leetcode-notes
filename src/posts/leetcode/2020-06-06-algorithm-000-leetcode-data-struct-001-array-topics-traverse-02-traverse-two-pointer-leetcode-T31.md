@@ -82,7 +82,7 @@ published: true
 
 # 历史回顾
 
-[【leetcode】016-31.下一个排列 next permutation + 46. 全排列 permutations + 47. 全排列 II permutations-ii + 60. 排列序列 permutation sequence](https://houbb.github.io/2020/06/08/algorithm-016-leetcode-31-next-permutation)
+[016-31.下一个排列 next permutation + 46. 全排列 permutations + 47. 全排列 II permutations-ii + 60. 排列序列 permutation sequence](https://houbb.github.io/2020/06/08/algorithm-016-leetcode-31-next-permutation)
 
 [leetcode 31+46+60 Next Permutation/Permutations/Permutation Sequence backtrack](https://houbb.github.io/2020/01/23/algorithm-34-leetcode-permutation)
 

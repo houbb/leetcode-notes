@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】07-7. 整数反转 reverse integer 整数的位运算汇总
+title: 07-7. 整数反转 reverse integer 整数的位运算汇总
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, leetcode, sf]

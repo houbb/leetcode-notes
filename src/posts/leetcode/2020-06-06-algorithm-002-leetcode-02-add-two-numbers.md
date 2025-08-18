@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】02-leetcode 2. 两数相加 add two numbers
+title: 02-leetcode 2. 两数相加 add two numbers
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, leetcode, sf]

@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】73-greedy 2459. 通过移动项目到空白区域来排序数组
+title:  73-greedy 2459. 通过移动项目到空白区域来排序数组
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, greedy, leetcode]

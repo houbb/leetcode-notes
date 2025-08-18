@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】58-差分数组（Difference Array） 1854. 人口最多的年份 maximum-population-year
+title:  58-差分数组（Difference Array） 1854. 人口最多的年份 maximum-population-year
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, difference-array, leetcode]

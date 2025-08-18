@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】016-31.下一个排列 next permutation + 46. 全排列 permutations + 47. 全排列 II permutations-ii + 60. 排列序列 permutation sequence
+title: 016-31.下一个排列 next permutation + 46. 全排列 permutations + 47. 全排列 II permutations-ii + 60. 排列序列 permutation sequence
 date:  2020-06-08
 categories: [Algorithm]
 tags: [Algorithm, backtrack, leetcode, sf]

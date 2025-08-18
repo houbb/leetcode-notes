@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】70-greedy 贪心算法
+title:  70-greedy 贪心算法
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, greedy, leetcode]

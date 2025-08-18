@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之贪心 Greedy 05-LC55 跳跃游戏 jump-game
+title: 算法篇专题之贪心 Greedy 05-LC55 跳跃游戏 jump-game
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, greedy, sf]

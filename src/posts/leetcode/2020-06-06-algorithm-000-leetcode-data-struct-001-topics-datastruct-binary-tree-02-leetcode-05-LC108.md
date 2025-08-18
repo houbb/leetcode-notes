@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之树 Tree 02-LC108. 将有序数组转换为二叉搜索树 convert-sorted-array-to-binary-search-tree
+title: 算法篇专题之树 Tree 02-LC108. 将有序数组转换为二叉搜索树 convert-sorted-array-to-binary-search-tree
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]

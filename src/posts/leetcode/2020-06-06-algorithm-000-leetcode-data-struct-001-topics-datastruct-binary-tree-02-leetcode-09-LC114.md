@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之树 Tree 02-LC114. 二叉树展开为链表 flatten-binary-tree-to-linked-list
+title: 算法篇专题之树 Tree 02-LC114. 二叉树展开为链表 flatten-binary-tree-to-linked-list
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]

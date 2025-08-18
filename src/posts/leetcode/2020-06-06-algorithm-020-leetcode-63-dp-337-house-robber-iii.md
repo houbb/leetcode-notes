@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】62-337. house-robber-iii  力扣 337. 打家劫舍 III  dynamic-programming
+title:  62-337. house-robber-iii  力扣 337. 打家劫舍 III  dynamic-programming
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, dp, dynamic-programming, leetcode]

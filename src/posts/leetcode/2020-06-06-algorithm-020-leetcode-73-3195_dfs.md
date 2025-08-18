@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】73-3195. 包含所有 1 的最小矩形面积 I
+title:  73-3195. 包含所有 1 的最小矩形面积 I
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, greedy, leetcode]

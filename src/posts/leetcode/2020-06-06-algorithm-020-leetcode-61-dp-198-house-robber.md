@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】61-198. house-robber  力扣 198. 打家劫舍  dynamic-programming
+title:  61-198. house-robber  力扣 198. 打家劫舍  dynamic-programming
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, dp, dynamic-programming, leetcode]

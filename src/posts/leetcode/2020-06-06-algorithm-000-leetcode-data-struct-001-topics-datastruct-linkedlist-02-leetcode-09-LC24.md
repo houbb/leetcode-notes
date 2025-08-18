@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之链表 Linkedlist 02-LC24. 两两交换链表中的节点 swap-nodes-in-pairs
+title: 算法篇专题之链表 Linkedlist 02-LC24. 两两交换链表中的节点 swap-nodes-in-pairs
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]
@@ -42,7 +42,7 @@ https://leetcode.cn/studyplan/top-100-liked/
 
 ## 历史回顾
 
-[【leetcode】013-25.K 个一组翻转链表 Reverse Nodes in k-Group + 24. 两两交换链表中的节点 swap nodes in pairs](https://houbb.github.io/2020/06/08/algorithm-013-leetcode-25-reverse-nodes-in-k-group)
+[013-25.K 个一组翻转链表 Reverse Nodes in k-Group + 24. 两两交换链表中的节点 swap nodes in pairs](https://houbb.github.io/2020/06/08/algorithm-013-leetcode-25-reverse-nodes-in-k-group)
 
 # LC 24. 两两交换链表中的节点
 

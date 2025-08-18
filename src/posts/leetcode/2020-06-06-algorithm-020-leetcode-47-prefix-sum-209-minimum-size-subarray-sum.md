@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】47-minimum-size-subarray-sum 力扣 209. 长度最小的子数组
+title:  47-minimum-size-subarray-sum 力扣 209. 长度最小的子数组
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]

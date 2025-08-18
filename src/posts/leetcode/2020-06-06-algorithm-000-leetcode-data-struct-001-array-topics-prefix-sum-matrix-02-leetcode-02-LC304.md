@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】Prefix Sum 二维区域和检索 - LC304 矩阵不可变
+title:  Prefix Sum 二维区域和检索 - LC304 矩阵不可变
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, prefix-sum-matrix, leetcode]

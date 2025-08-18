@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之树 Tree 02-LC105. 从前序与中序遍历序列构造二叉树 construct-binary-tree-from-preorder-and-inorder-traversal
+title: 算法篇专题之树 Tree 02-LC105. 从前序与中序遍历序列构造二叉树 construct-binary-tree-from-preorder-and-inorder-traversal
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]

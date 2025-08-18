@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】50-树状数组 Binary Indexed Tree，简称 BIT FenwickTree
+title:  50-树状数组 Binary Indexed Tree，简称 BIT FenwickTree
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]

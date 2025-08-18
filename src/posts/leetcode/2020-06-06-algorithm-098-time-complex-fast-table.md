@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣刷题之时间复杂度常见算法速查表+推断技巧
+title:  力扣刷题之时间复杂度常见算法速查表+推断技巧
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, tips, leetcode]

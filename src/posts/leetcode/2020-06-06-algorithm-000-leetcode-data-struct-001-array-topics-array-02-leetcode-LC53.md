@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣 数组 array-02-53. 最大子数组和 maximum-subarray
+title:  力扣 数组 array-02-53. 最大子数组和 maximum-subarray
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, array, leetcode]

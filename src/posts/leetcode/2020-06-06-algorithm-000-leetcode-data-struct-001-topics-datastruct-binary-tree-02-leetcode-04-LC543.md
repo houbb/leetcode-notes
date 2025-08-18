@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之树 Tree 02-LC543. 二叉树的直径 diameter-of-binary-tree
+title: 算法篇专题之树 Tree 02-LC543. 二叉树的直径 diameter-of-binary-tree
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]

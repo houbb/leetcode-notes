@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之回溯 Backtracking 02-LC77. 组合 combinations
+title: 算法篇专题之回溯 Backtracking 02-LC77. 组合 combinations
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, backtracking, sf]

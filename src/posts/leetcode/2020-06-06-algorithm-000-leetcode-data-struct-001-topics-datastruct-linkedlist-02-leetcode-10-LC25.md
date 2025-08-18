@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之链表 Linkedlist 02-LC25. K 个一组翻转链表 reverse-nodes-in-k-group
+title: 算法篇专题之链表 Linkedlist 02-LC25. K 个一组翻转链表 reverse-nodes-in-k-group
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]
@@ -42,9 +42,9 @@ https://leetcode.cn/studyplan/top-100-liked/
 
 ## 历史回顾
 
-[【leetcode】013-25.K 个一组翻转链表 Reverse Nodes in k-Group + 24. 两两交换链表中的节点 swap nodes in pairs](https://houbb.github.io/2020/06/08/algorithm-013-leetcode-25-reverse-nodes-in-k-group)
+[013-25.K 个一组翻转链表 Reverse Nodes in k-Group + 24. 两两交换链表中的节点 swap nodes in pairs](https://houbb.github.io/2020/06/08/algorithm-013-leetcode-25-reverse-nodes-in-k-group)
 
-[leetcode 算法篇专题之链表 Linkedlist 02-LC206. 反转链表 reverse-linked-list](https://houbb.github.io/2020/06/08/algorithm-000-leetcode-data-struct-001-topics-datastruct-linkedlist-02-leetcode-02-LC206#v2-%E7%9B%B4%E6%8E%A5%E8%BF%AD%E4%BB%A3)
+[算法篇专题之链表 Linkedlist 02-LC206. 反转链表 reverse-linked-list](https://houbb.github.io/2020/06/08/algorithm-000-leetcode-data-struct-001-topics-datastruct-linkedlist-02-leetcode-02-LC206#v2-%E7%9B%B4%E6%8E%A5%E8%BF%AD%E4%BB%A3)
 
 # LC 24. 两两交换链表中的节点
 

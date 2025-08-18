@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣刷题之时间复杂度介绍 Time Complexity
+title:  力扣刷题之时间复杂度介绍 Time Complexity
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, tips, leetcode]

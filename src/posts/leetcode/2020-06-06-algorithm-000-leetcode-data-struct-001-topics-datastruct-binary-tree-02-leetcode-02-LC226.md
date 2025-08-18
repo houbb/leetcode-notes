@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之树 Tree 02-LC226. 翻转二叉树 invert-binary-tree
+title: 算法篇专题之树 Tree 02-LC226. 翻转二叉树 invert-binary-tree
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]

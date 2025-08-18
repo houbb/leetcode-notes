@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】014-29.两数相除 divide two integers 
+title: 014-29.两数相除 divide two integers 
 date:  2020-06-08
 categories: [Algorithm]
 tags: [Algorithm, data-struct, leetcode, sf]

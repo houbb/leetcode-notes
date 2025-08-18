@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣 数组 array-02-LC238 除自身以外数组的乘积  product-of-array-except-self
+title:  力扣 数组 array-02-LC238 除自身以外数组的乘积  product-of-array-except-self
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, array, top100, leetcode]
@@ -52,7 +52,7 @@ published: true
 
 打过游戏的都知道，限制使用一个技能时，大概率我们要学会新的技能了。
 
-> [【leetcode】48-product-of-array-except-self 力扣 238. 除自身以外的数组的乘积](https://houbb.github.io/2020/06/08/algorithm-020-leetcode-48-prefix-sum-238-product-of-array-except-self)
+> [48-product-of-array-except-self 力扣 238. 除自身以外的数组的乘积](https://houbb.github.io/2020/06/08/algorithm-020-leetcode-48-prefix-sum-238-product-of-array-except-self)
 
 # v1-暴力
 

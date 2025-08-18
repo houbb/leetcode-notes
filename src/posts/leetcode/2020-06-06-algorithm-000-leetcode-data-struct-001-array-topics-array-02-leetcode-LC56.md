@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣 数组 array-02-LC56. 合并区间
+title:  力扣 数组 array-02-LC56. 合并区间
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, array, greedy, leetcode]

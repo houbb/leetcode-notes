@@ -1,6 +1,6 @@
 ---
 
-title: 算法篇专题之栈 stack 03-LC155. 最小栈 min-stack
+title: 算法篇专题之栈 stack 03-LC394. 字符串解码 decode-string
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, stack, top100, sf]

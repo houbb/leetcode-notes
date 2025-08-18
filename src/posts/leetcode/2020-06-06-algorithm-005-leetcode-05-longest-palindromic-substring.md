@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】05-5. 最长回文子串 Longest Palindromic Substring
+title: 05-5. 最长回文子串 Longest Palindromic Substring
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, leetcode, sf]

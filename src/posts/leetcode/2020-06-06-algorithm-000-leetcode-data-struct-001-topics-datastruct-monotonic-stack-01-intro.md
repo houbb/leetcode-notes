@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 进阶数据结构篇专题之单调栈 Monotonic Stack
+title: 进阶数据结构篇专题之单调栈 Monotonic Stack
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, fenwick-tree, sf]

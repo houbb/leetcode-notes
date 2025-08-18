@@ -1,6 +1,6 @@
 ---
 
-title: 【leetcode】01-ksum 求符合条件的 k 个数  1. Two Sum/15. 3Sum/18. 4Sum/
+title: 01-ksum 求符合条件的 k 个数  1. Two Sum/15. 3Sum/18. 4Sum/
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, leetcode, sf]

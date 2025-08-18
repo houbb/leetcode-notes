@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之链表 Linkedlist 02-LC142. 环形链表 II linked-list-cycle-ii
+title: 算法篇专题之链表 Linkedlist 02-LC142. 环形链表 II linked-list-cycle-ii
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]

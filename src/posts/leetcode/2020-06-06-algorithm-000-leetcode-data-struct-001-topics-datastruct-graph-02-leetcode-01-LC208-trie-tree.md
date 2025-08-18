@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之图 graph 02-01-LC208. 实现 Trie (前缀树) implement-trie-prefix-tree
+title: 算法篇专题之图 graph 02-01-LC208. 实现 Trie (前缀树) implement-trie-prefix-tree
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, graph, sf]

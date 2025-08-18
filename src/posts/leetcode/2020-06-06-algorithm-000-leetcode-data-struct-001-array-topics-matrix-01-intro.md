@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣矩阵 matrix -01-入门介绍
+title:  力扣矩阵 matrix -01-入门介绍
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, matrix, leetcode]

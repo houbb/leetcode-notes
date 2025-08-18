@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之链表 Linkedlist 02-LC206. 反转链表 reverse-linked-list
+title: 算法篇专题之链表 Linkedlist 02-LC206. 反转链表 reverse-linked-list
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]

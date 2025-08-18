@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】81-recursive 递归 汉诺塔（Tower of Hanoi）
+title:  81-recursive 递归 汉诺塔（Tower of Hanoi）
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, greedy, leetcode]

@@ -1,9 +1,9 @@
 ---
 
-title: leetcode 算法篇专题之栈 stack 02-LC20. 有效的括号 valid-parentheses
+title: 算法篇专题之栈 stack 02-LC20. 有效的括号 valid-parentheses
 date:  2020-06-08
 categories: [Algorithm]
-tags: [algorithm, data-struct, topics, leetcode, stack, top100 sf]
+tags: [algorithm, data-struct, topics, leetcode, stack, top100, sf]
 published: true
 ---
 

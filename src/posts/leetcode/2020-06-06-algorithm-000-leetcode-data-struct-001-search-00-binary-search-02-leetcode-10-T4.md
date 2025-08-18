@@ -45,7 +45,7 @@ nums2.length == n
 
 # 历史回顾
 
-> [【leetcode】04-4.median of two sorted arrays 寻找两个正序数组的中位数](https://houbb.github.io/2020/06/08/algorithm-004-leetcode-04-median-of-two-sorted-arrays)
+> [04-4.median of two sorted arrays 寻找两个正序数组的中位数](https://houbb.github.io/2020/06/08/algorithm-004-leetcode-04-median-of-two-sorted-arrays)
 
 ## 解法汇总
 

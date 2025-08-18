@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】62-213. house-robber-ii  力扣 213. 打家劫舍 II  dynamic-programming
+title:  62-213. house-robber-ii  力扣 213. 打家劫舍 II  dynamic-programming
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, dp, dynamic-programming, leetcode]

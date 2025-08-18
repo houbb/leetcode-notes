@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之链表 Linkedlist 02-LC23. 合并 K 个升序链表 merge-k-sorted-lists
+title: 算法篇专题之链表 Linkedlist 02-LC23. 合并 K 个升序链表 merge-k-sorted-lists
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]

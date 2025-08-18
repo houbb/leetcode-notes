@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】58-差分数组（Difference Array） 力扣 1109. 航班预订统计 corporate-flight-bookings
+title:  58-差分数组（Difference Array） 力扣 1109. 航班预订统计 corporate-flight-bookings
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, difference-array, leetcode]

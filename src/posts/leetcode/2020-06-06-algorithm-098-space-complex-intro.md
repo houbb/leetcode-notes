@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】力扣刷题之空间复杂度介绍 Space Complexity
+title:  力扣刷题之空间复杂度介绍 Space Complexity
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, tips, leetcode]

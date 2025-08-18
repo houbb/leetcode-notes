@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】什么是差分数组（Difference Array）
+title:  什么是差分数组（Difference Array）
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, difference-array, leetcode]

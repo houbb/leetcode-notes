@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之贪心 Greedy 之合并区间 06-LC45 跳跃游戏 II jump-game II
+title: 算法篇专题之贪心 Greedy 之合并区间 06-LC45 跳跃游戏 II jump-game II
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, greedy, sf]

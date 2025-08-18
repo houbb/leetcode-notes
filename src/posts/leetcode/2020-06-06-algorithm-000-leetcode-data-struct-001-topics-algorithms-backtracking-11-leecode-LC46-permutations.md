@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之回溯 Backtracking 02-LC46. 全排列 permutations
+title: 算法篇专题之回溯 Backtracking 02-LC46. 全排列 permutations
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, backtracking, sf]

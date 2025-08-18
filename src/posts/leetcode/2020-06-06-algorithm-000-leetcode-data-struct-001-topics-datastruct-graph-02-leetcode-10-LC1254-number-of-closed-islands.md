@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之图 graph 02-01-LC1254. 统计封闭岛屿的数目 number-of-closed-islands
+title: 算法篇专题之图 graph 02-01-LC1254. 统计封闭岛屿的数目 number-of-closed-islands
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, graph, sf]

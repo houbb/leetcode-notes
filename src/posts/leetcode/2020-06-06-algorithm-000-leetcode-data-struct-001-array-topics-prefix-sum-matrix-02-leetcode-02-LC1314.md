@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】Prefix Sum 二维前缀和 LC1314 矩阵区域和 matrix-block-sum
+title:  Prefix Sum 二维前缀和 LC1314 矩阵区域和 matrix-block-sum
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, prefix-sum-matrix, leetcode]

@@ -1,6 +1,6 @@
 ---
 
-title:  【leetcode】49-303. range-sum-query-immutable  力扣 303. 区域和检索 - 数组不可变
+title:  49-303. range-sum-query-immutable  力扣 303. 区域和检索 - 数组不可变
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]

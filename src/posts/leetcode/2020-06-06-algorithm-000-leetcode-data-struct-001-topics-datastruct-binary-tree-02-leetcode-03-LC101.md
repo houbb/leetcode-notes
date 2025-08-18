@@ -1,6 +1,6 @@
 ---
 
-title: leetcode 算法篇专题之树 Tree 02-LC101. 对称二叉树 symmetric-tree
+title: 算法篇专题之树 Tree 02-LC101. 对称二叉树 symmetric-tree
 date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]
