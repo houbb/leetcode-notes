@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🔍 T34 可视化：查找元素的第一个和最后一个位置</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 16px;
+    }
+    .array-box {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .item {
+      width: 40px;
+      height: 40px;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px;
+      background-color: white;
+      transition: background-color 0.3s;
+    }
+    .highlight {
+      background-color: #ffeb3b;
+    }
+    .found {
+      background-color: #8bc34a !important;
+    }
+    .not-found {
+      background-color: #e57373 !important;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .back {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 8px 12px;
+      background: #2196f3;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .log {
+      background: #1e1e1e;
+      color: #dcdcdc;
+      font-family: monospace;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    .log p {
+      margin: 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 T34 可视化：查找元素的第一个和最后一个位置</h1>
+
+    <label>数组（用逗号分隔）：</label><br>
+    <input type="text" id="arrayInput" value="5,7,7,8,8,10" size="50"/><br>
+    <label>目标值：</label><br>
+    <input type="number" id="targetInput" value="8"/><br>
+    <button onclick="visualize()">开始可视化</button>
+
+    <div class="array-box" id="arrayBox"></div>
+
+    <div class="log" id="logBox"></div>
+
+    <div class="card" id="resultCard" style="display:none;">
+      <h3>查找结果</h3>
+      <p id="resultText"></p>
+    </div>
+
+    <div class="footer">
+      <a href="index.html" class="back">⬅ 返回首页</a>
+    </div>
+  </div>
+
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function log(msg) {
+      const logBox = document.getElementById("logBox");
+      const p = document.createElement("p");
+      p.textContent = msg;
+      logBox.appendChild(p);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    async function visualize() {
+      const input = document.getElementById("arrayInput").value;
+      const target = parseInt(document.getElementById("targetInput").value);
+      const array = input.split(",").map(n => parseInt(n.trim()));
+      const box = document.getElementById("arrayBox");
+      const resultCard = document.getElementById("resultCard");
+      const resultText = document.getElementById("resultText");
+      const logBox = document.getElementById("logBox");
+
+      resultCard.style.display = "none";
+      box.innerHTML = "";
+      logBox.innerHTML = "";
+
+      array.forEach(num => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerText = num;
+        box.appendChild(div);
+      });
+
+      const items = document.querySelectorAll(".item");
+
+      async function binarySearchBoundary(leftToRight) {
+        let left = 0;
+        let right = array.length - 1;
+        let result = -1;
+        log(`🔍 开始 ${leftToRight ? "查找左边界" : "查找右边界"}...`);
+
+        while (left <= right) {
+          let mid = Math.floor((left + right) / 2);
+          log(`➡️ left=${left}, right=${right}, mid=${mid}, nums[mid]=${array[mid]}`);
+
+          items[mid].classList.add("highlight");
+          await sleep(700);
+          items[mid].classList.remove("highlight");
+
+          if (array[mid] === target) {
+            result = mid;
+            log(`✅ nums[mid] == target，记录位置为 ${mid}`);
+            if (leftToRight) {
+              right = mid - 1;
+              log(`🔁 向左查找更小位置：right = ${right}`);
+            } else {
+              left = mid + 1;
+              log(`🔁 向右查找更大位置：left = ${left}`);
+            }
+          } else if (array[mid] < target) {
+            left = mid + 1;
+            log(`⬆️ nums[mid] < target，向右查找：left = ${left}`);
+          } else {
+            right = mid - 1;
+            log(`⬇️ nums[mid] > target，向左查找：right = ${right}`);
+          }
+        }
+
+        log(`🎯 ${leftToRight ? "左边界" : "右边界"} 查找结束，结果：${result}`);
+        return result;
+      }
+
+      const first = await binarySearchBoundary(true);
+      const last = await binarySearchBoundary(false);
+
+      if (first !== -1) {
+        items[first].classList.add("found");
+        if (last !== first) items[last].classList.add("found");
+      } else {
+        array.forEach((_, i) => items[i].classList.add("not-found"));
+      }
+
+      resultCard.style.display = "block";
+      resultText.innerText = `结果区间：[${first}, ${last}]`;
+    }
+  </script>
+</body>
+</html>

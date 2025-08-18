@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>差分数组可视化</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1f1f1f, #2c3e50);
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .array-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+      line-height: 50px;
+      font-size: 18px;
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .box:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px #00f7ff;
+    }
+
+    .highlight {
+      background: #00f7ff;
+      color: #000;
+    }
+
+    .completed {
+      background: #2ecc71;
+      color: #000;
+    }
+
+    .index {
+      font-size: 10px;
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ccc;
+    }
+
+    .controls {
+      margin: 20px 0;
+    }
+
+    input[type="text"], input[type="number"] {
+      padding: 5px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      width: 300px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      background: #00f7ff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #logs {
+      margin-top: 20px;
+      text-align: left;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #111;
+      padding: 10px;
+      border-radius: 10px;
+      font-family: monospace;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      color: #00f7ff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>差分数组可视化</h1>
+
+  <div class="controls">
+    原始数组（以逗号分隔）：
+    <input type="text" id="inputArray" value="3,8,12,14,20,25,30,35,38,40">
+    动画间隔（秒）：
+    <input type="number" id="interval" value="1" min="0.1" max="60" step="0.1">
+    <button onclick="startVisualization()">开始可视化</button>
+  </div>
+
+  <div>
+    <h3>原始数组</h3>
+    <div id="original" class="array-container"></div>
+  </div>
+
+  <div>
+    <h3>差分数组</h3>
+    <div id="diff" class="array-container"></div>
+  </div>
+
+  <div id="logs"></div>
+
+  <a href="index.html">返回首页</a>
+
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function renderArray(container, arr, prefix) {
+      container.innerHTML = '';
+      for (let i = 0; i < arr.length; i++) {
+        const div = document.createElement('div');
+        div.className = 'box';
+        div.id = `${prefix}-${i}`;
+        div.innerHTML = arr[i] !== null ? arr[i] : '';
+        const idx = document.createElement('div');
+        idx.className = 'index';
+        idx.innerText = i;
+        div.appendChild(idx);
+        container.appendChild(div);
+      }
+    }
+
+    async function startVisualization() {
+      const input = document.getElementById('inputArray').value;
+      const intervalSec = Math.min(60, Math.max(0.1, parseFloat(document.getElementById('interval').value || 1)));
+      const logs = document.getElementById('logs');
+      logs.innerHTML = '';
+
+      let arr = input.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+      if (arr.length < 2) {
+        logs.innerHTML = '请输入至少两个数字。';
+        return;
+      }
+
+      let diff = Array(arr.length).fill(null);
+      diff[0] = arr[0];
+
+      const originalContainer = document.getElementById('original');
+      const diffContainer = document.getElementById('diff');
+      renderArray(originalContainer, arr, 'original');
+      renderArray(diffContainer, diff, 'diff');
+
+      // 第0位特殊处理
+      document.getElementById('diff-0').classList.add('completed');
+      logs.innerHTML += `diff[0] = original[0] = ${arr[0]}<br>`;
+
+      for (let i = 1; i < arr.length; i++) {
+        document.getElementById(`original-${i}`).classList.add('highlight');
+        document.getElementById(`original-${i - 1}`).classList.add('highlight');
+
+        await sleep(intervalSec * 1000);
+
+        const d = arr[i] - arr[i - 1];
+        diff[i] = d;
+        document.getElementById(`diff-${i}`).innerText = d;
+        document.getElementById(`diff-${i}`).classList.add('completed');
+
+        logs.innerHTML += `diff[${i}] = original[${i}] - original[${i - 1}] = ${arr[i]} - ${arr[i - 1]} = ${d}<br>`;
+        logs.scrollTop = logs.scrollHeight;
+
+        document.getElementById(`original-${i}`).classList.remove('highlight');
+        document.getElementById(`original-${i - 1}`).classList.remove('highlight');
+      }
+    }
+  </script>
+</body>
+</html>

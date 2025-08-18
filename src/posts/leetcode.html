@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Leetcode 专题查询</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+	<style>
+		body {
+			background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+			font-family: 'Montserrat', sans-serif;
+			margin: 0;
+			color: #fff;
+			min-height: 100vh;
+			overflow-x: hidden;
+		}
+		.container {
+			max-width: 1200px;
+			margin: 40px auto;
+			padding: 20px;
+		}
+		h1 {
+			text-align: center;
+			font-size: 3em;
+			margin-bottom: 30px;
+			letter-spacing: 3px;
+			text-shadow: 0 4px 24px #000a, 0 1px 0 #fff3;
+			background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+		.search-bar {
+			display: flex;
+			justify-content: center;
+			gap: 18px;
+			margin-bottom: 36px;
+		}
+		.search-bar input, .search-bar select {
+			padding: 12px 18px;
+			border-radius: 12px;
+			border: none;
+			font-size: 1.1em;
+			outline: none;
+			background: #fff1;
+			color: #fff;
+			box-shadow: 0 2px 12px #0003;
+			transition: background 0.2s, color 0.2s;
+		}
+		.search-bar input:focus, .search-bar select:focus {
+			background: #fff3;
+			color: #ff512f;
+		}
+		.card-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+			gap: 32px;
+		}
+		.card {
+			background: linear-gradient(120deg, #ff512f 0%, #dd2476 100%);
+			border-radius: 20px;
+			box-shadow: 0 8px 32px #0007, 0 1.5px 0 #fff2;
+			padding: 32px 28px 48px 28px;
+			transition: transform 0.25s, box-shadow 0.25s;
+			position: relative;
+			overflow: hidden;
+			animation: floatIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+		}
+		@keyframes floatIn {
+			0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+			100% { opacity: 1; transform: translateY(0) scale(1); }
+		}
+		.card:hover {
+			transform: translateY(-12px) scale(1.04) rotate(-1deg);
+			box-shadow: 0 16px 48px #dd2476cc, 0 2px 0 #fff5;
+		}
+		.card-title {
+			font-size: 1.5em;
+			font-weight: bold;
+			margin-bottom: 10px;
+			background: linear-gradient(90deg, #fff 0%, #ffe0e0 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+		.card-meta {
+			font-size: 1em;
+			margin-bottom: 16px;
+			color: #ffe0e0;
+			text-shadow: 0 1px 0 #0002;
+		}
+		.card-tags {
+			margin-bottom: 14px;
+		}
+		.tag {
+			display: inline-block;
+			background: linear-gradient(90deg, #fff2 0%, #ff512f 100%);
+			color: #fff;
+			border-radius: 8px;
+			padding: 4px 14px;
+			font-size: 0.95em;
+			margin-right: 8px;
+			margin-bottom: 4px;
+			box-shadow: 0 1px 4px #0002;
+			transition: background 0.2s;
+		}
+		.tag:hover {
+			background: linear-gradient(90deg, #dd2476 0%, #ff512f 100%);
+		}
+		.card-desc {
+			font-size: 1.08em;
+			color: #fff;
+			text-shadow: 0 1px 0 #0002;
+		}
+		.card a {
+			position: absolute;
+			right: 24px;
+			bottom: 24px;
+			color: #fff;
+			text-decoration: underline;
+			font-size: 1em;
+			background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
+			border-radius: 8px;
+			padding: 4px 12px;
+			box-shadow: 0 1px 8px #0002;
+			transition: background 0.2s;
+		}
+		.card a:hover {
+			background: linear-gradient(90deg, #fff 0%, #ff512f 100%);
+			color: #dd2476;
+		}
+		@media (max-width: 600px) {
+			.container { padding: 8px; }
+			h1 { font-size: 2em; }
+			.card-list { grid-template-columns: 1fr; gap: 18px; }
+			.card { padding: 18px 10px 38px 10px; }
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Leetcode 专题查询</h1>
+		<div class="search-bar">
+			<input type="text" id="searchInput" placeholder="搜索标题/分类/标签...">
+			<select id="categorySelect">
+				<option value="">全部分类</option>
+			</select>
+			<select id="tagSelect">
+				<option value="">全部标签</option>
+			</select>
+		</div>
+		<div class="card-list" id="cardList"></div>
+	</div>
+	<script src="./leetcode-index.js"></script>
+	<script>
+		// 等待 window.LEETCODE_INDEX 加载
+		function initLeetcodePage() {
+			const data = window.LEETCODE_INDEX || [];
+			const categories = [...new Set(data.flatMap(d => d.categories))];
+			const tags = [...new Set(data.flatMap(d => d.tags))];
+			const categorySelect = document.getElementById('categorySelect');
+			const tagSelect = document.getElementById('tagSelect');
+			categories.forEach(c => {
+				const opt = document.createElement('option');
+				opt.value = c;
+				opt.textContent = c;
+				categorySelect.appendChild(opt);
+			});
+			tags.forEach(t => {
+				const opt = document.createElement('option');
+				opt.value = t;
+				opt.textContent = t;
+				tagSelect.appendChild(opt);
+			});
+
+			function renderCards(list) {
+				const cardList = document.getElementById('cardList');
+				cardList.innerHTML = '';
+				if (list.length === 0) {
+					cardList.innerHTML = '<div style="text-align:center;font-size:1.2em;">没有匹配的题目</div>';
+					return;
+				}
+				list.forEach(item => {
+					const card = document.createElement('div');
+					card.className = 'card';
+					card.innerHTML = `
+						<div class="card-title">${item.title}</div>
+						<div class="card-meta">${item.date} | 分类: ${item.categories.join(', ')}</div>
+						<div class="card-tags">${item.tags.map(t => `<span class='tag'>${t}</span>`).join('')}</div>
+						<div class="card-desc">${item.desc}</div>
+						<a href="./leetcode/${item.url}" target="_blank">查看原文</a>
+					`;
+					cardList.appendChild(card);
+				});
+			}
+
+			function filterData() {
+				const search = document.getElementById('searchInput').value.trim().toLowerCase();
+				const category = categorySelect.value;
+				const tag = tagSelect.value;
+				let filtered = data.filter(item => {
+					const matchSearch = search === '' ||
+						item.title.toLowerCase().includes(search) ||
+						item.categories.join(',').toLowerCase().includes(search) ||
+						item.tags.join(',').toLowerCase().includes(search);
+					const matchCategory = !category || item.categories.includes(category);
+					const matchTag = !tag || item.tags.includes(tag);
+					return matchSearch && matchCategory && matchTag;
+				});
+				renderCards(filtered);
+			}
+
+			document.getElementById('searchInput').addEventListener('input', filterData);
+			categorySelect.addEventListener('change', filterData);
+			tagSelect.addEventListener('change', filterData);
+
+			renderCards(data);
+		}
+		if (window.LEETCODE_INDEX) {
+			initLeetcodePage();
+		} else {
+			window.addEventListener('DOMContentLoaded', initLeetcodePage);
+		}
+	</script>
+</body>
+</html>

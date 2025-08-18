@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radix Sort Visualizer - LeetCode 164</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: white;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    #inputArea {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #arrayDisplay, #logArea, #bucketsArea {
+      margin: 20px auto;
+      width: fit-content;
+    }
+    .array-item {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      margin: 5px;
+      background-color: #4caf50;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    #logArea {
+      background-color: black;
+      color: lime;
+      padding: 10px;
+      font-family: monospace;
+      max-height: 300px;
+      overflow-y: auto;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+    #bucketsArea {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+    .bucket {
+      margin: 0 10px;
+      text-align: center;
+    }
+    .bucket-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .bucket-items {
+      min-height: 40px;
+      padding: 5px;
+      border: 2px dashed #888;
+      border-radius: 6px;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    #controlPanel {
+      text-align: center;
+      margin: 10px auto;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    /* 闪烁动画 */
+    @keyframes flash {
+      0%, 100% { background-color: #2196f3; color: white; }
+      50% { background-color: #ffeb3b; color: black; font-weight: bolder; }
+    }
+    .flash {
+      animation: flash 1s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <h1>Radix Sort 可视化（LeetCode 164）</h1>
+  <div id="inputArea">
+    <label>输入数组（逗号分隔）：<input id="inputArray" type="text" value="170,45,75,90,802,24,2,66" size="50" /></label>
+    <br/><br/>
+    <label>动画间隔 (ms)：<input type="number" id="intervalInput" value="800" /></label>
+    <br/><br/>
+    <button onclick="startVisualization()">开始可视化</button>
+    <br/>
+    <a href="index.html">返回首页</a>
+  </div>
+
+  <div id="arrayDisplay"></div>
+  <div id="bucketsArea"></div>
+  <div id="logArea"></div>
+
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function renderArray(arr) {
+      const container = document.getElementById('arrayDisplay');
+      container.innerHTML = '';
+      arr.forEach(num => {
+        const div = document.createElement('div');
+        div.className = 'array-item';
+        div.textContent = num;
+        container.appendChild(div);
+      });
+    }
+
+    function renderBuckets(buckets) {
+      const container = document.getElementById('bucketsArea');
+      container.innerHTML = '';
+      for (let i = 0; i < 10; i++) {
+        const bucketDiv = document.createElement('div');
+        bucketDiv.className = 'bucket';
+
+        const label = document.createElement('div');
+        label.className = 'bucket-label';
+        label.textContent = `桶 ${i}`;
+
+        const itemsDiv = document.createElement('div');
+        itemsDiv.className = 'bucket-items';
+        bucketDiv.appendChild(label);
+        bucketDiv.appendChild(itemsDiv);
+        container.appendChild(bucketDiv);
+      }
+    }
+
+    function log(message) {
+      const logArea = document.getElementById('logArea');
+      logArea.innerHTML += `➡️ ${message}\n`;
+      logArea.scrollTop = logArea.scrollHeight;
+    }
+
+    async function animatePutInBuckets(nums, exp) {
+      const buckets = Array.from({ length: 10 }, () => []);
+      renderBuckets(buckets);
+
+      const bucketsArea = document.getElementById('bucketsArea');
+      const bucketItemsContainers = [];
+      for (let i = 0; i < 10; i++) {
+        bucketItemsContainers.push(bucketsArea.children[i].querySelector('.bucket-items'));
+      }
+
+      log(`开始按位放入桶（当前位权重 exp = ${exp}）`);
+
+      for (let idx = 0; idx < nums.length; idx++) {
+        let num = nums[idx];
+        let digit = Math.floor(num / exp) % 10;
+        buckets[digit].push(num);
+
+        log(`将数字 ${num} 放入桶 ${digit}`);
+
+        for (let i = 0; i < 10; i++) {
+          bucketItemsContainers[i].innerHTML = '';
+          buckets[i].forEach((val, j) => {
+            const div = document.createElement('div');
+            div.className = 'array-item';
+            div.style.backgroundColor = '#2196f3';
+            div.textContent = val;
+            if (i === digit && j === buckets[i].length - 1) {
+              div.classList.add('flash');
+              setTimeout(() => div.classList.remove('flash'), 800);
+            }
+            bucketItemsContainers[i].appendChild(div);
+          });
+        }
+
+        await sleep(parseInt(document.getElementById('intervalInput').value) || 800);
+      }
+      log(`全部数字放入桶完成。\n`);
+      return buckets;
+    }
+
+    async function animateTakeOutBuckets(buckets) {
+      const n = buckets.reduce((acc, arr) => acc + arr.length, 0);
+      const result = [];
+
+      const bucketsArea = document.getElementById('bucketsArea');
+      const bucketItemsContainers = [];
+      for (let i = 0; i < 10; i++) {
+        bucketItemsContainers.push(bucketsArea.children[i].querySelector('.bucket-items'));
+      }
+
+      log(`开始依次从桶中取出数字放回数组`);
+
+      for (let i = 0; i < 10; i++) {
+        while (buckets[i].length > 0) {
+          const num = buckets[i].shift();
+          result.push(num);
+
+          log(`从桶 ${i} 取出数字 ${num}，放回数组`);
+
+          for (let bi = 0; bi < 10; bi++) {
+            bucketItemsContainers[bi].innerHTML = '';
+            buckets[bi].forEach(val => {
+              const div = document.createElement('div');
+              div.className = 'array-item';
+              div.style.backgroundColor = '#2196f3';
+              div.textContent = val;
+              bucketItemsContainers[bi].appendChild(div);
+            });
+          }
+
+          renderArray(result);
+          const arrayItems = document.querySelectorAll('#arrayDisplay .array-item');
+          const lastIdx = result.length - 1;
+          if (arrayItems[lastIdx]) {
+            arrayItems[lastIdx].classList.add('flash');
+            setTimeout(() => arrayItems[lastIdx].classList.remove('flash'), 800);
+          }
+
+          await sleep(parseInt(document.getElementById('intervalInput').value) || 800);
+        }
+      }
+      log(`所有数字取出并放回数组完成。\n`);
+      return result;
+    }
+
+    async function startVisualization() {
+      const input = document.getElementById('inputArray').value;
+      let nums = input.split(',').map(s => parseInt(s.trim())).filter(x => !isNaN(x));
+      if (nums.length < 2) {
+        alert('请至少输入两个数字');
+        return;
+      }
+
+      document.getElementById('logArea').innerHTML = '';
+      renderArray(nums);
+
+      let maxVal = Math.max(...nums);
+      let exp = 1;
+
+      while (Math.floor(maxVal / exp) > 0) {
+        log(`-------------------------`);
+        log(`当前处理位权重 exp = ${exp}`);
+
+        const buckets = await animatePutInBuckets(nums, exp);
+
+        nums = await animateTakeOutBuckets(buckets);
+
+        exp *= 10;
+      }
+
+      let maxGap = 0;
+      for (let i = 1; i < nums.length; i++) {
+        maxGap = Math.max(maxGap, nums[i] - nums[i - 1]);
+      }
+      log(`最终排序完成，最大间距为: ${maxGap}`);
+    }
+  </script>
+</body>
+</html>

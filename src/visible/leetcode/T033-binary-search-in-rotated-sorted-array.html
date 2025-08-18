@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LeetCode 033 动画演示</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f8f9fa;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .input-section {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    input {
+      padding: 0.5rem;
+      margin: 0.25rem;
+      width: 250px;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .array-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem auto;
+    }
+    .box {
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      margin: 5px;
+      text-align: center;
+      font-weight: bold;
+      background-color: #e0e0e0;
+      border-radius: 6px;
+      position: relative;
+      transition: 0.3s ease;
+    }
+    .box.left {
+      background-color: #ffeaa7;
+    }
+    .box.mid {
+      background-color: #fab1a0;
+    }
+    .box.right {
+      background-color: #74b9ff;
+    }
+    .box.found {
+      background-color: #55efc4;
+    }
+    .label {
+      position: absolute;
+      top: -20px;
+      font-size: 12px;
+      color: #555;
+    }
+    .log {
+      max-width: 800px;
+      margin: 2rem auto;
+      font-size: 14px;
+      background: #111;
+      color: #00ff88;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #333;
+      max-height: 240px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .back-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔍 LeetCode 033 动画演示</h1>
+
+<div class="input-section">
+  <input type="text" id="numsInput" value="4,5,6,7,0,1,2" placeholder="输入数组，如 4,5,6,7,0,1,2" />
+  <input type="number" id="targetInput" value="0" placeholder="目标值" />
+  <br />
+  <button onclick="startVisualization()">开始动画演示</button>
+</div>
+
+<div class="array-container" id="arrayContainer"></div>
+<div class="log" id="log"></div>
+
+<div class="back-link">
+  <a href="index.html">⬅️ 返回首页</a>
+</div>
+
+<script>
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  function renderArray(nums, left, mid, right, targetIndex = -1) {
+    const container = document.getElementById('arrayContainer');
+    container.innerHTML = '';
+    nums.forEach((num, idx) => {
+      const div = document.createElement('div');
+      div.className = 'box';
+      div.textContent = num;
+
+      if (idx === targetIndex) div.classList.add('found');
+      else if (idx === left) {
+        div.classList.add('left');
+        div.innerHTML += `<div class="label">L</div>`;
+      }
+      else if (idx === mid) {
+        div.classList.add('mid');
+        div.innerHTML += `<div class="label">M</div>`;
+      }
+      else if (idx === right) {
+        div.classList.add('right');
+        div.innerHTML += `<div class="label">R</div>`;
+      }
+
+      container.appendChild(div);
+    });
+  }
+
+  async function findPivotVisual(nums, logEl) {
+    let left = 0, right = nums.length - 1;
+
+    if (nums[left] < nums[right]) {
+      logEl.innerHTML += `数组未旋转，返回 0<br>`;
+      renderArray(nums, left, left, right);
+      await sleep(800);
+      return 0;
+    }
+
+    while (left <= right) {
+      let mid = Math.floor((left + right) / 2);
+      renderArray(nums, left, mid, right);
+      logEl.innerHTML += `查找旋转点: L=${left}, M=${mid}, R=${right}<br>`;
+      await sleep(800);
+
+      if (mid < nums.length - 1 && nums[mid] > nums[mid + 1]) {
+        logEl.innerHTML += `找到旋转点 at index ${mid}<br>`;
+        return mid;
+      }
+      if (nums[mid] >= nums[left]) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+    return -1;
+  }
+
+  async function binarySearchVisual(nums, target, left, right, logEl) {
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      renderArray(nums, left, mid, right);
+      logEl.innerHTML += `二分查找: L=${left}, M=${mid}, R=${right}<br>`;
+      await sleep(800);
+      if (nums[mid] === target) {
+        renderArray(nums, -1, -1, -1, mid);
+        logEl.innerHTML += `✅ 找到目标值 ${target} at index ${mid}<br>`;
+        return mid;
+      } else if (nums[mid] < target) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+    logEl.innerHTML += `❌ 未找到目标值 ${target}<br>`;
+    return -1;
+  }
+
+  async function startVisualization() {
+    const nums = document.getElementById('numsInput').value.split(',').map(Number);
+    const target = parseInt(document.getElementById('targetInput').value);
+    const log = document.getElementById('log');
+    log.innerHTML = '';
+
+    const pivot = await findPivotVisual(nums, log);
+
+    let result = -1;
+    if (pivot === -1 || nums[0] <= target) {
+      result = await binarySearchVisual(nums, target, 0, pivot === -1 ? nums.length - 1 : pivot, log);
+    } else {
+      result = await binarySearchVisual(nums, target, pivot + 1, nums.length - 1, log);
+    }
+  }
+</script>
+
+</body>
+</html>

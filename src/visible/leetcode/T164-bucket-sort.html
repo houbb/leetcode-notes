@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>T164 最大间距桶排序可视化</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background: #f5f5f5;
+  }
+  h1 {
+    text-align: center;
+  }
+  a#homeLink {
+    display: inline-block;
+    margin-bottom: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #007acc;
+  }
+  .input-area {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  input[type="text"] {
+    width: 60%;
+    padding: 6px 10px;
+    font-size: 16px;
+  }
+  input[type="number"] {
+    width: 60px;
+    padding: 4px;
+    font-size: 16px;
+  }
+  button {
+    margin-left: 10px;
+    padding: 6px 12px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  #arrayContainer {
+    margin: 20px auto;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .array-item {
+    width: 40px;
+    height: 40px;
+    background: #3498db;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-weight: bold;
+    user-select: none;
+    transition: background-color 0.3s;
+  }
+  .highlight {
+    background-color: #e74c3c !important;
+  }
+  .bucket {
+    border: 2px dashed #888;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px;
+    min-width: 60px;
+    min-height: 40px;
+    text-align: center;
+    background-color: #ecf0f1;
+    position: relative;
+  }
+  .bucket-label {
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: #555;
+  }
+  #bucketsContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    gap: 6px;
+  }
+  #log {
+    background-color: #111;
+    color: #eee;
+    font-family: monospace;
+    padding: 12px;
+    height: 200px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    border-radius: 6px;
+    margin-top: 20px;
+  }
+  #infoArea {
+    margin-top: 15px;
+    font-size: 16px;
+    text-align: center;
+    min-height: 24px;
+  }
+</style>
+</head>
+<body>
+  <h1>力扣 T164 最大间距桶排序可视化</h1>
+  <a href="index.html" id="homeLink">【返回首页】</a>
+  <div class="input-area">
+    <label for="inputArray">输入数组（逗号分隔）: </label>
+    <input type="text" id="inputArray" value="3,6,9,1,24,25,48" />
+    <label for="intervalInput">动画间隔（秒）:</label>
+    <input type="number" id="intervalInput" value="1" min="0.1" step="0.1" />
+    <button id="startBtn">开始可视化</button>
+  </div>
+
+  <div id="arrayContainer"></div>
+  <div id="bucketsContainer"></div>
+
+  <div id="infoArea"></div>
+  <div id="log"></div>
+
+<script>
+(() => {
+  const startBtn = document.getElementById("startBtn");
+  const inputArray = document.getElementById("inputArray");
+  const intervalInput = document.getElementById("intervalInput");
+  const arrayContainer = document.getElementById("arrayContainer");
+  const bucketsContainer = document.getElementById("bucketsContainer");
+  const logArea = document.getElementById("log");
+  const infoArea = document.getElementById("infoArea");
+
+  let animationInterval = 1000;
+  let timerId = null;
+
+  // 渲染数组
+  function renderArray(arr, highlightIndices = []) {
+    arrayContainer.innerHTML = "";
+    arr.forEach((v, i) => {
+      const div = document.createElement("div");
+      div.className = "array-item";
+      div.textContent = v;
+      if (highlightIndices.includes(i)) {
+        div.classList.add("highlight");
+      }
+      arrayContainer.appendChild(div);
+    });
+  }
+
+  // 渲染桶状态
+  function renderBuckets(buckets, min, bucketWidth, highlightIndex = -1) {
+    bucketsContainer.innerHTML = "";
+    buckets.forEach((bucket, i) => {
+      const div = document.createElement("div");
+      div.className = "bucket";
+      if (i === highlightIndex) {
+        div.style.backgroundColor = "#f39c12";
+      } else {
+        div.style.backgroundColor = "#ecf0f1";
+      }
+      const label = document.createElement("div");
+      label.className = "bucket-label";
+      label.textContent = `桶${i}`;
+      div.appendChild(label);
+
+      if (bucket[0] === Number.MAX_SAFE_INTEGER) {
+        div.appendChild(document.createTextNode("空"));
+      } else {
+        div.appendChild(document.createTextNode(`最小: ${bucket[0]}, 最大: ${bucket[1]}`));
+      }
+      bucketsContainer.appendChild(div);
+    });
+  }
+
+  // 输出日志，自动滚动到底部
+  function log(msg) {
+    logArea.textContent += msg + "\n";
+    logArea.scrollTop = logArea.scrollHeight;
+  }
+
+  // 清理日志和信息
+  function resetUI() {
+    logArea.textContent = "";
+    infoArea.textContent = "";
+    bucketsContainer.innerHTML = "";
+    arrayContainer.innerHTML = "";
+  }
+
+  // 主动画函数：桶排序可视化
+  async function visualizeMaximumGap(arr, intervalSec) {
+    resetUI();
+    if (arr.length < 2) {
+      infoArea.textContent = "数组长度小于2，无需排序，最大间距为0";
+      log("数组长度小于2，直接返回0");
+      renderArray(arr);
+      return;
+    }
+
+    log(`输入数组: [${arr.join(", ")}]`);
+    renderArray(arr);
+
+    let min = Number.MAX_SAFE_INTEGER;
+    let max = Number.MIN_SAFE_INTEGER;
+    for (const num of arr) {
+      if (num > max) max = num;
+      if (num < min) min = num;
+    }
+    log(`最小值: ${min}, 最大值: ${max}`);
+
+    if (min === max) {
+      log("最小值和最大值相同，最大间距为0");
+      infoArea.textContent = "所有元素相同，最大间距为0";
+      return;
+    }
+
+    const bucketSize = arr.length + 1;
+    let buckets = new Array(bucketSize);
+    for (let i = 0; i < bucketSize; i++) {
+      // 用大整数代替Integer.MAX_VALUE
+      buckets[i] = [Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
+    }
+
+    // 计算桶宽度
+    const bucketWidth = Math.ceil((max - min) / bucketSize);
+    log(`桶数量: ${bucketSize}, 桶宽度: ${bucketWidth}`);
+
+    // 显示初始空桶
+    renderBuckets(buckets, min, bucketWidth);
+
+    // 放入桶中
+    for (let i = 0; i < arr.length; i++) {
+      const num = arr[i];
+      let bucketIndex = Math.floor((num - min) / bucketWidth);
+      if (bucketIndex >= bucketSize) bucketIndex = bucketSize - 1;
+
+      infoArea.textContent = `第${i + 1}个元素 ${num} 放入桶 ${bucketIndex}`;
+      log(`元素 ${num} 计算桶索引: ${bucketIndex}`);
+
+      // 高亮当前元素
+      renderArray(arr, [i]);
+      // 高亮当前桶
+      renderBuckets(buckets, min, bucketWidth, bucketIndex);
+
+      // 更新桶内最大最小值
+      buckets[bucketIndex][0] = Math.min(buckets[bucketIndex][0], num);
+      buckets[bucketIndex][1] = Math.max(buckets[bucketIndex][1], num);
+
+      log(`更新桶${bucketIndex} => 最小值: ${buckets[bucketIndex][0]}, 最大值: ${buckets[bucketIndex][1]}`);
+
+      await sleep(intervalSec);
+    }
+
+    // 计算最大间距
+    let maxGap = 0;
+    let prev = min;
+    infoArea.textContent = "开始计算最大间距...";
+    renderBuckets(buckets, min, bucketWidth);
+
+    for (let i = 0; i < buckets.length; i++) {
+      if (buckets[i][0] === Number.MAX_SAFE_INTEGER) {
+        log(`桶${i}为空，跳过`);
+        continue;
+      }
+
+      let gap = buckets[i][0] - prev;
+      log(`桶${i}的最小值 ${buckets[i][0]} - 上一个最大值 ${prev} = 间距 ${gap}`);
+      if (gap > maxGap) {
+        maxGap = gap;
+        log(`更新最大间距为 ${maxGap}`);
+      }
+
+      prev = buckets[i][1];
+
+      infoArea.textContent = `检查桶${i}，当前最大间距: ${maxGap}`;
+      renderBuckets(buckets, min, bucketWidth, i);
+
+      await sleep(intervalSec);
+    }
+
+    infoArea.textContent = `最大间距计算完成: ${maxGap}`;
+    log(`返回最大间距: ${maxGap}`);
+
+    // 最后高亮全部数组
+    renderArray(arr);
+    renderBuckets(buckets, min, bucketWidth);
+  }
+
+  function sleep(seconds) {
+    return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+  }
+
+  // 事件绑定
+  startBtn.addEventListener("click", () => {
+    if (timerId) {
+      clearTimeout(timerId);
+      timerId = null;
+    }
+    const rawInput = inputArray.value.trim();
+    if (!rawInput) {
+      alert("请输入有效数组！");
+      return;
+    }
+    let arr = rawInput.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+    if (arr.length === 0) {
+      alert("请输入有效数字数组！");
+      return;
+    }
+    let intervalSec = parseFloat(intervalInput.value);
+    if (isNaN(intervalSec) || intervalSec <= 0) {
+      intervalSec = 1;
+    }
+    animationInterval = intervalSec;
+
+    visualizeMaximumGap(arr, animationInterval);
+  });
+
+  // 页面加载时默认渲染数组
+  renderArray(inputArray.value.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n)));
+})();
+</script>
+</body>
+</html>

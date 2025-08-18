@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>算法可视化 · 资源导航</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 40px;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #fff;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    #searchInput {
+      display: block;
+      margin: 0 auto 30px auto;
+      padding: 12px 15px;
+      width: 60%;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      backdrop-filter: blur(6px);
+    }
+    #searchInput::placeholder { color: #ccc; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #fff;
+    }
+
+    .card:hover {
+      transform: translateY(-6px) rotate(-1deg);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: #ddd;
+    }
+
+    .category {
+      display: inline-block;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .card a {
+      text-decoration: none;
+      color: #00d4ff;
+      font-weight: bold;
+    }
+
+    .hidden { display: none; }
+
+    /* 资料部分样式 */
+    .resources {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .resource-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #fff;
+    }
+
+    .resource-card:hover {
+      transform: translateY(-6px) rotate(-1deg);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .resource-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .resource-card ul {
+      list-style: none;
+      padding-left: 0;
+      line-height: 1.8;
+    }
+
+    .resource-card ul li a {
+      color: #00d4ff;
+      text-decoration: none;
+    }
+
+    .resource-card img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 13px;
+      color: #ccc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1><i class="fas fa-code"></i> 算法可视化 · 资源导航</h1>
+  <input id="searchInput" type="text" placeholder="🔍 输入关键字搜索，如 binary、查找、排序...">
+
+  <div class="grid" id="cardGrid"></div>
+
+  <!-- 资料部分 -->
+  <div class="resources" id="resourcesGrid"></div>
+
+  <footer>
+    © 2025 算法可视化项目 | 老马啸西风 💡
+  </footer>
+
+  <script>
+    const cardsData = [
+      // 图论
+      {title:"T207 课程表",desc:"DFS + 染色法解法",tags:"graph 图 T207 dfs 染色法",url:"./T207-course-schedule-DFS-color.html",category:"图论",icon:"fa-project-diagram"},
+      {title:"105. 从前序与中序遍历序列构造二叉树",desc:"二叉树构造",tags:"binary-tree T105 二叉树 前序 中序 preorder inorder",url:"./T105-binary-search-construct-binary-tree-from-preorder-and-inorder-traversal.html",category:"二叉树",icon:"fa-tree"},
+      {title:"binary-tree-travel 二叉树遍历",desc:"binary-tree-travel 前序、中序、后序、层序遍历",tags:"binary-tree 二叉树 前序 中序 后序 层序",url:"./binary-tree-travel.html",category:"二叉树",icon:"fa-tree"},
+      {title:"T160 相交链表 intersection-of-two-linked-lists",desc:"双指针解法",tags:"linkedlist two-pointer 双指针 T160相交链表 intersection-of-two-linked-lists",url:"./T160_linkedlist-two-pointer.html",category:"链表",icon:"fa-link"},
+      {title:"difference-array 差分数组",desc:"difference-array 差分数组",tags:"difference-array array 差分数组 数组",url:"./array-difference-array-visual.html",category:"数组",icon:"fa-table-cells"},
+      {title:"prefix-sum 数组前缀和",desc:"prefix-sum 数组前缀和",tags:"prefix-sum array 前缀和 数组",url:"./array-prefix-sum-visual.html",category:"数组",icon:"fa-table-cells"},
+      {title:"T304 二维区域和检索 - 矩阵不可变",desc:"T304 二维区域和检索 - 矩阵不可变 前缀和+二维前缀和",tags:"T304 prefix-sum prefix-sum-matrix array 前缀和 二维前缀和",url:"./T304-prefix-sum-matrix-summary.html",category:"数组",icon:"fa-table-cells"},
+      {title:"1277. 统计全为 1 的正方形子矩阵 count-square-submatrices-with-all-ones",desc:"T1277 统计全为 1 的正方形子矩阵",tags:"T1277 dp array matrix 动态规划 count-square-submatrices-with-all-ones",url:"./T1277-dp-count-square-submatrices-with-all-ones.html",category:"动态规划",icon:"fa-chess-board"},
+      // 排序
+      {title:"T164 最大间距-基数排序",desc:"T164 最大间距-基数排序+计数排序+前缀和",tags:"T164 sort radix-sort bucket-sort counting-sort array",url:"./T164-radix-sort-prefix-sum.html",category:"排序",icon:"fa-sort"},
+      {title:"T164 最大间距-基数排序",desc:"T164 最大间距-基数排序",tags:"T164 sort radix-sort array",url:"./T164-radix-sort-basic.html",category:"排序",icon:"fa-sort"},
+      {title:"T164 最大间距-桶排序",desc:"T164 最大间距-桶排序",tags:"T164 sort bucket-sort array",url:"./T164-bucket-sort.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组选择排序",desc:"T192 数组选择排序",tags:"T192 sort select-sort array",url:"./T192-sort-select-sort.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组冒泡排序",desc:"T192 数组冒泡排序",tags:"T192 sort bubble-sort array",url:"./T192-sort-bubble-sort.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组插入排序二分法改良",desc:"T192 数组插入排序二分法改良",tags:"T192 sort insert-sort binary-search array",url:"./T192-sort-insert-sort-binary-search.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组插入排序",desc:"T192 数组插入排序",tags:"T192 sort insert-sort array",url:"./T192-sort-insert-sort.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组归并排序",desc:"T192 数组归并排序",tags:"T192 sort merge-sort array",url:"./T192-sort-merge-sort.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组希尔排序",desc:"T192 数组希尔排序",tags:"T192 sort shell-sort array",url:"./T192-sort-shell-sort.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组快速排序",desc:"T192 数组快速排序",tags:"T192 sort quick-sort array",url:"./T192-sort-quick-sort.html",category:"排序",icon:"fa-sort"},
+      {title:"T192 数组堆排序",desc:"T192 数组堆排序",tags:"T192 sort heap-sort heap array",url:"./T192-sort-heap-sort.html",category:"排序",icon:"fa-sort"},
+      // 二分查找
+      {title:"T033 搜索旋转排序数组",desc:"二分查找 旋转数组 局部有序",tags:"T033 binary search 二分查找 范围 最大值 最小值 旋转数组 局部有序",url:"./T033-binary-search-in-rotated-sorted-array.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T034 查找元素的第一个和最后一个位置",desc:"通过动画步骤演示二分查找范围过程",tags:"T034 binary search 二分查找 范围 最大值 最小值",url:"./T034-binary-search-range.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T035 搜索插入位置",desc:"通过动画步骤演示二分查找插入过程",tags:"T035 binary search 二分查找 插入",url:"./T035-binary-search-insert.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T704 二分查找目标值是否存在",desc:"通过动画步骤演示二分查找过程",tags:"T704 binary search 二分查找",url:"./T704-binary-search-basic.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T153 寻找旋转排序数组中的最小值",desc:"二分查找 旋转数组 局部有序",tags:"T153 binary search 二分查找 范围 最大值 最小值 旋转数组 局部有序",url:"./T153-binary-search-find-minimum-in-rotated-sorted-array.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T154 寻找旋转排序数组中的最小值 II",desc:"二分查找 旋转数组 局部有序",tags:"T153 binary search 二分查找 范围 最大值 最小值 旋转数组 局部有序",url:"./T154-binary-search-find-minimum-in-rotated-sorted-array-ii.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T852 山脉数组的峰顶索引",desc:"通过动画步骤演示二分查找峰值",tags:"T852 binary search 二分查找 三分查找",url:"./T852-binary-search-peek.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T875 爱吃香蕉的珂珂",desc:"通过动画步骤演示二分法在某个值的范围内，寻找最小/最大满足条件的值的场景",tags:"T875 binary search 二分查找 最大值 最小值",url:"./T875-binary-search-eat-banana.html",category:"二分查找",icon:"fa-magnifying-glass"},
+      {title:"T1011. 在 D 天内送达包裹的能力",desc:"通过动画步骤演示二分法在某个值的范围内，寻找最小/最大满足条件的值的场景",tags:"T1011 binary search 二分查找 最大值 最小值",url:"./T1011-binary-search-capacity-to-ship-packages-within-d-days.html",category:"二分查找",icon:"fa-magnifying-glass"}
+    ];
+
+    const resourcesData = [
+      {
+        title: "LeetCode 算法",
+        links: [
+          { text: "技术博客", url: "https://houbb.github.io/" },
+          { text: "leetcode-visual · 可视化资源", url: "https://github.com/houbb/leetcode-visual" },
+          { text: "leetcode 算法实现", url: "https://github.com/houbb/leetcode" }
+        ]
+      },
+      {
+        title: "吹牛交流群",
+        img: "https://github.com/houbb/sensitive-word/raw/master/WECHAT.png?raw=true"
+      },
+      {
+        title: "支持开源",
+        text: "开源不易，如果本项目对你有帮助，你可以请老马喝一杯奶茶 ☕。",
+        img: "https://github.com/houbb/sensitive-word/raw/master/lmxxf_reword.png?raw=true"
+      }
+    ];
+
+    const grid = document.getElementById("cardGrid");
+    const searchInput = document.getElementById("searchInput");
+    const resourcesGrid = document.getElementById("resourcesGrid");
+
+    function renderCards(filter = "") {
+      grid.innerHTML = "";
+      cardsData.forEach(card => {
+        const text = (card.title + card.desc + card.tags).toLowerCase();
+        if (text.includes(filter.toLowerCase())) {
+          const cardEl = document.createElement("div");
+          cardEl.className = "card";
+          cardEl.innerHTML = `
+            <div class="category"><i class="fas ${card.icon}"></i> ${card.category}</div>
+            <div class="card-title"><i class="fas ${card.icon}"></i> ${card.title}</div>
+            <div class="card-desc">${card.desc}</div>
+            <a href="${card.url}" target="_blank">打开页面</a>
+          `;
+          grid.appendChild(cardEl);
+        }
+      });
+    }
+
+    function renderResources() {
+      resourcesGrid.innerHTML = "";
+      resourcesData.forEach(res => {
+        const resEl = document.createElement("div");
+        resEl.className = "resource-card";
+        let innerHTML = `<div class="resource-title"><i class="fas fa-book"></i> ${res.title}</div>`;
+        if (res.links) {
+          innerHTML += "<ul>";
+          res.links.forEach(l => {
+            innerHTML += `<li><a href="${l.url}" target="_blank">${l.text}</a></li>`;
+          });
+          innerHTML += "</ul>";
+        }
+        if (res.text) {
+          innerHTML += `<p>${res.text}</p>`;
+        }
+        if (res.img) {
+          innerHTML += `<img src="${res.img}" alt="${res.title}"/>`;
+        }
+        resEl.innerHTML = innerHTML;
+        resourcesGrid.appendChild(resEl);
+      });
+    }
+
+    searchInput.addEventListener("input", () => {
+      renderCards(searchInput.value);
+    });
+
+    renderCards();
+    renderResources();
+  </script>
+</body>
+</html>

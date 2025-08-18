@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>力扣 912 堆排序双视图可视化</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background: #f0f0f0;
+  }
+  h1 {
+    text-align: center;
+  }
+  #inputArea {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  #arrayInput {
+    width: 280px;
+    font-size: 16px;
+    padding: 5px;
+  }
+  label {
+    font-weight: bold;
+  }
+  #intervalInput {
+    width: 50px;
+    font-size: 16px;
+    padding: 3px;
+    margin-left: 10px;
+  }
+  button {
+    font-size: 16px;
+    padding: 6px 12px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  #mainArea {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+  }
+  /* 直方图容器 */
+  #arrayContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45%;
+    height: 200px;
+  }
+  #barsContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 5px;
+    height: 160px;
+    width: 100%;
+  }
+  .bar {
+    width: 30px;
+    background: steelblue;
+    color: white;
+    text-align: center;
+    border-radius: 4px 4px 0 0;
+    user-select: none;
+    font-weight: bold;
+    font-size: 14px;
+    position: relative;
+  }
+  .bar.highlight {
+    background: orangered;
+  }
+  .bar.swapping {
+    background: orange;
+  }
+  #info {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 10px;
+    min-height: 24px;
+  }
+  /* 堆树形结构SVG容器 */
+  #heapTreeContainer {
+    width: 45%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  #heapTreeSVG {
+    width: 100%;
+    height: 220px;
+  }
+  /* 节点样式 */
+  .node circle {
+    fill: steelblue;
+    stroke: #333;
+    stroke-width: 1.5px;
+    cursor: default;
+  }
+  .node text {
+    fill: white;
+    font-weight: bold;
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .node.highlight circle {
+    fill: orangered;
+  }
+  .node.swapping circle {
+    fill: orange;
+  }
+  /* 线条 */
+  line.edge {
+    stroke: #999;
+    stroke-width: 1.5px;
+  }
+  /* 日志 */
+  #logContainer {
+    background: #111;
+    color: #eee;
+    font-family: monospace;
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 6px;
+    white-space: pre-line;
+    max-width: 900px;
+    margin: 0 auto 20px auto;
+  }
+  #footer {
+    margin-top: 10px;
+    text-align: center;
+  }
+  #footer a {
+    text-decoration: none;
+    color: #3366cc;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<h1>力扣 912 - 堆排序算法双视图可视化</h1>
+
+<div id="inputArea">
+  <label>数组（逗号分隔）：</label>
+  <input id="arrayInput" type="text" value="4,10,3,5,1,8,7,9" />
+  <label>动画间隔(s)：</label>
+  <input id="intervalInput" type="number" min="0.1" step="0.1" value="1" />
+  <button id="startBtn">开始可视化</button>
+</div>
+
+<div id="mainArea">
+  <div id="arrayContainer">
+    <div id="barsContainer"></div>
+    <div id="info"></div>
+  </div>
+  <div id="heapTreeContainer">
+    <svg id="heapTreeSVG"></svg>
+  </div>
+</div>
+
+<div id="logContainer"></div>
+
+<div id="footer">
+  <a href="index.html">【返回首页】</a>
+</div>
+
+<script>
+  const arrayInput = document.getElementById("arrayInput");
+  const intervalInput = document.getElementById("intervalInput");
+  const startBtn = document.getElementById("startBtn");
+  const barsContainer = document.getElementById("barsContainer");
+  const info = document.getElementById("info");
+  const logContainer = document.getElementById("logContainer");
+  const heapTreeSVG = document.getElementById("heapTreeSVG");
+
+  let nums = [];
+  let animationInterval = 1000;
+  let timer = null;
+  let steps = [];
+  let stepIndex = 0;
+
+  // 渲染直方图
+  function renderArray(arr, highlightIndices = [], swappingIndices = []) {
+    barsContainer.innerHTML = "";
+    const maxVal = Math.max(...arr, 10);
+    arr.forEach((num, idx) => {
+      const bar = document.createElement("div");
+      bar.classList.add("bar");
+      bar.style.height = (num / maxVal) * 150 + 30 + "px";
+      bar.textContent = num;
+
+      if (highlightIndices.includes(idx)) {
+        bar.classList.add("highlight");
+      }
+      if (swappingIndices.includes(idx)) {
+        bar.classList.add("swapping");
+      }
+
+      barsContainer.appendChild(bar);
+    });
+  }
+
+  // 日志打印
+  function log(text) {
+    logContainer.textContent += text + "\n";
+    logContainer.scrollTop = logContainer.scrollHeight;
+  }
+
+  // 记录步骤
+  function recordStep(arr, infoText, highlight = [], swapping = []) {
+    steps.push({
+      arr: arr.slice(),
+      info: infoText,
+      highlight,
+      swapping,
+    });
+  }
+
+  // 绘制堆树结构
+  function renderHeapTree(arr, highlight = [], swapping = []) {
+    // 清空SVG
+    while (heapTreeSVG.firstChild) {
+      heapTreeSVG.removeChild(heapTreeSVG.firstChild);
+    }
+
+    if (arr.length === 0) return;
+
+    const width = heapTreeSVG.clientWidth;
+    const height = heapTreeSVG.clientHeight;
+
+    // 计算每层最大节点数
+    // 层数 = floor(log2(n)) + 1
+    const n = arr.length;
+    const levels = Math.floor(Math.log2(n)) + 1;
+
+    // 每层节点横坐标间距计算（根据层宽度）
+    // 根节点居中, 每层间距递减
+    // 用递归或循环放置节点并画线
+
+    // 递归绘制节点和边
+    function drawNode(index, level, x) {
+      const nodeRadius = 15;
+      const yGap = 50;
+      const y = yGap * level + 20;
+
+      // 节点圆
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", x);
+      circle.setAttribute("cy", y);
+      circle.setAttribute("r", nodeRadius);
+      circle.setAttribute("class", "node-circle");
+
+      // 判断高亮和交换状态，改颜色
+      if (highlight.includes(index)) {
+        circle.classList.add("highlight");
+      }
+      if (swapping.includes(index)) {
+        circle.classList.add("swapping");
+      }
+
+      // 节点文本
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", x);
+      text.setAttribute("y", y + 5);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("pointer-events", "none");
+      text.setAttribute("class", "node-text");
+      text.textContent = arr[index];
+
+      // 包裹group方便管理
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      group.setAttribute("class", "node");
+      if (highlight.includes(index)) group.classList.add("highlight");
+      if (swapping.includes(index)) group.classList.add("swapping");
+
+      group.appendChild(circle);
+      group.appendChild(text);
+
+      heapTreeSVG.appendChild(group);
+
+      // 画连接线到左右子节点
+      const leftChild = 2 * index + 1;
+      const rightChild = 2 * index + 2;
+
+      const xGap = width / Math.pow(2, level + 2); // 横向分布距离控制
+
+      if (leftChild < n) {
+        const childX = x - xGap;
+        const childY = y + yGap;
+
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x);
+        line.setAttribute("y1", y + nodeRadius);
+        line.setAttribute("x2", childX);
+        line.setAttribute("y2", childY - nodeRadius);
+        line.setAttribute("class", "edge");
+        heapTreeSVG.appendChild(line);
+
+        drawNode(leftChild, level + 1, childX);
+      }
+      if (rightChild < n) {
+        const childX = x + xGap;
+        const childY = y + yGap;
+
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x);
+        line.setAttribute("y1", y + nodeRadius);
+        line.setAttribute("x2", childX);
+        line.setAttribute("y2", childY - nodeRadius);
+        line.setAttribute("class", "edge");
+        heapTreeSVG.appendChild(line);
+
+        drawNode(rightChild, level + 1, childX);
+      }
+    }
+
+    // 从根节点开始，水平居中绘制
+    drawNode(0, 0, width / 2);
+  }
+
+  // 堆排序过程，记录步骤
+  function heapSortWithSteps(arr) {
+    steps = [];
+    const n = arr.length;
+
+    recordStep(arr, `初始数组：${arr.join(", ")}`);
+
+    // 建堆
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+      recordStep(arr, `开始 heapify，rootIndex = ${i}`, [i]);
+      heapify(arr, n, i);
+    }
+    recordStep(arr, `最大堆构建完成`);
+
+    // 排序
+    for (let i = n - 1; i > 0; i--) {
+      recordStep(arr, `交换堆顶 nums[0]=${arr[0]} 和末尾 nums[${i}]=${arr[i]}`, [0], [i]);
+      swap(arr, 0, i);
+      recordStep(arr, `交换完成，heapify 调整堆，heapSize=${i}`, [0]);
+      heapify(arr, i, 0);
+    }
+    recordStep(arr, `排序完成，最终数组：${arr.join(", ")}`);
+  }
+
+  function heapify(arr, heapSize, rootIndex) {
+    let largest = rootIndex;
+    const left = 2 * rootIndex + 1;
+    const right = 2 * rootIndex + 2;
+
+    if (left < heapSize && arr[left] > arr[largest]) {
+      largest = left;
+    }
+    if (right < heapSize && arr[right] > arr[largest]) {
+      largest = right;
+    }
+
+    if (largest !== rootIndex) {
+      recordStep(arr, `heapify: 交换 nums[${rootIndex}]=${arr[rootIndex]} 和 nums[${largest}]=${arr[largest]}`, [rootIndex, largest], [rootIndex, largest]);
+      swap(arr, rootIndex, largest);
+      heapify(arr, heapSize, largest);
+    } else {
+      recordStep(arr, `heapify: 位置 ${rootIndex} 满足最大堆，无需交换`, [rootIndex]);
+    }
+  }
+
+  function swap(arr, i, j) {
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+
+  // 播放动画
+  function playAnimation() {
+    if (stepIndex >= steps.length) {
+      info.textContent = "排序完成 🎉";
+      startBtn.disabled = false;
+      return;
+    }
+    const step = steps[stepIndex];
+    renderArray(step.arr, step.highlight, step.swapping);
+    renderHeapTree(step.arr, step.highlight, step.swapping);
+    info.textContent = step.info;
+    log(step.info);
+    stepIndex++;
+    timer = setTimeout(playAnimation, animationInterval);
+  }
+
+  startBtn.onclick = () => {
+    const raw = arrayInput.value.trim();
+    if (!raw) {
+      alert("请输入数组，用逗号分隔");
+      return;
+    }
+    const arr = raw.split(",").map(x => Number(x.trim())).filter(x => !isNaN(x));
+    if (arr.length === 0) {
+      alert("请输入有效的数字数组");
+      return;
+    }
+    nums = arr;
+
+    let intervalVal = Number(intervalInput.value);
+    if (isNaN(intervalVal) || intervalVal <= 0) {
+      intervalVal = 1;
+      intervalInput.value = "1";
+    }
+    animationInterval = intervalVal * 1000;
+
+    stepIndex = 0;
+    logContainer.textContent = "";
+    info.textContent = "准备开始...";
+    renderArray(nums);
+    renderHeapTree(nums);
+
+    startBtn.disabled = true;
+    heapSortWithSteps(nums.slice());
+
+    setTimeout(() => {
+      logContainer.textContent = "";
+      stepIndex = 0;
+      playAnimation();
+    }, 300);
+  };
+
+  // 初始化渲染默认数组
+  renderArray([4, 10, 3, 5, 1, 8, 7, 9]);
+  renderHeapTree([4, 10, 3, 5, 1, 8, 7, 9]);
+</script>
+</body>
+</html>

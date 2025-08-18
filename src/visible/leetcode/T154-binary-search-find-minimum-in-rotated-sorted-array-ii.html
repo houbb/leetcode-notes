@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LeetCode 154 - 寻找旋转排序数组中的最小值 可视化</title>
+<style>
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    margin: 20px;
+  }
+  a {
+    text-decoration: none;
+    color: #0078d7;
+    font-weight: bold;
+  }
+  .container {
+    max-width: 900px;
+    margin: auto;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  label {
+    font-weight: bold;
+  }
+  input[type="text"] {
+    width: 100%;
+    font-size: 16px;
+    padding: 6px 10px;
+    margin: 8px 0 15px 0;
+    box-sizing: border-box;
+  }
+  button {
+    font-size: 16px;
+    padding: 8px 20px;
+    cursor: pointer;
+    background-color: #0078d7;
+    border: none;
+    border-radius: 3px;
+    color: white;
+  }
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  .array-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .array-item {
+    width: 40px;
+    height: 40px;
+    background-color: #eee;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 18px;
+    position: relative;
+    transition: background-color 0.3s ease;
+  }
+  /* 指针标记 */
+  .pointer {
+    position: absolute;
+    top: -22px;
+    width: 40px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    padding: 2px 0;
+    border-radius: 3px;
+  }
+  .pointer.L {
+    background-color: #e74c3c;
+  }
+  .pointer.M {
+    background-color: #3498db;
+  }
+  .pointer.R {
+    background-color: #2ecc71;
+  }
+  /* 高亮当前访问元素 */
+  .highlight-mid {
+    background-color: #3498db;
+    color: white;
+  }
+  /* 结果高亮 */
+  .result {
+    background-color: #f39c12 !important;
+    color: white !important;
+  }
+  /* 结束结果高亮 */
+  .result.final {
+    background-color: #d35400 !important;
+  }
+  .log-container {
+    margin-top: 30px;
+    background-color: #121212;
+    color: #eee;
+    font-family: monospace;
+    padding: 15px;
+    height: 250px;
+    overflow-y: auto;
+    border-radius: 6px;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html">← 返回首页</a>
+    <h1>LeetCode 154 - 寻找旋转排序数组中的最小值 可视化</h1>
+    <label for="inputArray">输入旋转排序数组（逗号分隔）：</label>
+    <input id="inputArray" type="text" value="3,4,5,1,2" placeholder="例如: 3,4,5,1,2" />
+    <button id="startBtn">开始可视化</button>
+
+    <div class="array-container" id="arrayContainer"></div>
+
+    <div class="log-container" id="logContainer"></div>
+  </div>
+
+<script>
+  const inputArray = document.getElementById("inputArray");
+  const startBtn = document.getElementById("startBtn");
+  const arrayContainer = document.getElementById("arrayContainer");
+  const logContainer = document.getElementById("logContainer");
+
+  let nums = [];
+  let left = 0, right = 0, mid = -1, min = 0;
+  let steps = [];
+  let stepIndex = 0;
+
+  // 记录日志
+  function log(str) {
+    logContainer.textContent += str + "\n";
+    logContainer.scrollTop = logContainer.scrollHeight;
+  }
+
+  // 渲染数组和指针
+  function renderArray(l, m, r, highlightMinIndex = -1, final = false) {
+    arrayContainer.innerHTML = "";
+    for (let i = 0; i < nums.length; i++) {
+      const div = document.createElement("div");
+      div.className = "array-item";
+
+      div.textContent = nums[i];
+
+      // 高亮最小值方块
+      if (i === highlightMinIndex) {
+        div.classList.add("result");
+        if(final) div.classList.add("final");
+      }
+
+      // L 指针
+      if (i === l) {
+        const pointerL = document.createElement("div");
+        pointerL.textContent = "L";
+        pointerL.className = "pointer L";
+        div.appendChild(pointerL);
+      }
+
+      // M 指针，m 为 -1 不显示
+      if (m !== -1 && i === m) {
+        const pointerM = document.createElement("div");
+        pointerM.textContent = "M";
+        pointerM.className = "pointer M";
+        div.appendChild(pointerM);
+        div.classList.add("highlight-mid");
+      }
+
+      // R 指针
+      if (i === r) {
+        const pointerR = document.createElement("div");
+        pointerR.textContent = "R";
+        pointerR.className = "pointer R";
+        div.appendChild(pointerR);
+      }
+
+      arrayContainer.appendChild(div);
+    }
+  }
+
+  // 预处理输入，转成数字数组
+  function parseInput() {
+    const val = inputArray.value.trim();
+    if (!val) return null;
+    const arr = val.split(",").map(s => s.trim()).filter(s => s.length > 0);
+    if (arr.length === 0) return null;
+    let parsed = [];
+    for (const s of arr) {
+      const num = Number(s);
+      if (isNaN(num)) return null;
+      parsed.push(num);
+    }
+    return parsed;
+  }
+
+  // 生成所有步骤，方便动画播放
+  function generateSteps(nums) {
+    let steps = [];
+    let left = 0;
+    let right = nums.length - 1;
+    let min = nums[0];
+
+    while (left <= right) {
+      let mid = left + Math.floor((right - left) / 2);
+      steps.push({
+        left, right, mid, min, nums: [...nums], note: ""
+      });
+
+      if (nums[left] < nums[right]) {
+        min = Math.min(min, nums[left]);
+        steps.push({
+          left, right, mid, min, nums: [...nums], done: true, note: "整体有序，最小值就是 nums[left]"
+        });
+        break;
+      }
+
+      min = Math.min(min, nums[mid]);
+
+      if (nums[mid] > nums[right]) {
+        left = mid + 1;
+        steps.push({
+          left, right, mid, min, nums: [...nums], note: "nums[mid] > nums[right]，最小值在右边，left = mid + 1"
+        });
+      } else if (nums[mid] < nums[right]) {
+        right = mid;
+        steps.push({
+          left, right, mid, min, nums: [...nums], note: "nums[mid] < nums[right]，最小值在 mid 或左边，right = mid"
+        });
+      } else {
+        right--;
+        steps.push({
+          left, right, mid, min, nums: [...nums], note: "nums[mid] == nums[right]，无法判断，right--"
+        });
+      }
+    }
+
+    if (steps.length === 0 || !steps[steps.length - 1].done) {
+      steps.push({
+        left, right, mid: -1, min, nums: [...nums], done: true, note: "算法结束"
+      });
+    }
+
+    return steps;
+  }
+
+  // 按步骤播放动画
+  function playSteps() {
+    if (stepIndex >= steps.length) {
+      const last = steps[steps.length - 1];
+      log(`完成，最小值为: ${last.min}`);
+      renderArray(
+        last.left,
+        -1,
+        last.right,
+        nums.indexOf(last.min),
+        true
+      );
+      startBtn.disabled = false;
+      return;
+    }
+
+    const step = steps[stepIndex];
+
+    log(`Step ${stepIndex + 1}: left=${step.left}, mid=${step.mid}, right=${step.right}, min=${step.min}`);
+    if (step.note) {
+      log(`  操作说明：${step.note}`);
+    }
+    if (step.done) {
+      log("算法结束");
+    }
+
+    renderArray(step.left, step.mid, step.right, nums.indexOf(step.min));
+
+    stepIndex++;
+    setTimeout(playSteps, 1200);
+  }
+
+  // 按钮点击处理
+  startBtn.addEventListener("click", () => {
+    const parsed = parseInput();
+    if (!parsed || parsed.length === 0) {
+      alert("请输入有效的数字数组，使用逗号分隔");
+      return;
+    }
+    nums = parsed;
+    left = 0;
+    right = nums.length - 1;
+    min = nums[0];
+    stepIndex = 0;
+    steps = generateSteps(nums);
+
+    logContainer.textContent = "";
+    startBtn.disabled = true;
+
+    // 初始化渲染：L在左边，R在右边，M不显示
+    renderArray(left, -1, right, -1);
+
+    setTimeout(playSteps, 800);
+  });
+
+  // 页面初始渲染
+  function init() {
+    const defaultNums = parseInput();
+    if (defaultNums) {
+      nums = defaultNums;
+      left = 0;
+      right = nums.length - 1;
+      renderArray(left, -1, right, -1);
+    }
+  }
+  init();
+</script>
+</body>
+</html>

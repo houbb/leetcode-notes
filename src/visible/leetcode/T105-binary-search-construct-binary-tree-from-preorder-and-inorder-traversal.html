@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LC105 Visualizer — Build tree from preorder & inorder (60/40 Layout)</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #0f1724;
+      --accent: #60a5fa;
+      --muted: #94a3b8;
+      --good: #10b981;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg,#071026 0%, #07172b 100%);
+      color: #e6eef8;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 20px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+    a.home {
+      color: var(--accent);
+      text-decoration: none;
+      background: rgba(96,165,250,0.08);
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      align-items: flex-start;
+    }
+    .panel {
+      background: linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.03);
+      padding: 14px;
+      border-radius: 12px;
+      flex: 1;
+    }
+    label {
+      display: inline-block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    input[type=text], input[type=number], textarea {
+      width: 80%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.04);
+      background: transparent;
+      color: inherit;
+    }
+    textarea {
+      min-height: 64px;
+      resize: vertical;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+    .btn {
+      background: var(--accent);
+      border: none;
+      color: #04122a;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.04);
+      color: var(--muted);
+    }
+
+    .viz-area {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      height: 480px;
+    }
+    .canvas {
+      flex-basis: 60%;
+      background: linear-gradient(180deg,#072031,#061220);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 100%;
+      border: 1px solid rgba(255,255,255,0.03);
+      position: relative;
+      overflow: auto;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .side {
+      flex-basis: 40%;
+      display: flex;
+      flex-direction: column;
+    }
+    .logs {
+      background: #000;
+      border-radius: 10px;
+      padding: 8px;
+      height: 100%;
+      color: #cfe7ff;
+      font-family: monospace;
+      font-size: 13px;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.04);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .queues {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .queue {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .item {
+      background: rgba(255,255,255,0.03);
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.02);
+      min-width: 28px;
+      text-align: center;
+    }
+    .item.active {
+      background: linear-gradient(90deg,rgba(96,165,250,0.15),rgba(96,165,250,0.06));
+      border-color: rgba(96,165,250,0.3);
+    }
+
+    .stack-view {
+      margin-top: 10px;
+      background: linear-gradient(180deg,rgba(255,255,255,0.01),transparent);
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px dashed rgba(255,255,255,0.03);
+      min-height: 80px;
+      font-size: 12px;
+      color: var(--muted);
+      overflow-y: auto;
+    }
+
+    /* node styles for svg */
+    .node circle {
+      fill: rgba(255,255,255,0.04);
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 1.2;
+    }
+    .node text {
+      fill: #e6eef8;
+      font-size: 12px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      user-select:none;
+    }
+    .node.active circle {
+      fill: var(--accent);
+      stroke: rgba(96,165,250,0.9);
+    }
+    .edge {
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 1.2;
+    }
+
+    footer {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>LC105 Visualizer — Build tree from <em>preorder</em> & <em>inorder</em></h1>
+      <a class="home" href="index.html">← 返回首页</a>
+    </header>
+
+    <div class="controls">
+      <div class="panel">
+		<div>
+			<label>前序</label>
+			<input id="preorder" type="text" value="3,9,20,15,7" />
+	    </div>
+		<div>
+        <label style="margin-top:8px">中序</label>
+        <input id="inorder" type="text" value="9,3,15,20,7" />
+		</div>
+		
+        <div class="row" style="margin-top:10px;align-items:center">
+          <div style="flex:1">
+            <label>间隔</label>
+            <input id="interval" type="number" value="1000" min="200" />
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="btn" id="startBtn">可视化</button>
+            <button class="btn secondary" id="resetBtn">重置</button>
+          </div>
+        </div>
+
+        <div class="small" style="margin-top:10px">提示：默认值已填。可以修改并点击“开始可视化”。日志会记录算法的关键变量。</div>
+      </div>
+    </div>
+
+    <div class="viz-area">
+      <div class="canvas" id="canvas">
+        <svg id="svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <div class="side">
+        <div style="flex:1; display:flex; flex-direction: column;">
+          <div style="margin-top: 12px;">
+            <label>当前队列 / 数组视图</label>
+            <div class="queues">
+              <div>
+                <div class="small">Preorder</div>
+                <div id="qPre" class="queue"></div>
+              </div>
+              <div>
+                <div class="small">Inorder</div>
+                <div id="qIn" class="queue"></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 12px;">
+            <label>递归调用栈（模拟）</label>
+            <div id="stack" class="stack-view"></div>
+          </div>
+		  <label>操作日志</label>
+          <div id="log" class="logs"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const preInput = document.getElementById('preorder');
+  const inInput = document.getElementById('inorder');
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const logEl = document.getElementById('log');
+  const qPre = document.getElementById('qPre');
+  const qIn = document.getElementById('qIn');
+  const stackEl = document.getElementById('stack');
+  const svg = document.getElementById('svg');
+  const intervalEl = document.getElementById('interval');
+
+  let steps = [];
+  let nodes = {};
+  let edges = [];
+  let nextId = 1;
+
+  function parseArr(str){
+    return str.split(',').map(s=>s.trim()).filter(s=>s!=="").map(Number);
+  }
+
+  function log(msg){
+    const time = new Date().toLocaleTimeString();
+    const newLine = document.createElement('div');
+    newLine.textContent = `[${time}] ${msg}`;
+    logEl.appendChild(newLine);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function clearLog(){ logEl.innerHTML = ''; }
+  function clearViz(){ nodes={}; edges=[]; nextId=1; svg.innerHTML = ''; }
+  function renderQueues(preorder,inorder){
+    qPre.innerHTML = '';
+    qIn.innerHTML = '';
+    preorder.forEach((v,i)=>{
+      const d = document.createElement('div'); d.className='item'; d.innerText = v; d.dataset.val=v; qPre.appendChild(d);
+    });
+    inorder.forEach((v,i)=>{
+      const d = document.createElement('div'); d.className='item'; d.innerText = v; d.dataset.val=v; qIn.appendChild(d);
+    });
+  }
+
+  function createSteps(preorder, inorder){
+    steps = [];
+    const indexMap = new Map();
+    inorder.forEach((v,i)=>indexMap.set(v,i));
+
+    function helper(pL, pR, iL, iR, parentId=null, side=null){
+      if(pL>pR || iL>iR) return;
+      const rootVal = preorder[pL];
+      const rootInIdx = indexMap.get(rootVal);
+      const leftSize = rootInIdx - iL;
+
+      const id = nextId++;
+      steps.push({type:'create', id, val:rootVal, parentId, side, pRange:[pL,pR], iRange:[iL,iR]});
+      steps.push({type:'stackPush', frame:{pRange:[pL,pR], iRange:[iL,iR], root:rootVal}});
+
+      if(leftSize>0){
+        steps.push({type:'descend', dir:'left', id, rootVal, pRange:[pL+1, pL+leftSize], iRange:[iL, rootInIdx-1]});
+        helper(pL+1, pL+leftSize, iL, rootInIdx-1, id, 'L');
+      }
+      if(rootInIdx < iR){
+        steps.push({type:'descend', dir:'right', id, rootVal, pRange:[pL+leftSize+1, pR], iRange:[rootInIdx+1, iR]});
+        helper(pL+leftSize+1, pR, rootInIdx+1, iR, id, 'R');
+      }
+
+      steps.push({type:'stackPop', frame:{pRange:[pL,pR], iRange:[iL,iR], root:rootVal}});
+    }
+
+    helper(0, preorder.length-1, 0, inorder.length-1, null, null);
+    return steps;
+  }
+
+  function layoutAndDraw(){
+    const root = Object.values(nodes).find(n=>!n.parentId);
+    const placements = {};
+    if(!root){ svg.innerHTML=''; return; }
+
+    function assign(node, depth, minX, maxX){
+      placements[node.id] = {depth, x:(minX+maxX)/2};
+      const left = node.leftId ? nodes[node.leftId] : null;
+      const right = node.rightId ? nodes[node.rightId] : null;
+      if(left) assign(left, depth+1, minX, (minX+maxX)/2 - 20);
+      if(right) assign(right, depth+1, (minX+maxX)/2 + 20, maxX);
+    }
+    assign(root, 0, 60, 940);
+
+    svg.innerHTML = '';
+    edges.forEach(e=>{
+      const a = placements[e.from], b = placements[e.to];
+      if(!a||!b) return;
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1', a.x); line.setAttribute('y1', 80 + a.depth*90);
+      line.setAttribute('x2', b.x); line.setAttribute('y2', 80 + b.depth*90);
+      line.setAttribute('class','edge'); svg.appendChild(line);
+    });
+
+    Object.values(nodes).forEach(n=>{
+      const p = placements[n.id];
+      if(!p) return;
+      const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.setAttribute('class','node');
+      g.setAttribute('transform',`translate(${p.x}, ${80 + p.depth*90})`);
+      g.dataset.id = n.id;
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('r',22);
+      g.appendChild(c);
+      const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.textContent = n.val;
+      g.appendChild(t);
+      svg.appendChild(g);
+    });
+  }
+
+  function applyStep(step){
+    switch(step.type){
+      case 'create':{
+        const {id,val,parentId,side,pRange,iRange} = step;
+        nodes[id] = {id,val,parentId,side,leftId:null,rightId:null};
+        if(parentId){
+          if(side==='L') nodes[parentId].leftId = id;
+          if(side==='R') nodes[parentId].rightId = id;
+          edges.push({from:parentId,to:id});
+        }
+        log(`创建节点 ${val} (id=${id})  parent=${parentId?parentId:'null'} side=${side||'root'}`);
+        highlightRanges(pRange,iRange,val);
+        break;
+      }
+      case 'descend':{
+        const {id,dir,rootVal,pRange,iRange} = step;
+        log(`对 ${rootVal} 的 ${dir} 子问题 → preorder indices ${pRange}  inorder indices ${iRange}`);
+        highlightRanges(pRange,iRange);
+        break;
+      }
+      case 'stackPush':{
+        pushStackFrame(step.frame);
+        break;
+      }
+      case 'stackPop':{
+        popStackFrame(step.frame);
+        break;
+      }
+    }
+    layoutAndDraw();
+    updateQueuesDisplay();
+  }
+
+  function highlightRanges(pRange,iRange,activeVal){
+    const preItems = qPre.querySelectorAll('.item');
+    preItems.forEach((el,idx)=>{
+      const val = Number(el.dataset.val);
+      if(idx>=pRange[0] && idx<=pRange[1]) el.classList.add('active'); else el.classList.remove('active');
+      if(activeVal!==undefined && val===activeVal) el.classList.add('active');
+    });
+    const inItems = qIn.querySelectorAll('.item');
+    inItems.forEach((el,idx)=>{
+      const val = Number(el.dataset.val);
+      if(idx>=iRange[0] && idx<=iRange[1]) el.classList.add('active'); else el.classList.remove('active');
+      if(activeVal!==undefined && val===activeVal) el.classList.add('active');
+    });
+  }
+
+  function pushStackFrame(frame){
+    const el = document.createElement('div');
+    el.className='frame';
+    el.dataset.key = JSON.stringify(frame);
+    el.innerText = `root=${frame.root}  pre=${frame.pRange}  in=${frame.iRange}`;
+    stackEl.prepend(el);
+    log(`入栈 frame root=${frame.root} pre=${frame.pRange} in=${frame.iRange}`);
+  }
+  function popStackFrame(frame){
+    const children = stackEl.querySelectorAll('.frame');
+    for(const c of children){
+      if(c.innerText.includes(`root=${frame.root}`) && c.innerText.includes(`pre=${frame.pRange}`)){
+        c.remove();
+        break;
+      }
+    }
+    log(`出栈 frame root=${frame.root} pre=${frame.pRange} in=${frame.iRange}`);
+  }
+
+  function updateQueuesDisplay(){ /* currently no extra action */ }
+
+  let animTimer=null;
+  let animIndex=0;
+
+  function animate(){
+    if(animIndex>=steps.length){
+      log('动画结束');
+      clearInterval(animTimer);
+      animTimer = null;
+      return;
+    }
+    applyStep(steps[animIndex]);
+    animIndex++;
+  }
+
+  startBtn.onclick = ()=>{
+    clearLog();
+    clearViz();
+    stackEl.innerHTML = '';
+    const preorder = parseArr(preInput.value);
+    const inorder = parseArr(inInput.value);
+    if(preorder.length!==inorder.length || preorder.length===0){
+      alert('输入的前序和中序长度不一致或为空！');
+      return;
+    }
+    renderQueues(preorder,inorder);
+    steps = createSteps(preorder,inorder);
+    animIndex = 0;
+    animate();
+    const ms = Math.max(200, Number(intervalEl.value) || 1000);
+    if(animTimer) clearInterval(animTimer);
+    animTimer = setInterval(animate, ms);
+  };
+
+  resetBtn.onclick = ()=>{
+    if(animTimer) clearInterval(animTimer);
+    animTimer=null;
+    clearLog();
+    clearViz();
+    stackEl.innerHTML = '';
+    const preorder = parseArr(preInput.value);
+    const inorder = parseArr(inInput.value);
+    renderQueues(preorder,inorder);
+  };
+
+  resetBtn.onclick();
+})();
+</script>
+
+</body>
+</html>

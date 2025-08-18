@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>计数全 1 正方形 - 动态规划可视化 (可点击反转)</title>
+<style>
+  body {
+    background: #121212;
+    color: #ddd;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    user-select: none;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #7cffcb;
+    text-shadow: 0 0 8px #7cffcb;
+  }
+  .controls {
+    max-width: 800px;
+    margin: 0 auto 15px;
+    text-align: center;
+  }
+  input[type=number] {
+    width: 60px;
+    padding: 5px 8px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    margin: 0 10px;
+    outline: none;
+  }
+  button {
+    background: #7cffcb;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    color: #121212;
+    box-shadow: 0 0 6px #7cffcb;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #53bfb3;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    max-width: 900px;
+    margin: 0 auto 30px;
+  }
+  .matrix-block {
+    display: inline-block;
+    text-align: center;
+  }
+  .matrix-title {
+    margin-bottom: 6px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #7cffcb;
+    text-shadow: 0 0 6px #7cffcb;
+  }
+  table {
+    border-collapse: collapse;
+    user-select: none;
+  }
+  td {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #444;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 40px;
+    text-align: center;
+    cursor: default;
+    position: relative;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  /* 原始矩阵 1 为亮色 */
+  .matrix-original td[data-val="1"] {
+    background: #0f766e;
+    box-shadow: 0 0 8px #0f766e66 inset;
+    cursor: pointer;
+  }
+  .matrix-original td[data-val="0"] {
+    color: #555;
+    cursor: pointer;
+  }
+
+  /* dp 值颜色渐变: 越大越亮绿 */
+  .matrix-dp td {
+    background: #222;
+    color: #8fbc8f;
+    box-shadow: none;
+    cursor: default;
+  }
+  .matrix-dp td[data-dp="0"] {
+    color: #555;
+    background: #111;
+  }
+  /* 用 JS 动态设置背景色 */
+
+  /* 高亮依赖点 */
+  .highlight-dep {
+    box-shadow: 0 0 10px 2px #ff9f00 inset !important;
+    background-color: #442a00 !important;
+    color: #ffb347 !important;
+  }
+  /* 高亮当前计算点 */
+  .highlight-current {
+    box-shadow: 0 0 12px 3px #00ffe3 inset !important;
+    background-color: #004d4d !important;
+    color: #00ffe3 !important;
+  }
+  /* 高亮正方形区域 */
+  .highlight-square {
+    outline: 3px solid #7cffcb;
+    outline-offset: -2px;
+  }
+
+  /* Tooltip 弹出框 */
+  .tooltip {
+    position: absolute;
+    background: rgba(0, 255, 227, 0.9);
+    color: #121212;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+    transform: translate(-50%, -110%);
+    box-shadow: 0 0 10px #00ffe3aa;
+  }
+
+  /* 日志黑底 */
+  #log {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #0a0a0a;
+    border-radius: 8px;
+    padding: 15px;
+    height: 240px;
+    overflow-y: auto;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.3;
+    color: #7cffcb;
+    box-shadow: 0 0 20px #0affcaa0 inset;
+  }
+  #log .entry {
+    margin-bottom: 6px;
+  }
+  #log .entry strong {
+    color: #00ffe3;
+  }
+
+  /* 首页链接 */
+  #home-link {
+    display: block;
+    max-width: 900px;
+    margin: 0 auto 30px;
+    color: #7cffcb;
+    font-weight: bold;
+    font-size: 16px;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 0 0 8px #7cffcb;
+  }
+  #home-link:hover {
+    color: #00ffe3;
+  }
+</style>
+</head>
+<body>
+
+<h1>计数全 1 正方形 - 动态规划可视化 (可点击反转)</h1>
+<a id="home-link" href="index.html">&larr; 返回首页</a>
+
+<div class="controls">
+  行数 m: <input id="input-m" type="number" min="1" max="40" value="6" />
+  列数 n: <input id="input-n" type="number" min="1" max="40" value="6" />
+  <button id="btn-generate">随机生成矩阵</button>
+  <button id="btn-run">开始可视化</button>
+</div>
+
+<div class="container">
+  <div class="matrix-block matrix-original">
+    <div class="matrix-title">原始矩阵 (点击切换 0/1)</div>
+    <table id="matrix-original"></table>
+  </div>
+  <div class="matrix-block matrix-dp">
+    <div class="matrix-title">DP 数组（边长）</div>
+    <table id="matrix-dp"></table>
+  </div>
+</div>
+
+<div id="log"></div>
+
+<script>
+(() => {
+  const maxDim = 40;
+  let m = 6, n = 6;
+  let matrix = [];
+  let dp = [];
+  let animInterval = null;
+  let animStep = 0;
+  let steps = [];
+
+  const originalTable = document.getElementById('matrix-original');
+  const dpTable = document.getElementById('matrix-dp');
+  const logEl = document.getElementById('log');
+
+  function randomMatrix(m, n) {
+    const mat = [];
+    for (let i = 0; i < m; i++) {
+      const row = [];
+      for (let j = 0; j < n; j++) {
+        row.push(Math.random() < 0.4 ? 1 : 0); // 40%概率是1
+      }
+      mat.push(row);
+    }
+    return mat;
+  }
+
+  function renderMatrix(tableEl, data, isDp=false) {
+    tableEl.innerHTML = '';
+    for (let i = 0; i < data.length; i++) {
+      const tr = document.createElement('tr');
+      for (let j = 0; j < data[i].length; j++) {
+        const td = document.createElement('td');
+        if (!isDp) {
+          td.dataset.val = data[i][j];
+          td.textContent = data[i][j];
+          td.style.backgroundColor = '';
+          td.style.color = '';
+        } else {
+          td.dataset.dp = data[i][j];
+          td.textContent = data[i][j] > 0 ? data[i][j] : '';
+          if (data[i][j] > 0) {
+            let val = data[i][j];
+            let capped = Math.min(val, 10);
+            const r = Math.floor(20 - capped * 2);
+            const g = Math.floor(60 + capped * 15);
+            const b = 20;
+            td.style.backgroundColor = `rgb(${r},${g},${b})`;
+            td.style.color = `rgb(0,${g + 50},0)`;
+            td.style.fontWeight = 'bold';
+            td.style.textShadow = `0 0 6px rgb(0,${g + 100},0)`;
+          } else {
+            td.style.backgroundColor = '#111';
+            td.style.color = '#555';
+            td.style.fontWeight = 'normal';
+            td.style.textShadow = 'none';
+          }
+        }
+        tr.appendChild(td);
+      }
+      tableEl.appendChild(tr);
+    }
+  }
+
+  // 点击切换矩阵值
+  function bindOriginalClick(){
+    originalTable.querySelectorAll('td').forEach((td,i)=>{
+      td.style.cursor = 'pointer';
+      td.onclick = () => {
+        const r = Math.floor(i / n);
+        const c = i % n;
+        // 反转 0/1
+        matrix[r][c] = matrix[r][c] === 1 ? 0 : 1;
+        td.dataset.val = matrix[r][c];
+        td.textContent = matrix[r][c];
+        if(matrix[r][c] === 1){
+          td.style.backgroundColor = '#0f766e';
+          td.style.boxShadow = '0 0 8px #0f766e66 inset';
+          td.style.color = '';
+        } else {
+          td.style.backgroundColor = '';
+          td.style.boxShadow = 'none';
+          td.style.color = '#555';
+        }
+        // 反转后重新生成步骤
+        generateSteps();
+        // 重新渲染 dp 表格清空
+        renderMatrix(dpTable, Array.from({length:m},()=>Array(n).fill(0)), true);
+        clearHighlights();
+        // 输出日志最终结果
+        logFinalCount();
+      };
+    });
+  }
+
+  // 清除高亮
+  function clearHighlights() {
+    document.querySelectorAll('.highlight-current,.highlight-dep,.highlight-square').forEach(el => {
+      el.classList.remove('highlight-current', 'highlight-dep', 'highlight-square');
+      el.style.outline = '';
+      el.style.boxShadow = '';
+      el.style.backgroundColor = '';
+      el.style.color = '';
+      el.style.textShadow = '';
+    });
+  }
+
+  // 记录日志
+  function logStep(text, strong = false){
+    const div = document.createElement('div');
+    div.className = 'entry';
+    div.innerHTML = strong ? `<strong>${text}</strong>` : text;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  // 生成每一步的计算信息和状态快照
+  function generateSteps(){
+    steps = [];
+    dp = Array.from({length:m},()=>Array(n).fill(0));
+    for(let i=0; i<m; i++){
+      for(let j=0; j<n; j++){
+        if(matrix[i][j] === 1){
+          if(i===0 || j===0){
+            dp[i][j] = 1;
+            steps.push({
+              i,j,dpVal:1,
+              deps:[],
+              squareSize:1,
+              msg:`位置(${i},${j})是边界，dp[${i}][${j}] = 1`
+            });
+          } else {
+            let deps = [dp[i-1][j], dp[i][j-1], dp[i-1][j-1]];
+            let minVal = Math.min(...deps);
+            let val = minVal + 1;
+            dp[i][j] = val;
+            steps.push({
+              i,j,dpVal:val,
+              deps: [
+                {r:i-1,c:j,val:dp[i-1][j]},
+                {r:i,c:j-1,val:dp[i][j-1]},
+                {r:i-1,c:j-1,val:dp[i-1][j-1]}
+              ],
+              squareSize: val,
+              msg:`dp[${i}][${j}] = min(dp[${i-1}][${j}]=${dp[i-1][j]}, dp[${i}][${j-1}]=${dp[i][j-1]}, dp[${i-1}][${j-1}]=${dp[i-1][j-1]}) + 1 = ${val}`
+            });
+          }
+        } else {
+          dp[i][j] = 0;
+          steps.push({
+            i,j,dpVal:0,
+            deps: [],
+            squareSize:0,
+            msg:`位置(${i},${j})是0，dp[${i}][${j}] = 0`
+          });
+        }
+      }
+    }
+  }
+
+  function resetTables(){
+    renderMatrix(originalTable, matrix, false);
+    renderMatrix(dpTable, Array.from({length:m},()=>Array(n).fill(0)), true);
+    clearHighlights();
+    logEl.innerHTML = '';
+  }
+
+  function animateStep(step){
+    clearHighlights();
+    const i = step.i, j = step.j;
+    dpTable.rows[i].cells[j].textContent = step.dpVal > 0 ? step.dpVal : '';
+    if(step.dpVal > 0){
+      let capped = Math.min(step.dpVal, 10);
+      const r = Math.floor(20 - capped * 2);
+      const g = Math.floor(60 + capped * 15);
+      const b = 20;
+      dpTable.rows[i].cells[j].style.backgroundColor = `rgb(${r},${g},${b})`;
+      dpTable.rows[i].cells[j].style.color = `rgb(0,${g+50},0)`;
+      dpTable.rows[i].cells[j].style.fontWeight = 'bold';
+      dpTable.rows[i].cells[j].style.textShadow = `0 0 6px rgb(0,${g+100},0)`;
+    } else {
+      dpTable.rows[i].cells[j].style.backgroundColor = '#111';
+      dpTable.rows[i].cells[j].style.color = '#555';
+      dpTable.rows[i].cells[j].style.fontWeight = 'normal';
+      dpTable.rows[i].cells[j].style.textShadow = 'none';
+    }
+
+    highlightCurrent(i,j);
+    if(step.deps.length === 3){
+      step.deps.forEach(d=>{
+        if(d.r>=0 && d.c>=0) dpTable.rows[d.r].cells[d.c].classList.add('highlight-dep');
+      });
+    }
+    if(step.squareSize > 1){
+      highlightSquare(i,j,step.squareSize);
+    }
+    logStep(step.msg, true);
+  }
+
+  function highlightDeps(i,j){
+    if(i>0) dpTable.rows[i-1]?.cells[j]?.classList.add('highlight-dep');
+    if(j>0) dpTable.rows[i]?.cells[j-1]?.classList.add('highlight-dep');
+    if(i>0 && j>0) dpTable.rows[i-1]?.cells[j-1]?.classList.add('highlight-dep');
+  }
+  function highlightCurrent(i,j){
+    dpTable.rows[i]?.cells[j]?.classList.add('highlight-current');
+  }
+  function highlightSquare(i,j,size){
+    clearHighlights();
+    for(let r = i - size + 1; r <= i; r++){
+      for(let c = j - size + 1; c <= j; c++){
+        if(r<0 || c<0) continue;
+        let cell = dpTable.rows[r]?.cells[c];
+        if(cell){
+          cell.style.outline = '3px solid #7cffcb';
+          cell.style.outlineOffset = '-2px';
+          cell.classList.add('highlight-square');
+        }
+      }
+    }
+  }
+
+  // 显示气泡
+  let tooltipDiv = null;
+  function showTooltip(td, step) {
+    if(tooltipDiv){
+      tooltipDiv.remove();
+      tooltipDiv = null;
+    }
+    if(!step) return;
+    tooltipDiv = document.createElement('div');
+    tooltipDiv.className = 'tooltip';
+    let content = `<div><strong>位置 (${step.i},${step.j})</strong></div>`;
+    content += `<div>dp值: ${step.dpVal}</div>`;
+    if(step.deps.length === 3){
+      content += `<div>计算: min(上=${step.deps[0].val}, 左=${step.deps[1].val}, 左上=${step.deps[2].val}) + 1 = ${step.dpVal}</div>`;
+      content += `<div>正方形边长: ${step.squareSize}</div>`;
+    } else {
+      content += `<div>${step.msg}</div>`;
+    }
+    tooltipDiv.innerHTML = content;
+    td.appendChild(tooltipDiv);
+  }
+  function hideTooltip(){
+    if(tooltipDiv){
+      tooltipDiv.remove();
+      tooltipDiv = null;
+    }
+  }
+  function bindTooltip(){
+    dpTable.querySelectorAll('td').forEach((td,i)=>{
+      td.onclick = () => {
+        const r = Math.floor(i / n);
+        const c = i % n;
+        let step = steps.find(s => s.i === r && s.j === c);
+        if(!step) return;
+        if(tooltipDiv) {
+          hideTooltip();
+          return;
+        }
+        showTooltip(td, step);
+      };
+    });
+  }
+
+  function startAnimation(){
+    if(animInterval) clearInterval(animInterval);
+    animStep = 0;
+    logEl.innerHTML = '';
+    renderMatrix(dpTable, Array.from({length:m},()=>Array(n).fill(0)), true);
+    animInterval = setInterval(()=>{
+      if(animStep >= steps.length){
+        clearInterval(animInterval);
+        animInterval = null;
+        logFinalCount();
+        return;
+      }
+      animateStep(steps[animStep]);
+      animStep++;
+    }, 200);
+  }
+
+  // 计算并输出最终结果日志
+  function logFinalCount(){
+    const sum = dp.flat().reduce((a,b)=>a+b,0);
+    logStep(`计算完成！矩阵中所有全 1 正方形的数量是：<strong>${sum}</strong>`, true);
+  }
+
+  function init(){
+    m = parseInt(document.getElementById('input-m').value);
+    n = parseInt(document.getElementById('input-n').value);
+    if(isNaN(m) || m < 1) m = 6;
+    if(isNaN(n) || n < 1) n = 6;
+    if(m > maxDim) m = maxDim;
+    if(n > maxDim) n = maxDim;
+
+    matrix = randomMatrix(m,n);
+    generateSteps();
+    resetTables();
+    bindOriginalClick();
+    bindTooltip();
+    logFinalCount();
+  }
+
+  document.getElementById('btn-generate').onclick = () => {
+    init();
+  };
+
+  document.getElementById('btn-run').onclick = () => {
+    startAnimation();
+  };
+
+  // 首次载入初始化
+  init();
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LC160 双指针链表相交可视化</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 40px;
+    }
+    h2 {
+      text-align: center;
+      color: #38bdf8;
+    }
+    input {
+      padding: 10px;
+      width: 300px;
+      margin-right: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      padding: 10px 20px;
+      background: #3b82f6;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .list-container {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+    .node {
+      padding: 10px 15px;
+      margin-right: 10px;
+      border-radius: 8px;
+      background: #1e293b;
+      border: 2px solid #334155;
+      position: relative;
+      min-width: 40px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .arrow::after {
+      content: '→';
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+    .highlight {
+      background: #facc15 !important;
+      color: #000;
+      animation: blink 1s infinite;
+      border-color: #facc15;
+    }
+    .shared {
+      background: #10b981;
+      border-color: #22c55e;
+    }
+    .overlap {
+      background: #c084fc !important;
+      border-color: #d946ef !important;
+    }
+    .both-highlight {
+      background: #e11d48 !important;
+      border-color: #f43f5e !important;
+      animation: flash 1s infinite;
+      color: white;
+    }
+    .log {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+    @keyframes blink {
+      0% { box-shadow: 0 0 10px #facc15; }
+      50% { box-shadow: 0 0 20px #facc15; }
+      100% { box-shadow: 0 0 10px #facc15; }
+    }
+    @keyframes flash {
+      0%, 100% { box-shadow: 0 0 10px #f43f5e; }
+      50% { box-shadow: 0 0 20px #f43f5e; }
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #10b981;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="location.href='index.html'">← 返回首页</button>
+
+  <h2>🚀 LC160 双指针链表相交可视化</h2>
+
+  <div style="text-align:center;">
+    链表 A: <input id="inputA" placeholder="1,2,3,8,9" value="1,2,3,8,9" />
+    链表 B: <input id="inputB" placeholder="4,5,8,9" value="4,5,8,9" />
+    <br>
+    <button onclick="startVisualization()">开始可视化</button>
+  </div>
+
+  <h3>链表 A</h3>
+  <div id="listA" class="list-container"></div>
+
+  <h3>链表 B</h3>
+  <div id="listB" class="list-container"></div>
+
+  <h3>执行日志</h3>
+  <div id="log" class="log"></div>
+
+  <script>
+    let nodesA = [], nodesB = [];
+    let pointerA = 0, pointerB = 0;
+    let timer = null;
+    let step = 1;
+
+    function buildLists(valA, valB) {
+      let arrA = valA.split(',').map(s => s.trim());
+      let arrB = valB.split(',').map(s => s.trim());
+
+      let i = arrA.length - 1, j = arrB.length - 1;
+      const shared = [];
+      while (i >= 0 && j >= 0 && arrA[i] === arrB[j]) {
+        shared.unshift(arrA[i]);
+        i--; j--;
+      }
+
+      const build = (unique, shared) =>
+        unique.map(v => ({ val: v, shared: false }))
+              .concat(shared.map(v => ({ val: v, shared: true })));
+
+      return [
+        build(arrA.slice(0, i + 1), shared),
+        build(arrB.slice(0, j + 1), shared)
+      ];
+    }
+
+    function renderLists() {
+      const listA = document.getElementById("listA");
+      const listB = document.getElementById("listB");
+      listA.innerHTML = "";
+      listB.innerHTML = "";
+
+      nodesA.forEach((node, idx) => {
+        const div = document.createElement("div");
+        let className = "node arrow";
+        if (node.shared) className += " shared";
+        if (idx === pointerA && idx < nodesA.length) {
+          if (pointerB < nodesB.length && nodesB[pointerB].val === node.val && node.shared) {
+            className += " both-highlight"; // 🎯 重合节点高亮
+          } else if (node.shared) {
+            className += " overlap"; // 🟣 路过共享节点
+          } else {
+            className += " highlight";
+          }
+        }
+        div.className = className;
+        div.textContent = node.val;
+        listA.appendChild(div);
+      });
+
+      nodesB.forEach((node, idx) => {
+        const div = document.createElement("div");
+        let className = "node arrow";
+        if (node.shared) className += " shared";
+        if (idx === pointerB && idx < nodesB.length) {
+          if (pointerA < nodesA.length && nodesA[pointerA].val === node.val && node.shared) {
+            className += " both-highlight"; // 🎯 重合节点高亮
+          } else if (node.shared) {
+            className += " overlap"; // 🟣 路过共享节点
+          } else {
+            className += " highlight";
+          }
+        }
+        div.className = className;
+        div.textContent = node.val;
+        listB.appendChild(div);
+      });
+    }
+
+    function log(msg) {
+      const logDiv = document.getElementById("log");
+      logDiv.textContent += msg + "\n";
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function nextStep() {
+      const nodeA = nodesA[pointerA] || null;
+      const nodeB = nodesB[pointerB] || null;
+
+      const valA = nodeA ? nodeA.val : "null";
+      const valB = nodeB ? nodeB.val : "null";
+
+      log(`Step ${step++}: p1 → ${valA}, p2 → ${valB}`);
+
+      if (nodeA && nodeB && nodeA.shared && nodeB.shared && nodeA.val === nodeB.val) {
+        log(`🎉 找到相交节点：${nodeA.val}`);
+        renderLists();
+        clearInterval(timer);
+        return;
+      }
+
+      pointerA++;
+      if (pointerA > nodesA.length) pointerA = 0;
+
+      pointerB++;
+      if (pointerB > nodesB.length) pointerB = 0;
+
+      renderLists();
+    }
+
+    function startVisualization() {
+      const valA = document.getElementById("inputA").value || "1,2,3,8,9";
+      const valB = document.getElementById("inputB").value || "4,5,8,9";
+
+      [nodesA, nodesB] = buildLists(valA, valB);
+      pointerA = 0;
+      pointerB = 0;
+      step = 1;
+
+      document.getElementById("log").textContent = "";
+      renderLists();
+
+      if (timer) clearInterval(timer);
+      timer = setInterval(nextStep, 1000);
+    }
+  </script>
+</body>
+</html>
