@@ -1,7 +1,7 @@
 ---
 
 title: 【leetcode】015-30.串联所有单词的子串 Substring with Concatenation of All Words
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [Algorithm, data-struct, leetcode, sf]
 published: true

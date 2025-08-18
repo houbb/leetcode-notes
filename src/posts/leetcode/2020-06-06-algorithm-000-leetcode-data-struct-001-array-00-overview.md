@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 数组专题 力扣数据结构之数组-00-概览
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, sf]
 published: true

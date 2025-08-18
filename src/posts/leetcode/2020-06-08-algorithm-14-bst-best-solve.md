@@ -1,7 +1,7 @@
 ---
 
 title:  面试算法：有序链表转换为高度平衡的二叉搜索树
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, search]
 published: true

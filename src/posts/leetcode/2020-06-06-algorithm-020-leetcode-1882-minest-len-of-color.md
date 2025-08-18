@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】1882-1182. 与目标颜色间的最短距离
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, binary-search, leetcode]
 published: true

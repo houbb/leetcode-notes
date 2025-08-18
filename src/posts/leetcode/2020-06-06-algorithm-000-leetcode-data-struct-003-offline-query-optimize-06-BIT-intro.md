@@ -1,7 +1,7 @@
 ---
 
 title: leetcode offline-query-optimize 离线查询优化-06-BIT 树状数组
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, offline-query-optimize, sf]
 published: true

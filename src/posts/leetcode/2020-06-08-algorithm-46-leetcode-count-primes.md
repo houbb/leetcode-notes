@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 46 204. Count Primes count-primes 素数的判断算法 Sieve of Eratosthenes
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Algorithm]
 tags: [algorithm, leetcode, dp, sh]
 published: true

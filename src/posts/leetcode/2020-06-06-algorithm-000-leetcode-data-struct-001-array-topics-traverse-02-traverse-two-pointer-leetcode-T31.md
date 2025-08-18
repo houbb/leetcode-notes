@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 数组专题之数组遍历-01-遍历 T31 下一个排列 next-permutation
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, array, traverse, two-pointer, sf]
 published: true

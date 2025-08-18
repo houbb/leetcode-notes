@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 数组专题 01-leetcode.167 two-sum-ii 力扣.167 两数之和II
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, array, binary-search, two-pointer, sf]
 published: true

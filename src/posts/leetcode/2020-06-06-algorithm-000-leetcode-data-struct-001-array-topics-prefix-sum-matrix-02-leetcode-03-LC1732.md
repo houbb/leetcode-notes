@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】Prefix Sum 二维前缀和 1732. 找到最高海拔 find-the-highest-altitude
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, prefix-sum-matrix, leetcode]
 published: true

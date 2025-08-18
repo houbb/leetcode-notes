@@ -1,7 +1,7 @@
 ---
 
 title: leecode 39 Combination Sum backtracking 回溯算法 + 剪枝
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, backtracking, leetcode, sf]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 扫描线专题 06-leetcode.253 meeting room ii 力扣.253 会议室 II
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, array, sweep-line, sf]
 published: true

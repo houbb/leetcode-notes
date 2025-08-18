@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】力扣矩阵 matrix -01-LC74. 搜索二维矩阵 search-a-2d-matrix
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, matrix, binary-search, leetcode]
 published: true

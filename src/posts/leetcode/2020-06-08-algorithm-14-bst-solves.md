@@ -1,7 +1,7 @@
 ---
 
 title:  面试算法力扣95-二叉搜索树的所有解法结果？
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, search]
 published: true

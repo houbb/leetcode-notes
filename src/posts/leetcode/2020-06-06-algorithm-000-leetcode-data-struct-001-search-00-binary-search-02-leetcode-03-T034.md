@@ -1,7 +1,7 @@
 ---
 
 title:  二分查找法？binary-search-02-leetcode 34. 在排序数组中查找元素的第一个和最后一个位置
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, binary-search, sf]
 published: true

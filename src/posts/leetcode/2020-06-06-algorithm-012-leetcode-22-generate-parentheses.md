@@ -1,7 +1,7 @@
 ---
 
 title: 【leetcode】012-22.括号生成 generate-parentheses + 20. 有效的括号 valid parentheses + 32. 最长有效括号 Longest Valid Parentheses
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [Algorithm, data-struct, leetcode, sf]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】57-1371. find-the-longest-substring-containing-vowels-in-even-counts  力扣 1371. 每个元音包含偶数次的最长子字符串
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]
 published: true

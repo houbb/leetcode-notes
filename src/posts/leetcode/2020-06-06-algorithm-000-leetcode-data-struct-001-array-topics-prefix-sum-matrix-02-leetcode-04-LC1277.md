@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】Prefix Sum 二维前缀和 1277. 统计全为 1 的正方形子矩阵 count-square-submatrices-with-all-ones
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, prefix-sum-matrix, leetcode]
 published: true

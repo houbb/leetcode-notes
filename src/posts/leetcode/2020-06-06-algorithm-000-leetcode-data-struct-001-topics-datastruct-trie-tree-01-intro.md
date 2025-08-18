@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 进阶数据结构篇专题之前缀树（Trie，又称字典树）01-入门介绍
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, union-find-set, sf]
 published: true

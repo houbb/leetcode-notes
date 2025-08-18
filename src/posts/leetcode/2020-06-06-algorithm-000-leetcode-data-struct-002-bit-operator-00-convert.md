@@ -1,7 +1,7 @@
 ---
 
 title: java 位运算转换 bit operator convert
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, bit-operator, leetcode, sf]
 published: true

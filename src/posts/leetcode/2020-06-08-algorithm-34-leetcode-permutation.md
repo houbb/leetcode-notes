@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 31+46+60 下一个排列 Next Permutation/Permutations/Permutation Sequence  backtrack
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Algorithm]
 tags: [algorithm, leetcode, backtrack, sh]
 published: true

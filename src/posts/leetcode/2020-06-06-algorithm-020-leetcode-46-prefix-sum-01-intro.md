@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】46-Prefix Sum 力扣前缀和介绍 
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 算法篇专题之图 graph 02-01-LC695. 岛屿的最大面积 max-area-of-island
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, graph, sf]
 published: true

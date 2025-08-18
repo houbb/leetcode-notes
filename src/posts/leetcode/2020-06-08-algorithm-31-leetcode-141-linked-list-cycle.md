@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 141+142 Linked List Cycle 循环链表 快慢指针
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Algorithm]
 tags: [algorithm, leetcode, list, sh]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title: 面试算法：二叉树的前序/中序/后序非递归遍历图解
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Data-Struct]
 tags: [data-struct, block-chain, leetcode, sh]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title: leetcode sort 排序-08-countingSort 计数排序 389. 找不同
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, sort, sf]
 published: true

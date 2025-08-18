@@ -1,7 +1,7 @@
 ---
 
 title: 从零开始的数据结构与算法-00-概览 算法专题汇总
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, sf]
 published: true

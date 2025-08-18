@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 算法篇专题之树 Tree 02-LC230. 二叉搜索树中第 K 小的元素 kth-smallest-element-in-a-bst
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]
 published: true

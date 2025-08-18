@@ -1,7 +1,7 @@
 ---
 
 title: 面试算法：如何找到数组中出现次数最多的元素？
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Data-Struct]
 tags: [data-struct, binary-tree, leetcode, sh]
 published: true

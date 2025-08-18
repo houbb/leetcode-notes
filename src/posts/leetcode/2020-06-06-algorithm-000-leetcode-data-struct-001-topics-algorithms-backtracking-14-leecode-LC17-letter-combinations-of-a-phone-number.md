@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 算法篇专题之回溯 Backtracking 02-LC17 电话号码的字母组合 letter-combinations-of-a-phone-number
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, backtracking, sf]
 published: true

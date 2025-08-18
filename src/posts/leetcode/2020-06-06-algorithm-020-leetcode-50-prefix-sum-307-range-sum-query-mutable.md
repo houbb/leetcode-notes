@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】50-307. range-sum-query-mutable  力扣 307. 区域和检索 - 数组可变
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]
 published: true

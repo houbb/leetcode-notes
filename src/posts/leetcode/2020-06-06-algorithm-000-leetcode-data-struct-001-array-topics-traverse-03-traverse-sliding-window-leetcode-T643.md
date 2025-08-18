@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 数组专题之数组遍历-03-遍历滑动窗口 T643. 子数组最大平均数 I
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, array, traverse, sliding-window, prefix-sum, sf]
 published: true

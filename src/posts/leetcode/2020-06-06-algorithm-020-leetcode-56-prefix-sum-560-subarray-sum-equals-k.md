@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】56-560. subarray-sum-equals-k  力扣 560. 和为 k 的子数组  前缀和+HashMap
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]
 published: true

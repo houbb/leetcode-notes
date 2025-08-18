@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 220 Contains Duplicate III
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Algorithm]
 tags: [algorithm, leetcode, hash, bit, sort, sh]
 published: true

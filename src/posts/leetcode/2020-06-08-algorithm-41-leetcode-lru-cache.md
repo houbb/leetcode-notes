@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 41 LRU CACHE 
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Algorithm]
 tags: [algorithm, leetcode, sh]
 published: true

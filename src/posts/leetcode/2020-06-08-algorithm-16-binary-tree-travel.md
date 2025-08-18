@@ -1,7 +1,7 @@
 ---
 
 title: 面试算法：二叉树的前序/中序/后序/层序遍历方式汇总 preorder/Inorder/postorder/levelorder
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Data-Struct]
 tags: [data-struct, block-chain, leetcode, sh]
 published: true

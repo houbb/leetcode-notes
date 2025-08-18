@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 42 Trapping Rain Water 双指针
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Algorithm]
 tags: [algorithm, leetcode, sh]
 published: true

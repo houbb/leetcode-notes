@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 51 - 217. Contains Duplicate 存在重复元素 哈希？位运算？插入排序？
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Algorithm]
 tags: [algorithm, leetcode, hash, bit, sort, sh]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】54-325. max-size-subarray-sum-equals-k  力扣 325：和等于 k 的最长子数组长度
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]
 published: true

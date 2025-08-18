@@ -1,7 +1,7 @@
 ---
 
 title: leetcode 算法篇专题之动态规划 dynamic-programming 11-LC674. 最长连续递增序列 longest-continuous-increasing-subsequence
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, data-struct, topics, leetcode, dynamic-programming, dp, sf]
 published: true

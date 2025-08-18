@@ -1,7 +1,7 @@
 ---
 
 title:  二分查找法？binary-search-01-基本概念介绍
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, search, binary-search]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】40-best-time-to-buy-and-sell-stock 力扣 121. 买卖股票的最佳时机
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, backtrack, leetcode]
 published: true

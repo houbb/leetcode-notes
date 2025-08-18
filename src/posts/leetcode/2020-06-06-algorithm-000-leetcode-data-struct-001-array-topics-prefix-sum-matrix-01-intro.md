@@ -1,7 +1,7 @@
 ---
 
 title:  二维前缀和 Prefix Sum Matrix-01-基本概念
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, prefix-sum-matrix, matrix, leetcode]
 published: true

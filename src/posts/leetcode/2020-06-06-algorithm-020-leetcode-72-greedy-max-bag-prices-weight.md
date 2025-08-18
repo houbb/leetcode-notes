@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】72-greedy 2548. 填满背包的最大价格 分数背包
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, greedy, leetcode]
 published: true

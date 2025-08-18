@@ -1,7 +1,7 @@
 ---
 
 title: 面试算法：二叉树路径之和问题汇总
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Data-Struct]
 tags: [data-struct, binary-tree, leetcode, sh]
 published: true

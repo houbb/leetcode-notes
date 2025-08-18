@@ -1,7 +1,7 @@
 ---
 
 title:  【leetcode】53-523. continuous-subarray-sum  力扣 523. 连续的子数组和 同余定理  前缀和+HashMap
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, prefix-sum, leetcode]
 published: true

@@ -1,7 +1,7 @@
 ---
 
 title: 面试算法：只出现一次的数字详解汇总
-date:  2020-1-23 10:09:32 +0800 
+date:  2020-01-23 
 categories: [Data-Struct]
 tags: [data-struct, binary-tree, leetcode, sh]
 published: true

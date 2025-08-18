@@ -1,7 +1,7 @@
 ---
 
 title: 【leetcode】009 - 11. 盛最多水的容器 Container With Most Water 双指针法 + 42. 接雨水 Trapping Rain Water + 407. Trapping Rain Water II
-date:  2020-6-8 15:13:08 +0800
+date:  2020-06-08
 categories: [Algorithm]
 tags: [algorithm, dp, leetcode, sf]
 published: true
