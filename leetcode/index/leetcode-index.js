@@ -2984,7 +2984,8 @@ window.LEETCODE_INDEX = [
             "topics",
             "leetcode",
             "stack",
-            "top100 sf"
+            "top100",
+            "sf"
         ],
         "desc": "",
         "url": "2020-06-06-algorithm-000-leetcode-data-struct-001-topics-datastruct-stack-02-leetcode-T20.html"
@@ -3001,10 +3002,29 @@ window.LEETCODE_INDEX = [
             "topics",
             "leetcode",
             "stack",
-            "top100 sf"
+            "top100",
+            "sf"
         ],
         "desc": "",
         "url": "2020-06-06-algorithm-000-leetcode-data-struct-001-topics-datastruct-stack-03-leetcode-LC155-min-stack.html"
+    },
+    {
+        "title": "算法篇专题之栈 stack 03-LC394. 字符串解码 decode-string",
+        "date": "2020-06-08",
+        "categories": [
+            "Algorithm"
+        ],
+        "tags": [
+            "algorithm",
+            "data-struct",
+            "topics",
+            "leetcode",
+            "stack",
+            "top100",
+            "sf"
+        ],
+        "desc": "",
+        "url": "2020-06-06-algorithm-000-leetcode-data-struct-001-topics-datastruct-stack-03-leetcode-LC394-decode-string.html"
     },
     {
         "title": "进阶数据结构篇专题之后缀数组 suffix-array 01-入门介绍",
