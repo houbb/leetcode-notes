@@ -402,7 +402,7 @@ O(m·n)，可以进一步压缩
 
 ## DP 可视化在线
 
-> [在线体验](https://houbb.github.io/leetcode-visual/T1277-dp-count-square-submatrices-with-all-ones.html)
+> [在线体验](https://houbb.github.io/leetcode-notes/leetcode/visible/T1277-dp-count-square-submatrices-with-all-ones.html)
 
 ## 效果
 

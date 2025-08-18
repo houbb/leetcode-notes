@@ -133,7 +133,7 @@ inorder  = [7]
 
 ## 在线可视化
 
-> [从前序与中序遍历序列构造二叉树](https://houbb.github.io/leetcode-visual/T105-binary-search-construct-binary-tree-from-preorder-and-inorder-traversal.html)
+> [从前序与中序遍历序列构造二叉树](https://houbb.github.io/leetcode-notes/leetcode/visible/T105-binary-search-construct-binary-tree-from-preorder-and-inorder-traversal.html)
 
 
 ## 实现

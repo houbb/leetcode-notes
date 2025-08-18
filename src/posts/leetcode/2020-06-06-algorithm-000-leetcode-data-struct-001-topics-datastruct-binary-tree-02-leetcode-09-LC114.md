@@ -319,6 +319,6 @@ public void flatten(TreeNode root) {
 
 # 在线可视化
 
-> [二叉树遍历](https://houbb.github.io/leetcode-visual/binary-tree-travel.html)
+> [二叉树遍历](https://houbb.github.io/leetcode-notes/leetcode/visible/binary-tree-travel.html)
 
  

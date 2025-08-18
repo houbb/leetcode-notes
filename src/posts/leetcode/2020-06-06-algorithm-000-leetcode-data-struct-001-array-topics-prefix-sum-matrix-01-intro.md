@@ -78,7 +78,7 @@ sum = prefix[row2+1][col2+1]
 
 你可以在线体验
 
-> [二维前缀和在线体验](https://houbb.github.io/leetcode-visual/T304-prefix-sum-matrix-summary.html)
+> [二维前缀和在线体验](https://houbb.github.io/leetcode-notes/leetcode/visible/T304-prefix-sum-matrix-summary.html)
 
 ## 代码实现模板（Java）
 

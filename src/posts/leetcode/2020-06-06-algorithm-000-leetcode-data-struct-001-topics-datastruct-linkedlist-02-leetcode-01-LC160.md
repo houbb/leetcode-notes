@@ -310,7 +310,7 @@ public class Solution {
 
 ## 在线可视化
 
-> [双指针](https://houbb.github.io/leetcode-visual/T160_linkedlist-two-pointer.html)
+> [双指针](https://houbb.github.io/leetcode-notes/leetcode/visible/T160_linkedlist-two-pointer.html)
 
 
 # 数据结构

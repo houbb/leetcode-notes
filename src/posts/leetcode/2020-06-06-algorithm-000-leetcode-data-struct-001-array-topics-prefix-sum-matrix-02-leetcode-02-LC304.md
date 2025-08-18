@@ -153,7 +153,7 @@ for (int i = row1; i <= row2; i++) {
 
 你可以在线体验
 
-> [二维前缀和在线体验](https://houbb.github.io/leetcode-visual/T304-prefix-sum-matrix-summary.html)
+> [二维前缀和在线体验](https://houbb.github.io/leetcode-notes/leetcode/visible/T304-prefix-sum-matrix-summary.html)
 
 ## 思路
 

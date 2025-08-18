@@ -332,7 +332,7 @@ PS: 这种个人理解和 v3 异曲同工之妙。
 
 为方便大家学习，所有相关文档和代码均已开源。
 
-[leetcode-visual 资源可视化](https://github.com/houbb/leetcode-visual)
+[leetcode-visual 资源可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/index.html)
 
 [leetcode 算法实现源码](https://github.com/houbb/leetcode)
 

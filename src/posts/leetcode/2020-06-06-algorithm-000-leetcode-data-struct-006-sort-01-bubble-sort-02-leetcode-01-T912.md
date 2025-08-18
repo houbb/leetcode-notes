@@ -171,7 +171,7 @@ public int[] sortArray(int[] nums) {
 
 ## 可视化
 
-> [可视化-冒泡](https://houbb.github.io/leetcode-visual/T192-sort-bubble-sort.html)
+> [可视化-冒泡](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-bubble-sort.html)
 
 
 # v2-选择排序
@@ -217,7 +217,7 @@ public int[] sortArray(int[] nums) {
 
 ## 可视化
 
-> [可视化-选择](https://houbb.github.io/leetcode-visual/T192-sort-select-sort.html)
+> [可视化-选择](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-select-sort.html)
 
 # v3-插入排序
 
@@ -272,7 +272,7 @@ public int[] sortArray(int[] nums) {
 
 ## 可视化
 
-> [可视化](https://houbb.github.io/leetcode-visual/T192-sort-insert-sort.html)
+> [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-insert-sort.html)
 
 # v4-插入排序优化
 
@@ -330,7 +330,7 @@ public int[] sortArray(int[] nums) {
 
 ## 可视化
 
-> [可视化](https://houbb.github.io/leetcode-visual/T192-sort-insert-sort-binary-search.html)
+> [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-insert-sort-binary-search.html)
 
 # v5-归并排序
 
@@ -562,7 +562,7 @@ public void mergeSort(int[] nums, int left, int right, int[] temp) {
 
 ## 可视化
 
-> [可视化](https://houbb.github.io/leetcode-visual/T192-sort-merge-sort.html)
+> [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-merge-sort.html)
 
 # v6-快速排序
 
@@ -713,7 +713,7 @@ public int[] sortArray(int[] nums) {
 
 ## 可视化
 
-> [可视化](https://houbb.github.io/leetcode-visual/T192-sort-quick-sort.html)
+> [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-quick-sort.html)
 
 # v7-希尔排序
 
@@ -796,7 +796,7 @@ public int[] sortArray(int[] nums) {
 
 ## 可视化
 
-> [可视化](https://houbb.github.io/leetcode-visual/T192-sort-shell-sort.html)
+> [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-shell-sort.html)
 
 # v8-堆排序
 
@@ -862,7 +862,7 @@ public int[] sortArray(int[] nums) {
 
 ## 可视化
 
-> [可视化](https://houbb.github.io/leetcode-visual/T192-sort-shell-sort.html)
+> [可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/T192-sort-shell-sort.html)
 
 # 小结
 

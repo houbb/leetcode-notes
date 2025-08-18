@@ -69,7 +69,7 @@ sum(l, r) = prefixSum[r + 1] - prefixSum[l]
 
 ## 在线可视化
 
-> [前缀和](https://houbb.github.io/leetcode-visual/array-prefix-sum-visual.html)
+> [前缀和](https://houbb.github.io/leetcode-notes/leetcode/visible/array-prefix-sum-visual.html)
 
 ## 二、代码实现（以 Java 为例）
 

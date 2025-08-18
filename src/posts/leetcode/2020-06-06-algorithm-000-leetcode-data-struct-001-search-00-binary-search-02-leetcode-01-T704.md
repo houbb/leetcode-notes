@@ -158,13 +158,13 @@ left < right, `arr[mid] == target` 返回。
 
 # 补充-可视化效果
 
-> [可视化效果](https://houbb.github.io/leetcode-visual/T704-binary-search-basic.html)
+> [可视化效果](https://houbb.github.io/leetcode-notes/leetcode/visible/T704-binary-search-basic.html)
 
 # 项目开源
 
 > [技术博客](https://houbb.github.io/)
 
-> [leetcode-visual 资源可视化](https://github.com/houbb/leetcode-visual)
+> [leetcode-visual 资源可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/index.html)
 
 > [leetcode 算法实现](https://github.com/houbb/leetcode)
 

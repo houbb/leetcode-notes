@@ -406,5 +406,5 @@ colors[i] 表示课程 i 的访问状态：
 
 ## 在线可视化体验
 
-> [DFS 在线可视化](https://houbb.github.io/leetcode-visual/T207-course-schedule-DFS-color.html)
+> [DFS 在线可视化](https://houbb.github.io/leetcode-notes/leetcode/visible/T207-course-schedule-DFS-color.html)
 

@@ -75,7 +75,7 @@ diff[r + 1] -= k;
 
 ## 在线可视化
 
-> [前缀和](https://houbb.github.io/leetcode-visual/array-difference-array-visual.html)
+> [前缀和](https://houbb.github.io/leetcode-notes/leetcode/visible/array-difference-array-visual.html)
 
 ## 四、完整代码实现（Java 示例）
 

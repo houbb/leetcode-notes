@@ -315,7 +315,7 @@ for (int i = 0; i < bucketCount; i++) {
 
 ## 可视化
 
-> [可视化效果](https://houbb.github.io/leetcode-visual/T164-bucket-sort.html)
+> [可视化效果](https://houbb.github.io/leetcode-notes/leetcode/visible/T164-bucket-sort.html)
 
 # v4-基数排序
 
@@ -381,7 +381,7 @@ for (int i = 0; i < bucketCount; i++) {
 
 ## 可视化
 
-> [可视化效果](https://houbb.github.io/leetcode-visual/T164-radix-sort-basic.html)
+> [可视化效果](https://houbb.github.io/leetcode-notes/leetcode/visible/T164-radix-sort-basic.html)
 
 # v5-基数排序基本类型
 

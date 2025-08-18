@@ -210,6 +210,6 @@ DFS 可以，我们自然也可以写一个 BFS 的版本。
 
 # 在线可视化
 
-> [二叉树遍历](https://houbb.github.io/leetcode-visual/binary-tree-travel.html)
+> [二叉树遍历](https://houbb.github.io/leetcode-notes/leetcode/visible/binary-tree-travel.html)
 
  
