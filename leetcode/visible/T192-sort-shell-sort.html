@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>T192 希尔排序可视化</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f5f5f5;
+      text-align: center;
+      padding: 20px;
+    }
+    #array-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 300px;
+      margin-bottom: 5px;
+      gap: 5px;
+    }
+    .bar {
+      width: 30px;
+      background-color: steelblue;
+      color: white;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+    .highlight {
+      background-color: orange !important;
+    }
+    .temp {
+      background-color: red !important;
+    }
+    #index-labels, #group-labels {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-bottom: 3px;
+    }
+    #index-labels span, #group-labels span {
+      width: 30px;
+      text-align: center;
+      font-size: 12px;
+      color: #333;
+    }
+    #log {
+      background-color: black;
+      color: limegreen;
+      padding: 10px;
+      text-align: left;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-line;
+      font-family: monospace;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 5px;
+      width: 300px;
+    }
+    button {
+      padding: 8px 16px;
+      margin: 10px;
+    }
+    footer {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🌀 T192 希尔排序可视化</h2>
+  <div>
+    <label>输入数组（逗号分隔）：</label><br>
+    <input type="text" id="arrayInput" value="22,10,9,8,7,6,5,4,3,2,1" />
+  </div>
+  <div>
+    <label>动画间隔（毫秒）：</label>
+    <input type="number" id="delayInput" value="1000" style="width:80px"/> ms
+    <button onclick="startSort()">开始可视化</button>
+  </div>
+
+  <div id="array-container"></div>
+  <div id="index-labels"></div>
+  <div id="group-labels"></div>
+
+  <h3>📜 日志输出</h3>
+  <div id="log"></div>
+
+  <footer>
+    <a href="index.html">🔙 返回首页</a>
+  </footer>
+
+  <script>
+    const container = document.getElementById('array-container');
+    const indexLabels = document.getElementById('index-labels');
+    const groupLabels = document.getElementById('group-labels');
+    const logEl = document.getElementById('log');
+    let delay = 1000;
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function log(msg) {
+      logEl.textContent += msg + '\n';
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function renderArray(arr, highlightIndexes = [], tempIndex = null, gap = null) {
+      container.innerHTML = '';
+      indexLabels.innerHTML = '';
+      groupLabels.innerHTML = '';
+
+      const max = Math.max(...arr);
+
+      arr.forEach((val, idx) => {
+        // 条形图
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = (val / max) * 100 + '%';
+        bar.textContent = val;
+        if (highlightIndexes.includes(idx)) bar.classList.add('highlight');
+        if (tempIndex === idx) bar.classList.add('temp');
+        container.appendChild(bar);
+
+        // 下标
+        const index = document.createElement('span');
+        index.textContent = idx;
+        indexLabels.appendChild(index);
+
+        // gap 分组
+        const group = document.createElement('span');
+        group.textContent = gap !== null ? `G${idx % gap}` : '';
+        groupLabels.appendChild(group);
+      });
+    }
+
+    async function shellSortVisual(arr) {
+      const n = arr.length;
+      let gap = Math.floor(n / 2);
+      while (gap > 0) {
+        log(`当前 gap = ${gap}`);
+        renderArray(arr, [], null, gap);
+        await sleep(delay);
+
+        for (let i = gap; i < n; i++) {
+          let temp = arr[i];
+          let j = i;
+          log(`\n插入值 temp = arr[${i}] = ${temp}`);
+          renderArray(arr, [i], i, gap);
+          await sleep(delay);
+
+          while (j - gap >= 0 && arr[j - gap] > temp) {
+            log(`arr[${j - gap}] = ${arr[j - gap]} > temp，移动 arr[${j - gap}] -> arr[${j}]`);
+            arr[j] = arr[j - gap];
+            j -= gap;
+            renderArray(arr, [j], i, gap);
+            await sleep(delay);
+          }
+
+          arr[j] = temp;
+          log(`插入 temp 到 arr[${j}]`);
+          renderArray(arr, [j], j, gap);
+          await sleep(delay);
+        }
+        gap = Math.floor(gap / 2);
+        log(`------ 减小 gap 到 ${gap} ------\n`);
+      }
+      log('\n✅ 排序完成！');
+    }
+
+    function startSort() {
+      const input = document.getElementById('arrayInput').value;
+      const nums = input.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      delay = parseInt(document.getElementById('delayInput').value) || 1000;
+      logEl.textContent = '';
+      renderArray(nums);
+      shellSortVisual(nums);
+    }
+  </script>
+</body>
+</html>

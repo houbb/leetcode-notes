@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LeetCode 1011 Visualization</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .form {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 0.5rem;
+      width: 300px;
+      margin-right: 0.5rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .log {
+      max-height: 300px;
+      overflow-y: auto;
+      background: #fff;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      margin-bottom: 1rem;
+    }
+    .day {
+      display: flex;
+      margin-bottom: 0.5rem;
+    }
+    .box {
+      padding: 0.5rem;
+      background-color: #4caf50;
+      margin-right: 4px;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .capacity-info {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .mid { color: #ffa500; font-weight: bold; }
+    .valid { color: #4caf50; }
+    .invalid { color: #f44336; }
+    .back-link {
+      display: block;
+      margin-top: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>📦 LeetCode 1011 运包裹问题可视化</h1>
+  <div class="form">
+    <input type="text" id="weightsInput" placeholder="请输入 weights，例如 1,2,3,4,5,6,7,8,9,10" value="1,2,3,4,5,6,7,8,9,10">
+    <input type="number" id="daysInput" placeholder="请输入天数 days" value="5">
+    <button onclick="visualize()">点击可视化</button>
+  </div>
+  <div id="log" class="log"></div>
+  <div id="visualization"></div>
+  <div class="back-link">
+    <a href="index.html">⬅️ 返回首页</a>
+  </div>
+  <script>
+    function canShip(weights, capacity) {
+      const result = [];
+      let current = [];
+      let sum = 0;
+      for (const w of weights) {
+        if (sum + w > capacity) {
+          result.push(current);
+          current = [];
+          sum = 0;
+        }
+        current.push(w);
+        sum += w;
+      }
+      if (current.length) result.push(current);
+      return result;
+    }
+
+    function calcDays(weights, capacity) {
+      let days = 0;
+      let current = 0;
+      for (const w of weights) {
+        if (current + w > capacity) {
+          days++;
+          current = 0;
+        }
+        current += w;
+      }
+      if (current > 0) days++;
+      return days;
+    }
+
+    function visualize() {
+      const log = document.getElementById("log");
+      const visual = document.getElementById("visualization");
+      log.innerHTML = "";
+      visual.innerHTML = "";
+
+      const weights = document.getElementById("weightsInput").value.split(',').map(Number).filter(x => !isNaN(x));
+      const days = parseInt(document.getElementById("daysInput").value);
+
+      if (!weights.length || isNaN(days) || days <= 0) {
+        log.innerHTML = '<span style="color:red">请输入有效的 weights 和 days。</span>';
+        return;
+      }
+
+      let left = Math.max(...weights);
+      let right = weights.reduce((a, b) => a + b, 0);
+
+      while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        const needDays = calcDays(weights, mid);
+
+        const span = document.createElement("div");
+        span.innerHTML = `🟠 当前尝试容量：<span class="mid">${mid}</span>，需要天数：<span class="${needDays <= days ? 'valid' : 'invalid'}">${needDays}</span>（目标天数：${days}）`;
+        log.appendChild(span);
+
+        // 可视化当前的 mid 分组
+        const daysArr = canShip(weights, mid);
+        const dayContainer = document.createElement("div");
+        dayContainer.innerHTML = `<div class="capacity-info">⛴️ 尝试容量 ${mid}，装载方案如下：</div>`;
+
+        daysArr.forEach((group, i) => {
+          const dayDiv = document.createElement("div");
+          dayDiv.className = "day";
+          group.forEach(w => {
+            const box = document.createElement("div");
+            box.className = "box";
+            box.textContent = w;
+            dayDiv.appendChild(box);
+          });
+          dayContainer.appendChild(dayDiv);
+        });
+
+        visual.appendChild(dayContainer);
+
+        if (needDays <= days) {
+          right = mid - 1;
+        } else {
+          left = mid + 1;
+        }
+      }
+    }
+  </script>
+</body>
+</html>

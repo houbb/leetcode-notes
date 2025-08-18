@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Radix Sort 可视化 - 力扣 T164 最大间距</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+    }
+    .input-group {
+      margin-bottom: 12px;
+    }
+    .array-box, .bucket {
+      display: flex;
+      margin: 10px 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .item {
+      width: 40px;
+      height: 40px;
+      margin: 4px;
+      background-color: #4caf50;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    .bucket-container {
+      display: flex;
+      justify-content: space-between;
+    }
+    .bucket-column {
+      width: 60px;
+      text-align: center;
+    }
+    .bucket-column .bucket {
+      border: 1px solid #ccc;
+      padding: 5px;
+      min-height: 50px;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    #log {
+      background-color: #000;
+      color: #0f0;
+      padding: 10px;
+      height: 180px;
+      overflow-y: auto;
+      white-space: pre-line;
+      font-family: monospace;
+    }
+    .controls {
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🧮 基数排序可视化 - 力扣 T164 最大间距</h2>
+
+  <div class="input-group">
+    <label>输入数组（逗号分隔）：</label>
+    <input id="inputArray" type="text" value="170,45,75,90,802,24,2,66" size="50">
+  </div>
+
+  <div class="input-group">
+    <label>动画间隔（毫秒）：</label>
+    <input id="delay" type="number" value="1000" min="100">
+  </div>
+
+  <button onclick="startVisualization()">▶️ 开始可视化</button>
+  <a href="index.html" style="margin-left:20px;">返回首页</a>
+
+  <h3>数组状态</h3>
+  <div id="array" class="array-box"></div>
+
+  <h3>每位的桶（0~9）</h3>
+  <div class="bucket-container" id="buckets">
+    <!-- 10个桶 -->
+    <!-- 每个桶是 .bucket-column 下的 .bucket -->
+  </div>
+
+  <h3>日志输出</h3>
+  <div id="log"></div>
+
+  <script>
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    function log(msg) {
+      const logEl = document.getElementById("log");
+      logEl.textContent += msg + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function renderArray(arr) {
+      const arrayEl = document.getElementById("array");
+      arrayEl.innerHTML = "";
+      arr.forEach(num => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerText = num;
+        arrayEl.appendChild(div);
+      });
+    }
+
+    function clearBuckets() {
+      for (let i = 0; i < 10; i++) {
+        document.getElementById(`bucket-${i}`).innerHTML = "";
+      }
+    }
+
+    function renderBuckets(bucketQueues) {
+      clearBuckets();
+      for (let i = 0; i < 10; i++) {
+        const bucket = bucketQueues[i];
+        const container = document.getElementById(`bucket-${i}`);
+        bucket.forEach(num => {
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerText = num;
+          container.appendChild(div);
+        });
+      }
+    }
+
+    async function startVisualization() {
+      const input = document.getElementById("inputArray").value.trim();
+      const delay = parseInt(document.getElementById("delay").value) || 1000;
+      const arr = input.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+
+      if (arr.length < 2) {
+        alert("请输入至少两个数字");
+        return;
+      }
+
+      document.getElementById("log").textContent = "";
+      log("开始基数排序...");
+
+      renderArray(arr);
+      const max = Math.max(...arr);
+      let exp = 1;
+
+      while (Math.floor(max / exp) > 0) {
+        log(`\n📍 当前位数（exp）: ${exp}`);
+        const buckets = Array.from({ length: 10 }, () => []);
+
+        // 入桶
+        for (let num of arr) {
+          const digit = Math.floor(num / exp) % 10;
+          buckets[digit].push(num);
+          log(`将 ${num} 放入桶 ${digit}`);
+        }
+
+        renderBuckets(buckets);
+        await sleep(delay);
+
+        // 出桶
+        let idx = 0;
+        for (let i = 0; i < 10; i++) {
+          while (buckets[i].length > 0) {
+            const num = buckets[i].shift();
+            arr[idx++] = num;
+            log(`从桶 ${i} 取出 ${num}`);
+            renderArray(arr);
+            renderBuckets(buckets);
+            await sleep(100);
+          }
+        }
+
+        exp *= 10;
+      }
+
+      log(`\n✅ 排序完成: ${arr.join(', ')}`);
+      // 计算最大间距
+      let maxGap = 0;
+      for (let i = 1; i < arr.length; i++) {
+        const gap = arr[i] - arr[i - 1];
+        log(`间距: ${arr[i]} - ${arr[i - 1]} = ${gap}`);
+        maxGap = Math.max(maxGap, gap);
+      }
+
+      log(`\n🔥 最大间距为: ${maxGap}`);
+    }
+
+    // 初始化桶 UI
+    window.onload = () => {
+      const container = document.getElementById("buckets");
+      for (let i = 0; i < 10; i++) {
+        const col = document.createElement("div");
+        col.className = "bucket-column";
+        col.innerHTML = `<strong>${i}</strong><div class="bucket" id="bucket-${i}"></div>`;
+        container.appendChild(col);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LC207 可视化 — DFS + 染色法（动画）</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  :root{
+    --bg:#0b1020;
+    --card:#0f1724;
+    --accent:#6ef0c5;
+    --muted:#9aa7b2;
+    --glow: 0 8px 24px rgba(110,240,197,0.08);
+  }
+  html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial; background: linear-gradient(180deg,#061024 0%, #071427 60%); color:#e6eef6;}
+  .container{max-width:1200px;margin:24px auto;padding:18px;display:grid;grid-template-columns: 520px 1fr;gap:18px;}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  h1{font-size:20px;margin:0;color:var(--accent)}
+  .back{color:#cfeee0;text-decoration:none;background:transparent;padding:6px 10px;border-radius:8px;border:1px solid rgba(111,246,200,0.12)}
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);padding:14px;border-radius:12px;box-shadow:var(--glow)}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+  input[type="number"], input[type="text"], textarea, select{
+    background:#061124;border:1px solid rgba(255,255,255,0.04);color:#dceff3;padding:8px;border-radius:8px;width:100%;
+    font-family:monospace;font-size:13px;
+  }
+  textarea{height:90px;resize:vertical}
+  .btn{
+    background:linear-gradient(90deg,#09c8a4,#2bd2ff);
+    color:#042a26;border:none;padding:8px 12px;border-radius:10px;font-weight:600;cursor:pointer;
+    box-shadow:0 6px 18px rgba(45,210,255,0.08);
+  }
+  .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:500}
+  .layout-right{display:grid;grid-template-rows: 400px 1fr; gap:12px;}
+  /* graph area */
+  #graphCard{display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;min-height:380px}
+  svg#graph{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0));border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  /* info panels */
+  .info-row{display:flex;gap:8px}
+  .small-card{flex:1;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0));border:1px solid rgba(255,255,255,0.02)}
+  .mono{font-family:monospace;font-size:13px;color:#bfead4}
+  /* logs */
+  #logs{background:#010204;border-radius:10px;padding:12px;height:260px;overflow:auto;border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+  .log-line{color:#69ffb1;font-family:monospace;font-size:13px;white-space:pre-wrap;margin-bottom:6px}
+  .log-time{color:#6fb0ff;margin-right:8px;font-weight:600}
+  .status{font-weight:700;color:var(--accent)}
+  footer{margin-top:10px;color:var(--muted);font-size:12px;text-align:center}
+  .controls-row{display:flex;gap:8px;align-items:center;margin-top:8px}
+  .kbd{background:#021621;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.02);font-family:monospace;color:#aee8cf}
+  .big {font-size:18px;font-weight:700;color:#e6fff7}
+  .node-label {font-family:monospace;font-weight:700}
+  /* responsive */
+  @media (max-width:1100px){
+    .container{grid-template-columns:1fr; padding:12px;}
+    .layout-right{grid-template-rows: 320px 1fr;}
+  }
+</style>
+</head>
+<body>
+  <div style="max-width:1200px;margin:14px auto 0;padding:0 18px;">
+    <header>
+      <h1>LC207 — DFS + 染色法 动画可视化</h1>
+      <a class="back" href="index.html">返回首页</a>
+    </header>
+  </div>
+
+  <div class="container">
+    <!-- 左侧 控件 & 输入 -->
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div><strong>算法设置</strong><div style="font-size:12px;color:var(--muted)">保留你的思路：染色 + DFS，可视化每步状态</div></div>
+        <div style="font-size:12px;color:var(--muted)">默认示例：0→1→2→0（有环）</div>
+      </div>
+
+      <div style="margin-bottom:8px">
+        <label>课程数（numCourses）</label>
+        <input id="numCourses" type="number" min="1" value="3" />
+      </div>
+
+      <div style="margin-bottom:8px">
+        <label>先修关系 prerequisites（列表格式，每行为 [to, from]，例如：[1,0] 表示 0→1）</label>
+        <textarea id="prereqInput">[1,0]
+[2,1]
+[0,2]</textarea>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">每行一个关系。也可写成单行用逗号分隔的 JS 数组元素形式。</div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+        <div style="flex:1">
+          <label>动画间隔（秒）</label>
+          <input id="intervalSec" type="number" min="0.05" step="0.05" value="1" />
+        </div>
+        <div style="width:120px">
+          <label>播放速度</label>
+          <select id="speedPreset">
+            <option value="2">慢</option>
+            <option value="1" selected>默认</option>
+            <option value="0.5">快</option>
+            <option value="0.25">非常快</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="visualizeBtn" class="btn">可视化</button>
+        <button id="nextBtn" class="btn secondary">下一步</button>
+        <button id="playBtn" class="btn secondary">自动播放</button>
+        <button id="pauseBtn" class="btn secondary">暂停</button>
+        <button id="resetBtn" class="btn secondary">重置</button>
+      </div>
+
+      <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+        使用说明：修改上方输入 → 点击 <span class="kbd">可视化</span> 会把 DFS 的“每一步”记录下来并准备播放。然后使用 <span class="kbd">下一步</span> 或 <span class="kbd">自动播放</span> 观察状态变化。日志会显示关键变量快照（colors、stack、current）。
+      </div>
+    </div>
+
+    <!-- 右侧 可视化与日志 -->
+    <div class="layout-right">
+      <div id="graphCard" class="panel">
+        <div style="width:100%;display:flex;justify-content:space-between;align-items:center">
+          <div class="big">图示 / 动画画布</div>
+          <div style="font-size:13px;color:var(--muted)">状态：<span id="playState" class="status">就绪</span></div>
+        </div>
+
+        <svg id="graph" width="700" height="380"></svg>
+
+        <div style="width:100%;display:flex;gap:12px;margin-top:6px">
+          <div class="small-card">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:6px">colors 数组（0=未访问 1=正在访问 2=完成）</div>
+            <div id="colorsView" class="mono">[0, 0, 0]</div>
+          </div>
+          <div class="small-card">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:6px">stack（当前递归路径）</div>
+            <div id="stackView" class="mono">[]</div>
+          </div>
+          <div class="small-card">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:6px">结果 / 提示</div>
+            <div id="resultView" class="mono">尚未运行</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="display:flex;gap:12px;flex-direction:column">
+        <div style="display:flex;gap:12px">
+          <div style="flex:1">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">日志（黑底）</div>
+            <div id="logs"></div>
+          </div>
+        </div>
+
+        <footer>演示：DFS + 染色法（Detect Cycle） · 可视化逐步展示节点染色、入栈/出栈、发现环等关键事件</footer>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  // ---- Helpers ----
+  function log(message) {
+    const logs = document.getElementById('logs');
+    const t = new Date();
+    const time = t.toLocaleTimeString();
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = `<span class="log-time">${time}</span> ${message}`;
+    logs.appendChild(line);
+    logs.scrollTop = logs.scrollHeight;
+  }
+  function setPlayState(s){ document.getElementById('playState').textContent = s; }
+
+  // ---- Parsing input ----
+  function parsePrereqInput(raw) {
+    const lines = raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+    const result = [];
+    for(const line of lines){
+      // allow formats: [a,b] or a,b or a b
+      let m = line.match(/\[?\s*(\d+)\s*[, ]\s*(\d+)\s*\]?/);
+      if(m){
+        result.push([parseInt(m[1],10), parseInt(m[2],10)]);
+      } else {
+        // try to split by comma or space
+        const parts = line.split(/[,\s]+/).filter(Boolean);
+        if(parts.length>=2){
+          result.push([parseInt(parts[0],10), parseInt(parts[1],10)]);
+        }
+      }
+    }
+    return result;
+  }
+
+  // ---- Visualization: graph drawing ----
+  const svg = d3.select('#graph');
+  const width = +svg.attr('width');
+  const height = +svg.attr('height');
+  let nodeElems = null, edgeElems = null, labelElems = null;
+  function drawGraph(numCourses, edges, colorsArr){
+    svg.selectAll('*').remove();
+    // defs arrow
+    svg.append("defs").append("marker")
+      .attr("id","arrow")
+      .attr("viewBox","0 0 10 10")
+      .attr("refX",10)
+      .attr("refY",5)
+      .attr("markerWidth",6).attr("markerHeight",6).attr("orient","auto")
+      .append("path").attr("d","M 0 0 L 10 5 L 0 10 z").attr("fill","#8de6c9");
+
+    // positions on circle
+    const cx = width/2, cy = height/2 - 10;
+    const r = Math.min(width, height)/2 - 80;
+    const nodes = [];
+    for(let i=0;i<numCourses;i++){
+      const ang = (Math.PI*2)*(i/numCourses) - Math.PI/2;
+      nodes.push({id:i, x: cx + r*Math.cos(ang), y: cy + r*Math.sin(ang)});
+    }
+
+    // edges: draw curved paths for nicer look
+    const edgesPath = svg.append('g').attr('class','edges');
+    edgesPath.selectAll('path')
+      .data(edges)
+      .enter()
+      .append('path')
+      .attr('d', d => {
+        const s = nodes[d[1]], t = nodes[d[0]]; // from pre -> cur (p[1] -> p[0])
+        const dx = t.x - s.x, dy = t.y - s.y;
+        const qx = (s.x + t.x)/2 + dy*0.15;
+        const qy = (s.y + t.y)/2 - dx*0.15;
+        return `M ${s.x} ${s.y} Q ${qx} ${qy} ${t.x} ${t.y}`;
+      })
+      .attr('stroke','#2fe0b0')
+      .attr('stroke-width',2)
+      .attr('fill','none')
+      .attr('marker-end','url(#arrow)')
+      .attr('opacity',0.9);
+
+    // nodes
+    const nodesG = svg.append('g').attr('class','nodes');
+    nodeElems = nodesG.selectAll('g.node')
+      .data(nodes)
+      .enter()
+      .append('g')
+      .attr('class','node')
+      .attr('transform', d => `translate(${d.x},${d.y})`);
+
+    nodeElems.append('circle')
+      .attr('r', 28)
+      .attr('fill', d => colorOfState(colorsArr[d.id]))
+      .attr('stroke','#0f7f63')
+      .attr('stroke-width',2)
+      .attr('filter','drop-shadow(0 6px 20px rgba(46,210,175,0.06))');
+
+    nodeElems.append('text')
+      .attr('text-anchor','middle')
+      .attr('dy',6)
+      .attr('class','node-label')
+      .attr('fill','#002826')
+      .style('font-size','16px')
+      .text(d => d.id);
+
+    // small state label (0/1/2) below
+    nodeElems.append('text')
+      .attr('text-anchor','middle')
+      .attr('dy',42)
+      .attr('class','mono')
+      .attr('fill','#9adbb8')
+      .style('font-size','12px')
+      .text(d => `state:${colorsArr[d.id]}`);
+
+    // return nodes for later update
+    labelElems = nodeElems;
+    edgeElems = edgesPath;
+  }
+
+  function colorOfState(s){
+    if(s===0) return '#e6eef6';        // 未访问: 淡灰 -> circle fill will be adjusted with overlay
+    if(s===1) return '#ffd96b';        // 正在访问: 橙
+    if(s===2) return '#8af3bd';        // 完成: 绿
+    return '#ddd';
+  }
+
+  function updateNodeStyles(colorsArr){
+    if(!labelElems) return;
+    labelElems.select('circle').transition().duration(150).attr('fill', d => colorOfState(colorsArr[d.id]));
+    labelElems.select('text.node-label').transition().duration(150).attr('fill', d => (colorsArr[d.id]===1? '#432000':'#002826'));
+    labelElems.select('text.mono').text(d => `state:${colorsArr[d.id]}`);
+    // update small panels
+    document.getElementById('colorsView').textContent = JSON.stringify(colorsArr);
+  }
+
+  // ---- Record DFS steps (precompute) ----
+  // step types: enter(node), visitNeighbor(from,to), foundCycle(from,to), exit(node)
+  function recordDFS(numCourses, edges) {
+    const adj = Array.from({length:numCourses}, ()=>[]);
+    for(const e of edges){
+      const to = e[0], from = e[1];
+      if(from>=0 && from < numCourses && to>=0 && to<numCourses){
+        adj[from].push(to);
+      }
+    }
+    const colors = new Array(numCourses).fill(0);
+    const steps = [];
+    const stack = [];
+
+    function snapshot(note){
+      // push a snapshot step (for logging)
+      steps.push({type:'snapshot', note, colors: colors.slice(), stack: stack.slice()});
+    }
+
+    function dfs(u){
+      // enter u
+      colors[u]=1;
+      stack.push(u);
+      steps.push({type:'enter', node:u, colors: colors.slice(), stack: stack.slice(), note:`enter ${u}`});
+      for(const v of adj[u]){
+        steps.push({type:'visitNeighbor', from:u, to:v, colors: colors.slice(), stack: stack.slice(), note:`from ${u} visit ${v}`});
+        if(colors[v]===1){
+          // found cycle
+          steps.push({type:'foundCycle', from:u, to:v, colors: colors.slice(), stack: stack.slice(), note:`found cycle: ${u} -> ${v}`});
+          return true; // stop this branch
+        } else if(colors[v]===0){
+          const res = dfs(v);
+          if(res) return true;
+        }
+      }
+      // exit u
+      colors[u]=2;
+      stack.pop();
+      steps.push({type:'exit', node:u, colors: colors.slice(), stack: stack.slice(), note:`exit ${u}`});
+      return false;
+    }
+
+    // try each node
+    for(let i=0;i<numCourses;i++){
+      if(colors[i]===0){
+        steps.push({type:'startNode', node:i, note:`start DFS(${i})`});
+        const res = dfs(i);
+        if(res){
+          steps.push({type:'end', result:false, note:'cycle detected, stop overall'});
+          return steps;
+        }
+      }
+    }
+    steps.push({type:'end', result:true, note:'no cycle detected'});
+    return steps;
+  }
+
+  // ---- Playback controller ----
+  let steps = [], stepIndex = 0, intervalMs = 1000;
+  let playing = false, playTimer = null;
+
+  async function playOneStep(){
+    if(stepIndex >= steps.length) {
+      setPlayState('已结束');
+      playing=false;
+      return;
+    }
+    const s = steps[stepIndex++];
+    renderStep(s);
+    if(s.type==='end'){
+      // show final result
+      const ok = s.result;
+      document.getElementById('resultView').textContent = ok ? '所有课程可完成（无环）' : '存在环（无法完成全部课程）';
+      setPlayState('完成');
+      playing=false;
+      return;
+    }
+  }
+
+  function renderStep(s){
+    // update UI according to step type and included colors/stack snapshot
+    if(s.colors) updateNodeStyles(s.colors);
+    // set stack view
+    document.getElementById('stackView').textContent = JSON.stringify(s.stack || []);
+    // log descriptive message with relevant vars
+    switch(s.type){
+      case 'startNode':
+        log(`[start] ${s.note} | colors=${JSON.stringify(s.colors)} | stack=${JSON.stringify(s.stack)}`);
+        setPlayState('运行中');
+        break;
+      case 'enter':
+        log(`[enter] 节点 ${s.node} 标记为 1(正在访问) | colors=${JSON.stringify(s.colors)} | stack=${JSON.stringify(s.stack)}`);
+        break;
+      case 'visitNeighbor':
+        log(`[visit] 从 ${s.from} 访问 邻居 ${s.to} | colors=${JSON.stringify(s.colors)} | stack=${JSON.stringify(s.stack)}`);
+        break;
+      case 'foundCycle':
+        log(`[cycle] 发现回边 ${s.from} -> ${s.to}（${s.to} 正在访问） | colors=${JSON.stringify(s.colors)} | stack=${JSON.stringify(s.stack)}`);
+        break;
+      case 'exit':
+        log(`[exit] 节点 ${s.node} 标记为 2(已完成) | colors=${JSON.stringify(s.colors)} | stack=${JSON.stringify(s.stack)}`);
+        break;
+      case 'snapshot':
+        log(`[snap] ${s.note} | colors=${JSON.stringify(s.colors)} | stack=${JSON.stringify(s.stack)}`);
+        break;
+      case 'end':
+        log(`[end] ${s.note}`);
+        break;
+      default:
+        log(`[info] ${s.note || 'step'} | colors=${JSON.stringify(s.colors)} | stack=${JSON.stringify(s.stack)}`);
+    }
+  }
+
+  function startAutoPlay(){
+    if(playing) return;
+    if(stepIndex >= steps.length){
+      log('已到末尾，重置后再播放');
+      return;
+    }
+    playing = true;
+    setPlayState('自动播放');
+    const ms = intervalMs;
+    playTimer = setInterval(()=>{
+      if(!playing){
+        clearInterval(playTimer);
+        return;
+      }
+      if(stepIndex < steps.length){
+        playOneStep();
+      } else {
+        clearInterval(playTimer);
+        playing=false;
+        setPlayState('已完成');
+      }
+    }, ms);
+  }
+  function pauseAutoPlay(){
+    playing=false;
+    if(playTimer) clearInterval(playTimer);
+    setPlayState('已暂停');
+  }
+  function resetAll(){
+    pauseAutoPlay();
+    stepIndex=0;
+    steps=[];
+    document.getElementById('logs').innerHTML='';
+    document.getElementById('resultView').textContent='尚未运行';
+    document.getElementById('stackView').textContent='[]';
+    document.getElementById('colorsView').textContent='[]';
+    setPlayState('就绪');
+    // clear svg
+    svg.selectAll('*').remove();
+  }
+
+  // ---- Hook up buttons ----
+  document.getElementById('visualizeBtn').addEventListener('click', ()=>{
+    resetAll();
+    const num = parseInt(document.getElementById('numCourses').value||'0',10);
+    const raw = document.getElementById('prereqInput').value;
+    let edges = parsePrereqInput(raw);
+    // validate edges
+    edges = edges.filter(([to,from]) => Number.isFinite(to) && Number.isFinite(from) && to>=0 && from>=0 && to<num && from<num);
+    if(num<=0){
+      alert('numCourses 必须大于 0');
+      return;
+    }
+    // build steps
+    log(`准备构建图：numCourses=${num} edges=${JSON.stringify(edges)}`);
+    steps = recordDFS(num, edges);
+    stepIndex = 0;
+    // initial colors are zeros
+    const initColors = new Array(num).fill(0);
+    drawGraph(num, edges, initColors);
+    document.getElementById('colorsView').textContent = JSON.stringify(initColors);
+    log('记录步骤完成，准备播放 (使用 下一步 或 自动播放)');
+    setPlayState('已准备');
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', ()=>{
+    // update interval
+    const iv = parseFloat(document.getElementById('intervalSec').value || '1');
+    const preset = parseFloat(document.getElementById('speedPreset').value || '1');
+    intervalMs = Math.max(50, Math.round(iv*1000* preset));
+    pauseAutoPlay();
+    if(stepIndex >= steps.length){
+      log('步骤已全部完成或未初始化。');
+      return;
+    }
+    playOneStep();
+  });
+
+  document.getElementById('playBtn').addEventListener('click', ()=>{
+    const iv = parseFloat(document.getElementById('intervalSec').value || '1');
+    const preset = parseFloat(document.getElementById('speedPreset').value || '1');
+    intervalMs = Math.max(50, Math.round(iv*1000* preset));
+    startAutoPlay();
+  });
+
+  document.getElementById('pauseBtn').addEventListener('click', ()=>{
+    pauseAutoPlay();
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', ()=>{
+    resetAll();
+  });
+
+  // init small demo on load
+  document.addEventListener('DOMContentLoaded', ()=>{
+    // auto draw default
+    document.getElementById('visualizeBtn').click();
+  });
+
+})();
+</script>
+</body>
+</html>

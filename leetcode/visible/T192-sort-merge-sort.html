@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>T192 归并排序可视化</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .bar-container {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      height: 200px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      gap: 5px;
+    }
+    .bar {
+      width: 30px;
+      background-color: steelblue;
+      text-align: center;
+      color: white;
+    }
+    .bar.highlight {
+      background-color: orange;
+    }
+    .pointer-row {
+      display: flex;
+      justify-content: flex-start;
+      height: 20px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1;
+      padding-left: 10px;
+      gap: 5px;
+    }
+    .pointer-label {
+      width: 30px;
+      text-align: center;
+    }
+    .log {
+      background: #111;
+      color: #0f0;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      white-space: pre-line;
+      font-family: monospace;
+    }
+    .controls {
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 5px;
+      width: 300px;
+    }
+    button {
+      padding: 5px 10px;
+      margin-left: 5px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>T192 归并排序可视化</h2>
+
+  <div class="controls">
+    输入数组（逗号分隔）：
+    <input type="text" id="arrayInput" value="5,2,9,1,5,6" />
+    动画间隔(ms)：
+    <input type="number" id="intervalInput" value="1000" min="100" />
+    <button onclick="startVisualization()">可视化</button>
+  </div>
+
+  <div class="bar-container" id="barContainer"></div>
+  <div class="pointer-row" id="pointerRow"></div>
+  <div class="log" id="logBox"></div>
+
+  <a href="index.html">← 返回首页</a>
+
+  <script>
+    let delay = 1000;
+    const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+
+    function log(message) {
+      const logBox = document.getElementById("logBox");
+      logBox.textContent += message + "\n";
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function renderBars(arr, highlightRange = [], pointerPositions = {}) {
+      const container = document.getElementById("barContainer");
+      const pointerRow = document.getElementById("pointerRow");
+      container.innerHTML = "";
+      pointerRow.innerHTML = "";
+
+      const maxVal = Math.max(...arr);
+      arr.forEach((val, idx) => {
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.height = `${(val / maxVal) * 100}%`;
+        bar.textContent = val;
+        if (highlightRange.includes(idx)) {
+          bar.classList.add("highlight");
+        }
+        container.appendChild(bar);
+
+        const label = document.createElement("div");
+        label.className = "pointer-label";
+        let symbols = "";
+        if (pointerPositions.L === idx) symbols += "L";
+        if (pointerPositions.M === idx) symbols += "M";
+        if (pointerPositions.R === idx) symbols += "R";
+        label.textContent = symbols;
+        pointerRow.appendChild(label);
+      });
+    }
+
+    async function mergeSortVisual(arr, left, right) {
+      if (left >= right) return;
+
+      const mid = Math.floor((left + right) / 2);
+      renderBars(arr, [], { L: left, M: mid, R: right });
+      log(`拆分：left=${left}, mid=${mid}, right=${right}`);
+      await sleep(delay);
+
+      await mergeSortVisual(arr, left, mid);
+      await mergeSortVisual(arr, mid + 1, right);
+      await mergeVisual(arr, left, mid, right);
+    }
+
+    async function mergeVisual(arr, left, mid, right) {
+      const temp = [];
+      let i = left, j = mid + 1;
+
+      log(`合并：left=${left}, mid=${mid}, right=${right}`);
+      while (i <= mid && j <= right) {
+        renderBars(arr, [i, j], { L: left, M: mid, R: right });
+        await sleep(delay);
+        if (arr[i] <= arr[j]) {
+          temp.push(arr[i++]);
+        } else {
+          temp.push(arr[j++]);
+        }
+      }
+
+      while (i <= mid) {
+        renderBars(arr, [i], { L: left, M: mid, R: right });
+        await sleep(delay);
+        temp.push(arr[i++]);
+      }
+
+      while (j <= right) {
+        renderBars(arr, [j], { L: left, M: mid, R: right });
+        await sleep(delay);
+        temp.push(arr[j++]);
+      }
+
+      for (let k = 0; k < temp.length; k++) {
+        arr[left + k] = temp[k];
+        renderBars(arr, [left + k], { L: left, M: mid, R: right });
+        await sleep(delay);
+      }
+
+      log(`合并完成：${arr.slice(left, right + 1).join(", ")}`);
+    }
+
+    async function startVisualization() {
+      let input = document.getElementById("arrayInput").value.trim();
+      let arr = input.split(",").map((x) => parseInt(x.trim())).filter(x => !isNaN(x));
+      delay = parseInt(document.getElementById("intervalInput").value) || 1000;
+
+      if (!arr.length) {
+        alert("请输入有效的整数数组");
+        return;
+      }
+
+      document.getElementById("logBox").textContent = "";
+      renderBars(arr);
+      await mergeSortVisual(arr, 0, arr.length - 1);
+      log("排序完成！最终结果：" + arr.join(", "));
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prefix Sum Visualization</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
+      color: white;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .input-area,
+    .array-container,
+    .log {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .box-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .box {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 20px;
+      border-radius: 12px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .box:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #fff5;
+    }
+
+    .highlight {
+      background-color: #00bcd4 !important;
+      animation: flash 0.8s ease;
+    }
+
+    .result-box {
+      background-color: #4caf50;
+    }
+
+    .index {
+      position: absolute;
+      top: -22px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    @keyframes flash {
+      0% { box-shadow: 0 0 5px #00bcd4; }
+      50% { box-shadow: 0 0 20px #00bcd4; }
+      100% { box-shadow: 0 0 5px #00bcd4; }
+    }
+
+    .log {
+      flex-direction: column;
+      align-items: center;
+      background: #111;
+      padding: 15px;
+      border-radius: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log p {
+      margin: 5px 0;
+      font-family: monospace;
+      color: #0f0;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .controls input {
+      width: 60px;
+    }
+
+    .home-link {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Prefix Sum Visualization</h1>
+
+  <div class="controls">
+    <label>间隔（秒）: <input id="interval" type="number" value="1" min="0.1" max="60" step="0.1" /></label>
+    <button onclick="startVisualization()">开始可视化</button>
+  </div>
+
+  <div class="input-area">
+    <input id="inputArray" type="text" value="1,2,3,4,5,6,7,8,9,10" style="width: 400px" />
+  </div>
+
+  <div class="array-container">
+    <div>
+      <h3 style="text-align:center">原数组</h3>
+      <div class="box-container" id="original"></div>
+    </div>
+  </div>
+
+  <div class="array-container">
+    <div>
+      <h3 style="text-align:center">前缀和数组</h3>
+      <div class="box-container" id="prefix"></div>
+    </div>
+  </div>
+
+  <div class="log" id="log"></div>
+
+  <a class="home-link" href="index.html">← 返回首页</a>
+
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function startVisualization() {
+      const interval = Math.min(Math.max(parseFloat(document.getElementById("interval").value), 0.1), 60) * 1000;
+      const input = document.getElementById("inputArray").value;
+      const nums = input.split(',').map(v => parseInt(v.trim())).filter(v => !isNaN(v));
+      const prefix = [];
+      const originalContainer = document.getElementById("original");
+      const prefixContainer = document.getElementById("prefix");
+      const log = document.getElementById("log");
+
+      originalContainer.innerHTML = "";
+      prefixContainer.innerHTML = "";
+      log.innerHTML = "";
+
+      nums.forEach((num, i) => {
+        const box = document.createElement("div");
+        box.className = "box";
+        box.innerHTML = `<div class='index'>${i}</div>${num}`;
+        box.style.backgroundColor = '#3949ab';
+        originalContainer.appendChild(box);
+      });
+
+      nums.forEach((_, i) => {
+        const box = document.createElement("div");
+        box.className = "box";
+        box.innerHTML = `<div class='index'>${i}</div>?`;
+        prefixContainer.appendChild(box);
+      });
+
+      for (let i = 0; i < nums.length; i++) {
+        const origBoxes = originalContainer.children;
+        const preBoxes = prefixContainer.children;
+
+        // 高亮当前
+        origBoxes[i].classList.add('highlight');
+        if (i > 0) origBoxes[i - 1].classList.remove('highlight');
+
+        prefix[i] = (prefix[i - 1] || 0) + nums[i];
+        preBoxes[i].classList.add('highlight');
+        preBoxes[i].textContent = prefix[i];
+
+        log.innerHTML += `<p>prefix[${i}] = ${(prefix[i - 1] || 0)} + ${nums[i]} = ${prefix[i]}</p>`;
+        log.scrollTop = log.scrollHeight;
+
+        await sleep(interval);
+
+        origBoxes[i].classList.remove('highlight');
+        preBoxes[i].classList.remove('highlight');
+        preBoxes[i].classList.add('result-box');
+      }
+    }
+  </script>
+</body>
+
+</html>

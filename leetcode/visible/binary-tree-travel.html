@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<title>二叉树遍历可视化</title>
+<style>
+  body {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h1 {
+    color: #58a6ff;
+    text-shadow: 0 0 10px #58a6ff;
+    margin-bottom: 10px;
+  }
+  .controls {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  input.input-box, select.input-box {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: white;
+    padding: 8px 12px;
+    font-size: 14px;
+    min-width: 120px;
+  }
+  button.button {
+    background: linear-gradient(90deg, #58a6ff, #1f6feb);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  button.button:hover {
+    box-shadow: 0 0 12px #58a6ff;
+    transform: translateY(-2px);
+  }
+  .container {
+    width: 100%;
+    max-width: 1400px;
+    display: flex;
+    gap: 20px;
+  }
+  .tree-container, .log-container {
+    background-color: #161b22;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .tree-container {
+    flex: 1;
+    position: relative;
+    min-height: 520px;
+    overflow: auto;
+  }
+  svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .tree {
+    position: relative;
+    width: 100%;
+    height: 500px;
+  }
+  .node {
+    background-color: #21262d;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 0 15px #58a6ff;
+    user-select: none;
+    cursor: default;
+    transition: all 0.3s ease;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+  }
+  .node.highlight {
+    background-color: #58a6ff;
+    box-shadow: 0 0 25px #58a6ff;
+    color: #000;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  .log-container {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+  }
+  .log {
+    flex: 1;
+    background-color: #0d1117;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #0f0;
+    overflow-y: auto;
+    height: 500px;
+    white-space: pre-wrap;
+  }
+  .assist {
+    margin-top: 15px;
+    background-color: #21262d;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #58a6ff;
+    min-height: 60px;
+  }
+  a {
+    margin-top: 12px;
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 14px;
+    align-self: flex-start;
+  }
+</style>
+</head>
+<body>
+
+<h1>二叉树遍历可视化</h1>
+
+<div class="controls">
+  <input id="treeInput" class="input-box" placeholder='输入数组，如：[1,2,3,null,5]' value='[1,2,3,4,5,6,7]' />
+  <select id="traverseType" class="input-box">
+    <option value="preorder">前序遍历</option>
+    <option value="inorder">中序遍历</option>
+    <option value="postorder">后序遍历</option>
+    <option value="levelorder">层级遍历</option>
+  </select>
+  <select id="mode" class="input-box">
+    <option value="recursive">递归</option>
+    <option value="iterative" selected>迭代</option>
+  </select>
+  <input id="interval" class="input-box" type="number" value="1000" min="100" step="100" />
+  <button class="button" onclick="start()">开始可视化</button>
+</div>
+
+<div class="container">
+  <div class="tree-container" id="treeContainer">
+    <svg id="linesSvg"></svg>
+    <div id="tree" class="tree"></div>
+  </div>
+  <div class="log-container">
+    <div id="log" class="log"></div>
+    <div id="assist" class="assist">辅助信息：<br>栈/队列：[]<br>结果：[]</div>
+    <a href="index.html">返回首页</a>
+  </div>
+</div>
+
+<script>
+  let treeData = [];
+  let nodes = [];
+  let nodePositions = [];
+  const NODE_SIZE = 50;
+  const LEVEL_HEIGHT = 110;
+
+  function getTreeHeight(arr) {
+    let n = arr.length;
+    let height = 0;
+    while ((1 << height) - 1 < n) height++;
+    return height;
+  }
+
+  function calcNodePositions(arr) {
+    let height = getTreeHeight(arr);
+    let positions = new Array(arr.length).fill(null);
+
+    function helper(idx, depth, left, right) {
+      if (idx >= arr.length || arr[idx] === null) return;
+      let x = (left + right) / 2;
+      let y = depth * LEVEL_HEIGHT + NODE_SIZE / 2 + 10;
+      positions[idx] = { x, y };
+      helper(2 * idx + 1, depth + 1, left, x);
+      helper(2 * idx + 2, depth + 1, x, right);
+    }
+
+    helper(0, 0, 0, 1000);
+    return positions;
+  }
+
+  function renderTree(arr) {
+    const treeEl = document.getElementById('tree');
+    const svg = document.getElementById('linesSvg');
+    treeEl.innerHTML = '';
+    svg.innerHTML = '';
+    nodes = [];
+    nodePositions = [];
+
+    if (!arr.length) return;
+
+    const container = document.getElementById('treeContainer');
+    const containerWidth = container.clientWidth || 1000;
+    const containerHeight = getTreeHeight(arr) * LEVEL_HEIGHT + 60;
+    treeEl.style.width = containerWidth + 'px';
+    treeEl.style.height = containerHeight + 'px';
+    svg.style.width = containerWidth + 'px';
+    svg.style.height = containerHeight + 'px';
+
+    nodePositions = calcNodePositions(arr);
+
+    for (let i = 0; i < arr.length; i++) {
+      if (!nodePositions[i]) continue;
+      let pos = nodePositions[i];
+      pos.x = (pos.x / 1000) * containerWidth;
+      pos.y = pos.y;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === null || arr[i] === undefined) continue;
+      let nodeEl = document.createElement('div');
+      nodeEl.className = 'node';
+      nodeEl.textContent = arr[i];
+      nodeEl.style.left = nodePositions[i].x + 'px';
+      nodeEl.style.top = nodePositions[i].y + 'px';
+      treeEl.appendChild(nodeEl);
+      nodes[i] = nodeEl;
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] === null || arr[i] === undefined) continue;
+      let leftChild = 2 * i + 1;
+      let rightChild = 2 * i + 2;
+      if (leftChild < arr.length && arr[leftChild] !== null && arr[leftChild] !== undefined) {
+        drawLine(svg, nodePositions[i], nodePositions[leftChild]);
+      }
+      if (rightChild < arr.length && arr[rightChild] !== null && arr[rightChild] !== undefined) {
+        drawLine(svg, nodePositions[i], nodePositions[rightChild]);
+      }
+    }
+  }
+
+  function drawLine(svg, start, end) {
+    let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute('x1', start.x);
+    line.setAttribute('y1', start.y);
+    line.setAttribute('x2', end.x);
+    line.setAttribute('y2', end.y);
+    line.setAttribute('stroke', '#58a6ff');
+    line.setAttribute('stroke-width', '3');
+    line.setAttribute('stroke-linecap', 'round');
+    line.style.filter = 'drop-shadow(0 0 5px #58a6ff)';
+    svg.appendChild(line);
+  }
+
+  function log(msg) {
+    const logEl = document.getElementById('log');
+    logEl.innerHTML += msg + '\n';
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function updateAssist(stack, result) {
+    const assistEl = document.getElementById('assist');
+    assistEl.innerHTML = `辅助信息：<br>栈/队列：[${stack.join(', ')}]<br>结果：[${result.join(', ')}]`;
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function highlightNode(idx, duration) {
+    if (!nodes[idx]) return;
+    nodes[idx].classList.add('highlight');
+    await sleep(duration);
+    nodes[idx].classList.remove('highlight');
+  }
+
+  async function traverseRecursive(arr, type, idx, stack, result, interval) {
+    if (idx >= arr.length || arr[idx] === null) return;
+    if (type === 'preorder') {
+      stack.push(arr[idx]);
+      updateAssist(stack, result);
+      await highlightNode(idx, interval);
+      log(`访问节点: ${arr[idx]}`);
+      result.push(arr[idx]);
+      await traverseRecursive(arr, type, 2 * idx + 1, stack, result, interval);
+      await traverseRecursive(arr, type, 2 * idx + 2, stack, result, interval);
+      stack.pop();
+      updateAssist(stack, result);
+    } else if (type === 'inorder') {
+      stack.push(arr[idx]);
+      updateAssist(stack, result);
+      await traverseRecursive(arr, type, 2 * idx + 1, stack, result, interval);
+      await highlightNode(idx, interval);
+      log(`访问节点: ${arr[idx]}`);
+      result.push(arr[idx]);
+      await traverseRecursive(arr, type, 2 * idx + 2, stack, result, interval);
+      stack.pop();
+      updateAssist(stack, result);
+    } else if (type === 'postorder') {
+      stack.push(arr[idx]);
+      updateAssist(stack, result);
+      await traverseRecursive(arr, type, 2 * idx + 1, stack, result, interval);
+      await traverseRecursive(arr, type, 2 * idx + 2, stack, result, interval);
+      await highlightNode(idx, interval);
+      log(`访问节点: ${arr[idx]}`);
+      result.push(arr[idx]);
+      stack.pop();
+      updateAssist(stack, result);
+    } else if (type === 'levelorder') {
+      // 递归层级遍历的实现，利用辅助函数访问每层节点
+      let height = getTreeHeight(arr);
+      for (let level = 0; level < height; level++) {
+        await traverseLevel(arr, 0, level, stack, result, interval);
+      }
+    }
+  }
+
+  // 递归辅助函数，访问第 level 层节点
+  async function traverseLevel(arr, idx, level, stack, result, interval) {
+    if (idx >= arr.length || arr[idx] === null) return;
+    if (level === 0) {
+      stack.push(arr[idx]);
+      updateAssist(stack, result);
+      await highlightNode(idx, interval);
+      log(`访问节点: ${arr[idx]}`);
+      result.push(arr[idx]);
+      stack.pop();
+      updateAssist(stack, result);
+    } else {
+      await traverseLevel(arr, 2 * idx + 1, level - 1, stack, result, interval);
+      await traverseLevel(arr, 2 * idx + 2, level - 1, stack, result, interval);
+    }
+  }
+
+  async function traverseIterative(arr, type, interval) {
+    let stack = [];
+    let result = [];
+    if (type === 'preorder') {
+      let s = [0];
+      while (s.length > 0) {
+        let idx = s.pop();
+        if (idx >= arr.length || arr[idx] === null) continue;
+        stack = [...s];
+        stack.push(idx);
+        updateAssist(stack.map(i => arr[i]), result);
+        await highlightNode(idx, interval);
+        log(`访问节点: ${arr[idx]}`);
+        result.push(arr[idx]);
+        s.push(2 * idx + 2);
+        s.push(2 * idx + 1);
+      }
+    } else if (type === 'inorder') {
+      let s = [];
+      let idx = 0;
+      while (idx < arr.length || s.length > 0) {
+        while (idx < arr.length && arr[idx] !== null) {
+          s.push(idx);
+          updateAssist(s.map(i => arr[i]), result);
+          idx = 2 * idx + 1;
+          await sleep(interval / 2);
+        }
+        idx = s.pop();
+        await highlightNode(idx, interval);
+        log(`访问节点: ${arr[idx]}`);
+        result.push(arr[idx]);
+        updateAssist(s.map(i => arr[i]), result);
+        idx = 2 * idx + 2;
+      }
+    } else if (type === 'postorder') {
+      let s1 = [0], s2 = [];
+      while (s1.length > 0) {
+        let idx = s1.pop();
+        if (idx >= arr.length || arr[idx] === null) continue;
+        s2.push(idx);
+        s1.push(2 * idx + 1);
+        s1.push(2 * idx + 2);
+      }
+      while (s2.length > 0) {
+        let idx = s2.pop();
+        updateAssist(s2.map(i => arr[i]), result);
+        await highlightNode(idx, interval);
+        log(`访问节点: ${arr[idx]}`);
+        result.push(arr[idx]);
+      }
+    } else if (type === 'levelorder') {
+      let queue = [0];
+      while (queue.length > 0) {
+        let idx = queue.shift();
+        if (idx >= arr.length || arr[idx] === null) continue;
+        updateAssist(queue.map(i => arr[i]), result);
+        await highlightNode(idx, interval);
+        log(`访问节点: ${arr[idx]}`);
+        result.push(arr[idx]);
+        queue.push(2 * idx + 1);
+        queue.push(2 * idx + 2);
+      }
+      updateAssist([], result);
+    }
+  }
+
+  async function start() {
+    let input = document.getElementById('treeInput').value.trim();
+    let arr;
+    try {
+      arr = JSON.parse(input);
+      if (!Array.isArray(arr)) throw new Error('输入不是数组');
+    } catch {
+      alert('请输入合法的数组，例如：[1,2,3,null,4]');
+      return;
+    }
+    treeData = arr;
+    renderTree(arr);
+
+    document.getElementById('log').innerHTML = '';
+    updateAssist([], []);
+    let interval = parseInt(document.getElementById('interval').value);
+    if (isNaN(interval) || interval < 100) interval = 100;
+    const type = document.getElementById('traverseType').value;
+    const mode = document.getElementById('mode').value;
+
+    if (mode === 'recursive') {
+      await traverseRecursive(arr, type, 0, [], [], interval);
+    } else {
+      await traverseIterative(arr, type, interval);
+    }
+  }
+
+  window.onload = () => {
+    try {
+      const defaultArr = JSON.parse(document.getElementById('treeInput').value);
+      renderTree(defaultArr);
+    } catch { }
+  };
+</script>
+
+</body>
+</html>

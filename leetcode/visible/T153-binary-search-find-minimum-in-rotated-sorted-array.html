@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>T153 Find Minimum in Rotated Sorted Array</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f2f5;
+      padding: 20px;
+    }
+    .array-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      position: relative;
+    }
+    .box {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 4px;
+      background-color: white;
+      font-weight: bold;
+      transition: background-color 0.5s;
+      position: relative;
+    }
+    .highlight-left {
+      background-color: #ffd700;
+    }
+    .highlight-mid {
+      background-color: #1e90ff;
+      color: white;
+    }
+    .highlight-right {
+      background-color: #32cd32;
+      color: white;
+    }
+    .highlight-result {
+      background-color: #ff1493 !important;
+      color: white;
+    }
+    .pointer-labels {
+      position: absolute;
+      top: -25px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .pointer {
+      font-size: 14px;
+      color: black;
+      position: absolute;
+    }
+    .log {
+      background-color: #111;
+      color: #0f0;
+      padding: 10px;
+      margin-top: 20px;
+      height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    input[type="text"] {
+      width: 300px;
+      padding: 5px;
+      font-size: 16px;
+    }
+    button {
+      padding: 6px 16px;
+      margin-left: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .nav {
+      margin-top: 20px;
+    }
+    .nav a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>T153 可视化：寻找旋转排序数组中的最小值</h2>
+  <div>
+    输入数组（逗号分隔）：<input type="text" id="inputArray" value="4,5,6,7,0,1,2">
+    <button onclick="visualize()">开始可视化</button>
+  </div>
+  <div class="array-container" id="arrayContainer"></div>
+  <div class="log" id="log"></div>
+  <div class="nav">
+    <a href="index.html">← 返回首页</a>
+  </div>
+
+  <script>
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function log(msg) {
+      const logBox = document.getElementById("log");
+      logBox.textContent += msg + "\n";
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function renderArray(nums, left, mid, right, highlightIndex = -1) {
+      const container = document.getElementById("arrayContainer");
+      container.innerHTML = "";
+
+      nums.forEach((num, i) => {
+        const div = document.createElement("div");
+        div.className = "box";
+        div.textContent = num;
+
+        if (i === highlightIndex) {
+          div.classList.add("highlight-result");
+        } else {
+          if (i === left) div.classList.add("highlight-left");
+          if (i === mid) div.classList.add("highlight-mid");
+          if (i === right) div.classList.add("highlight-right");
+        }
+
+        container.appendChild(div);
+      });
+
+      // Add pointer labels
+      const pointerLayer = document.createElement("div");
+      pointerLayer.className = "pointer-labels";
+
+      nums.forEach((_, i) => {
+        const label = document.createElement("div");
+        label.style.width = "58px";
+        label.style.textAlign = "center";
+        if (i === left) label.textContent = "L";
+        else if (i === mid) label.textContent = "M";
+        else if (i === right) label.textContent = "R";
+        else label.textContent = "";
+        pointerLayer.appendChild(label);
+      });
+
+      container.appendChild(pointerLayer);
+    }
+
+    async function visualize() {
+      document.getElementById("log").textContent = "";
+      let input = document.getElementById("inputArray").value;
+      let nums = input.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      if (nums.length === 0) {
+        log("请输入有效的整数数组");
+        return;
+      }
+
+      let left = 0;
+      let right = nums.length - 1;
+      let min = nums[0];
+      let resultIndex = 0;
+
+      while (left <= right) {
+        const mid = Math.floor(left + (right - left) / 2);
+        renderArray(nums, left, mid, right);
+        log(`当前范围 [${left}, ${right}]，mid=${mid}, nums[mid]=${nums[mid]}`);
+        await sleep(1000);
+
+        if (nums[left] <= nums[right]) {
+          min = Math.min(min, nums[left]);
+          resultIndex = left;
+          log(`数组整体有序，最小值为 nums[${left}] = ${nums[left]}`);
+          break;
+        }
+
+        if (nums[mid] < min) {
+          min = nums[mid];
+          resultIndex = mid;
+        }
+        log(`更新 min = ${min}`);
+
+        if (nums[left] <= nums[mid]) {
+          log("左侧有序，最小值在右侧");
+          left = mid + 1;
+        } else {
+          log("右侧有序，最小值在左侧");
+          right = mid - 1;
+        }
+
+        await sleep(1000);
+      }
+
+      renderArray(nums, -1, -1, -1, resultIndex);
+      log("\n最终最小值为：" + min);
+    }
+  </script>
+</body>
+</html>

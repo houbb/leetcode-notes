@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>T192 选择排序可视化</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    .controls {
+      margin-bottom: 20px;
+    }
+    #visual {
+      display: flex;
+      align-items: flex-end;
+      height: 300px;
+      margin-bottom: 20px;
+      gap: 5px;
+    }
+    .bar {
+      width: 30px;
+      background-color: #4caf50;
+      text-align: center;
+      color: white;
+      transition: height 0.3s ease, background-color 0.3s ease;
+    }
+    .bar.active {
+      background-color: orange !important;
+    }
+    .bar.min {
+      background-color: red !important;
+    }
+    .bar.sorted {
+      background-color: gray !important;
+    }
+    #log {
+      background-color: #111;
+      color: #0f0;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 5px;
+      width: 300px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔍 T192 选择排序可视化</h2>
+
+  <div class="controls">
+    输入数组（用逗号分隔）：<br>
+    <input type="text" id="inputArray" value="5,1,4,2,8"><br>
+    动画间隔（毫秒）：<input type="number" id="interval" value="1000" min="100" max="5000"><br>
+    <button onclick="startSort()">可视化排序</button>
+  </div>
+
+  <div id="visual"></div>
+
+  <div id="log"></div>
+
+  <a href="index.html">← 返回首页</a>
+
+  <script>
+    function log(msg) {
+      const logBox = document.getElementById('log');
+      logBox.innerText += msg + "\n";
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function render(array, highlight = [], minIdx = -1, sorted = []) {
+      const container = document.getElementById('visual');
+      container.innerHTML = '';
+      const maxVal = Math.max(...array);
+      array.forEach((val, idx) => {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        if (highlight.includes(idx)) bar.classList.add('active');
+        if (minIdx === idx) bar.classList.add('min');
+        if (sorted.includes(idx)) bar.classList.add('sorted');
+        bar.style.height = `${(val / maxVal) * 100 + 50}px`;
+        bar.innerText = val;
+        container.appendChild(bar);
+      });
+    }
+
+    async function selectionSortVisual(arr, delay) {
+      const len = arr.length;
+      let sorted = [];
+
+      for (let i = 0; i < len; i++) {
+        let minIdx = i;
+        log(`第 ${i + 1} 轮开始，初始 minIdx = ${minIdx} (值=${arr[minIdx]})`);
+        render(arr, [i], minIdx, sorted);
+        await new Promise(r => setTimeout(r, delay));
+
+        for (let j = i + 1; j < len; j++) {
+          render(arr, [j], minIdx, sorted);
+          log(`比较 nums[${j}] = ${arr[j]} 和当前最小 nums[${minIdx}] = ${arr[minIdx]}`);
+          await new Promise(r => setTimeout(r, delay));
+
+          if (arr[j] < arr[minIdx]) {
+            minIdx = j;
+            log(`更新 minIdx = ${minIdx} (值=${arr[minIdx]})`);
+            render(arr, [j], minIdx, sorted);
+            await new Promise(r => setTimeout(r, delay));
+          }
+        }
+
+        if (minIdx !== i) {
+          log(`交换 nums[${i}] = ${arr[i]} 和 nums[${minIdx}] = ${arr[minIdx]}`);
+          [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+          render(arr, [], i, sorted);
+          await new Promise(r => setTimeout(r, delay));
+        } else {
+          log(`当前位置 ${i} 已是最小值，无需交换`);
+        }
+
+        sorted.push(i);
+        log(`第 ${i + 1} 轮结束，当前数组：${arr.join(', ')}`);
+      }
+
+      render(arr, [], -1, Array.from({length: arr.length}, (_, i) => i));
+      log(`✅ 排序完成：${arr.join(', ')}`);
+    }
+
+    function startSort() {
+      const input = document.getElementById('inputArray').value;
+      const interval = parseInt(document.getElementById('interval').value) || 1000;
+      const arr = input.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+      if (arr.length === 0) {
+        alert("请输入有效的数组");
+        return;
+      }
+
+      document.getElementById('log').innerText = '';
+      log(`开始排序：${arr.join(', ')}`);
+      render(arr);
+      selectionSortVisual(arr, interval);
+    }
+  </script>
+</body>
+</html>

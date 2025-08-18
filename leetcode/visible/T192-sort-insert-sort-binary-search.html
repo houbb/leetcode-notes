@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>T192 插入排序可视化</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    #sortView, #searchView {
+      display: flex;
+      align-items: flex-end;
+      height: 200px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      position: relative;
+    }
+
+    .bar {
+      width: 30px;
+      margin: 0 5px;
+      background-color: steelblue;
+      text-align: center;
+      color: white;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .highlight {
+      background-color: orange !important;
+    }
+
+    .insert {
+      background-color: green !important;
+    }
+
+    .pointer {
+      position: absolute;
+      bottom: -20px;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      color: red;
+    }
+
+    #log {
+      background-color: black;
+      color: white;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      white-space: pre-wrap;
+      margin-top: 10px;
+    }
+
+    input, button {
+      margin: 5px;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    h3 {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>T192 插入排序（带二分查找）可视化</h2>
+
+<label>输入数组（用逗号分隔）:</label>
+<input type="text" id="inputArray" value="5,3,1,4,6,2,7" />
+<br>
+<label>动画间隔（ms）:</label>
+<input type="number" id="interval" value="1000" />
+<button onclick="startVisualization()">🔍 开始可视化</button>
+
+<h3>排序直方图</h3>
+<div id="sortView"></div>
+
+<h3>当前二分查找过程</h3>
+<div id="searchView"></div>
+
+<h3>日志输出</h3>
+<div id="log"></div>
+
+<a href="index.html">🔙 返回首页</a>
+
+<script>
+  function log(msg) {
+    const logDiv = document.getElementById("log");
+    logDiv.innerText += msg + "\n";
+    logDiv.scrollTop = logDiv.scrollHeight;
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  function renderSortView(arr, highlight = [], insertIdx = -1) {
+    const container = document.getElementById("sortView");
+    container.innerHTML = "";
+    const max = Math.max(...arr);
+    arr.forEach((val, i) => {
+      const bar = document.createElement("div");
+      bar.className = "bar";
+      bar.style.height = `${(val / max) * 100 + 50}px`;
+      bar.innerText = val;
+      if (highlight.includes(i)) bar.classList.add("highlight");
+      if (i === insertIdx) bar.classList.add("insert");
+      container.appendChild(bar);
+    });
+  }
+
+  function renderSearchView(arr, left, right, mid) {
+    const container = document.getElementById("searchView");
+    container.innerHTML = "";
+    arr.forEach((val, i) => {
+      const bar = document.createElement("div");
+      bar.className = "bar";
+      bar.style.height = "40px";
+      bar.style.backgroundColor = "#666";
+      bar.innerText = val;
+
+      if (i === mid) bar.classList.add("highlight");
+      else if (i === left || i === right) bar.classList.add("insert");
+
+      // 添加 L/M/R 指针
+      const pointer = document.createElement("div");
+      pointer.className = "pointer";
+      if (i === left) pointer.innerText = "L";
+      if (i === right) pointer.innerText += "R";
+      if (i === mid) pointer.innerText += "M";
+      bar.appendChild(pointer);
+
+      container.appendChild(bar);
+    });
+  }
+
+  async function binarySearchVisual(nums, left, right, target, delay) {
+    log(`🔍 二分查找：target=${target}，初始区间=[${left}, ${right}]`);
+    while (left <= right) {
+      const mid = left + Math.floor((right - left) / 2);
+      log(`  → mid=${mid}, nums[mid]=${nums[mid]}`);
+      renderSearchView(nums, left, right, mid);
+      await sleep(delay);
+
+      if (nums[mid] < target) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+    log(`✅ 插入位置：${left}\n`);
+    return left;
+  }
+
+  async function insertionSortVisual(arr, delay) {
+    renderSortView(arr);
+    for (let i = 1; i < arr.length; i++) {
+      const curNum = arr[i];
+      log(`=== 第 ${i} 步：当前数 = ${curNum} ===`);
+      const insertPos = await binarySearchVisual(arr.slice(0, i), 0, i - 1, curNum, delay);
+
+      // 元素右移
+      for (let j = i; j > insertPos; j--) {
+        arr[j] = arr[j - 1];
+      }
+      arr[insertPos] = curNum;
+
+      log(`💡 插入 ${curNum} 到位置 ${insertPos}`);
+      renderSortView(arr, [], insertPos);
+      await sleep(delay);
+    }
+
+    renderSearchView([], -1, -1, -1); // 清空二分查找区域
+    log("\n🎉 排序完成！");
+    renderSortView(arr);
+  }
+
+  function startVisualization() {
+    document.getElementById("log").innerText = "";
+    const input = document.getElementById("inputArray").value;
+    const arr = input.split(",").map(x => parseInt(x.trim()));
+    const delay = parseInt(document.getElementById("interval").value);
+    insertionSortVisual([...arr], delay);
+  }
+</script>
+
+</body>
+</html>

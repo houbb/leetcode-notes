@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>T403-二维前缀和公式可视化</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  h1 {
+    margin-bottom: 10px;
+  }
+  .config {
+    margin-bottom: 20px;
+  }
+  .config label {
+    margin-right: 10px;
+  }
+  input[type="number"] {
+    width: 50px;
+    margin-right: 15px;
+  }
+  button {
+    padding: 5px 15px;
+    font-size: 14px;
+  }
+  .matrix-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .matrix {
+    display: inline-block;
+    margin: 10px;
+  }
+  .matrix table {
+    border-collapse: collapse;
+  }
+  .matrix td {
+    border: 1px solid #999;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    position: relative;
+    user-select: none;
+  }
+  .legend {
+    margin-top: 30px;
+  }
+  .highlight-a { background-color: #FFD580; } /* +prefix[row2+1][col2+1] */
+  .highlight-b { background-color: #B6E2D3; } /* -prefix[row1][col2+1] */
+  .highlight-c { background-color: #FFB6C1; } /* -prefix[row2+1][col1] */
+  .highlight-d { background-color: #FFFACD; } /* +prefix[row1][col1] */
+  .highlight-region {
+    border: 3px solid #4A90E2 !important; /* 蓝色边框强调目标区域 */
+    box-sizing: border-box;
+    font-weight: bold;
+  }
+  .matrix-caption {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+</style>
+</head>
+<body>
+  <h1>二维前缀和公式可视化</h1>
+
+  <div class="config">
+    <label>行数 (rows): <input type="number" id="inputRows" value="5" min="1" max="20" /></label>
+    <label>列数 (cols): <input type="number" id="inputCols" value="5" min="1" max="20" /></label>
+    <br /><br />
+    <label>row1: <input type="number" id="inputRow1" value="2" min="0" /></label>
+    <label>col1: <input type="number" id="inputCol1" value="2" min="0" /></label>
+    <label>row2: <input type="number" id="inputRow2" value="3" min="0" /></label>
+    <label>col2: <input type="number" id="inputCol2" value="3" min="0" /></label>
+    <br /><br />
+    <button id="btnFill">填充矩阵并更新</button>
+	<a href="index.html">返回首页</a>
+    <div id="errorMsg" style="color:red; margin-top:10px;"></div>
+  </div>
+
+  <div class="matrix-container" id="matricesContainer">
+    <!-- 6 矩阵容器，JS动态生成 -->
+  </div>
+
+  <div class="legend">
+    <h2>颜色说明</h2>
+    <ul>
+      <li><span class="highlight-a">橙色</span>：+ prefix[row2+1][col2+1]，表示从 (0,0) 到 (row2,col2) 的区域</li>
+      <li><span class="highlight-b">绿色</span>：- prefix[row1][col2+1]，表示从 (0,0) 到 (row1-1,col2) 的区域</li>
+      <li><span class="highlight-c">粉色</span>：- prefix[row2+1][col1]，表示从 (0,0) 到 (row2,col1-1) 的区域</li>
+      <li><span class="highlight-d">黄色</span>：+ prefix[row1][col1]，表示从 (0,0) 到 (row1-1,col1-1) 的区域</li>
+      <li><span class="highlight-region" style="border:none; display:inline-block; width:18px; height:18px; margin-right:5px;"></span> 蓝色边框：实际求和区域 (row1,col1) 到 (row2,col2)</li>
+    </ul>
+    <h2>公式与计算说明</h2>
+    <p>求和区域为 <code>(row1, col1) 到 (row2, col2)</code>，则公式：</p>
+    <pre>
+return prefix[row2+1][col2+1]
+     - prefix[row1][col2+1]
+     - prefix[row2+1][col1]
+     + prefix[row1][col1]
+    </pre>
+    <p>其中每个 <code>prefix[x][y]</code> 表示从 (0,0) 到 (x-1,y-1) 的累加和。</p>
+  </div>
+
+<script>
+  const matricesNames = [
+    {id: 'A', caption: 'prefix[row2+1][col2+1]', className: 'highlight-a'},
+    {id: 'B', caption: 'prefix[row1][col2+1]', className: 'highlight-b'},
+    {id: 'C', caption: 'prefix[row2+1][col1]', className: 'highlight-c'},
+    {id: 'D', caption: 'prefix[row1][col1]', className: 'highlight-d'},
+    {id: 'region', caption: '目标求和区域 (row1, col1) 到 (row2, col2)', className: 'highlight-region'}
+  ];
+
+  function createTable(rows, cols) {
+    const table = document.createElement('table');
+    const tbody = document.createElement('tbody');
+    for(let r=0; r<rows; r++) {
+      const tr = document.createElement('tr');
+      for(let c=0; c<cols; c++) {
+        const td = document.createElement('td');
+        td.textContent = ''; // will fill later
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+    table.appendChild(tbody);
+    return table;
+  }
+
+  function buildMatrixDiv(caption, rows, cols) {
+    const div = document.createElement('div');
+    div.className = 'matrix';
+    const cap = document.createElement('div');
+    cap.className = 'matrix-caption';
+    cap.textContent = caption;
+    div.appendChild(cap);
+    div.appendChild(createTable(rows, cols));
+    return div;
+  }
+
+  function generateRandomMatrix(rows, cols) {
+    const matrix = [];
+    for(let i=0; i<rows; i++) {
+      const row = [];
+      for(let j=0; j<cols; j++) {
+        row.push(Math.floor(Math.random() * 101));
+      }
+      matrix.push(row);
+    }
+    return matrix;
+  }
+
+  function computePrefixSum(matrix, rows, cols) {
+    // prefix sums: (rows+1) x (cols+1)
+    const prefix = Array(rows+1).fill(0).map(() => Array(cols+1).fill(0));
+    for(let r=1; r<=rows; r++) {
+      for(let c=1; c<=cols; c++) {
+        prefix[r][c] = matrix[r-1][c-1] + prefix[r-1][c] + prefix[r][c-1] - prefix[r-1][c-1];
+      }
+    }
+    return prefix;
+  }
+
+  function clearHighlights(tdList) {
+    tdList.forEach(td => {
+      td.classList.remove('highlight-a', 'highlight-b', 'highlight-c', 'highlight-d', 'highlight-region');
+    });
+  }
+
+  function highlightArea(matrixDiv, rows, cols, rStart, cStart, rEnd, cEnd, className) {
+    const table = matrixDiv.querySelector('table');
+    const tbody = table.tBodies[0];
+    for(let r=0; r<rows; r++) {
+      for(let c=0; c<cols; c++) {
+        const td = tbody.rows[r].cells[c];
+        if(r >= rStart && r <= rEnd && c >= cStart && c <= cEnd) {
+          td.classList.add(className);
+        } else {
+          td.classList.remove(className);
+        }
+      }
+    }
+  }
+
+  function fillMatrixValues(matrixDiv, matrix) {
+    const table = matrixDiv.querySelector('table');
+    const tbody = table.tBodies[0];
+    for(let r=0; r<matrix.length; r++) {
+      for(let c=0; c<matrix[0].length; c++) {
+        tbody.rows[r].cells[c].textContent = matrix[r][c];
+      }
+    }
+  }
+
+  function renderMatrices(matrix, prefix, row1, col1, row2, col2) {
+    const container = document.getElementById('matricesContainer');
+    container.innerHTML = '';
+    const rows = matrix.length;
+    const cols = matrix[0].length;
+
+    // 构建矩阵A-D和目标区域矩阵
+    // A: prefix[row2+1][col2+1], highlight (0,0)-(row2,col2)
+    const matrixA = buildMatrixDiv('prefix[row2+1][col2+1]', rows, cols);
+    fillMatrixValues(matrixA, matrix);
+    highlightArea(matrixA, rows, cols, 0, 0, row2, col2, 'highlight-a');
+    container.appendChild(matrixA);
+
+    // B: prefix[row1][col2+1], highlight (0,0)-(row1-1,col2)
+    const matrixB = buildMatrixDiv('prefix[row1][col2+1]', rows, cols);
+    fillMatrixValues(matrixB, matrix);
+    highlightArea(matrixB, rows, cols, 0, 0, row1 - 1, col2, 'highlight-b');
+    container.appendChild(matrixB);
+
+    // C: prefix[row2+1][col1], highlight (0,0)-(row2,col1-1)
+    const matrixC = buildMatrixDiv('prefix[row2+1][col1]', rows, cols);
+    fillMatrixValues(matrixC, matrix);
+    highlightArea(matrixC, rows, cols, 0, 0, row2, col1 - 1, 'highlight-c');
+    container.appendChild(matrixC);
+
+    // D: prefix[row1][col1], highlight (0,0)-(row1-1,col1-1)
+    const matrixD = buildMatrixDiv('prefix[row1][col1]', rows, cols);
+    fillMatrixValues(matrixD, matrix);
+    highlightArea(matrixD, rows, cols, 0, 0, row1 - 1, col1 - 1, 'highlight-d');
+    container.appendChild(matrixD);
+
+    // 目标区域矩阵，全部填数字，只高亮目标区域用蓝色边框
+    const matrixRegion = buildMatrixDiv('目标求和区域 (row1, col1) 到 (row2, col2)', rows, cols);
+    fillMatrixValues(matrixRegion, matrix);
+    highlightArea(matrixRegion, rows, cols, row1, col1, row2, col2, 'highlight-region');
+    container.appendChild(matrixRegion);
+  }
+
+  function validateInputs(rows, cols, row1, col1, row2, col2) {
+    if(rows <= 0 || cols <= 0) return '行数和列数必须大于0';
+    if(row1 < 0 || col1 < 0 || row2 < 0 || col2 < 0) return '索引不能为负数';
+    if(row1 > row2) return 'row1 不能大于 row2';
+    if(col1 > col2) return 'col1 不能大于 col2';
+    if(row2 >= rows) return 'row2 不能超出矩阵最大行数';
+    if(col2 >= cols) return 'col2 不能超出矩阵最大列数';
+    return '';
+  }
+
+  document.getElementById('btnFill').addEventListener('click', () => {
+    const rows = parseInt(document.getElementById('inputRows').value);
+    const cols = parseInt(document.getElementById('inputCols').value);
+    const row1 = parseInt(document.getElementById('inputRow1').value);
+    const col1 = parseInt(document.getElementById('inputCol1').value);
+    const row2 = parseInt(document.getElementById('inputRow2').value);
+    const col2 = parseInt(document.getElementById('inputCol2').value);
+
+    const error = validateInputs(rows, cols, row1, col1, row2, col2);
+    const errorDiv = document.getElementById('errorMsg');
+    if(error) {
+      errorDiv.textContent = error;
+      return;
+    }
+    errorDiv.textContent = '';
+
+    const matrix = generateRandomMatrix(rows, cols);
+    const prefix = computePrefixSum(matrix, rows, cols);
+
+    renderMatrices(matrix, prefix, row1, col1, row2, col2);
+  });
+
+  // 页面加载时自动填充一次
+  document.getElementById('btnFill').click();
+</script>
+</body>
+</html>

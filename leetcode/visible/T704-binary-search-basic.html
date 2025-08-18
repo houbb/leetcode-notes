@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Binary Search Visualizer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    .array-box {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .item {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: lightgray;
+      border: 1px solid #999;
+      border-radius: 5px;
+      transition: all 0.3s;
+    }
+    .item.left {
+      background: #add8e6;
+    }
+    .item.right {
+      background: #f9c2ff;
+    }
+    .item.mid {
+      background: #90ee90;
+      font-weight: bold;
+    }
+    #log {
+      white-space: pre-wrap;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 15px;
+      height: 120px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+    input, button {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="padding: 20px; background: #f0f0f0; border-bottom: 1px solid #ddd;">
+    <a href="index.html" style="
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    ">
+      ← 返回首页
+    </a>
+  </div>	
+  
+  <h2>🔍 二分查找可视化</h2>
+
+  <label>输入有序数组（逗号分隔）:</label><br>
+  <input id="arrayInput" type="text" value="1,3,5,7,9,11,13"><br>
+
+  <label>目标值 target:</label><br>
+  <input id="targetInput" type="number" value="7"><br>
+
+  <label>步骤间隔时间（毫秒）:</label><br>
+  <input id="sleepTimeInput" type="number" value="1000"><br>
+
+  <button onclick="startSearch()">开始搜索</button>
+
+  <div class="array-box" id="arrayBox"></div>
+
+  <div><strong>步骤日志：</strong></div>
+  <div id="log"></div>
+
+  <script>
+    let nums = [], target = 0, log = '', step = 0, sleepTime = 1000;
+
+    function logStep(msg) {
+      log += msg + "\n";
+      document.getElementById('log').innerText = log;
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function startSearch() {
+      // 初始化
+      step = 0;
+      log = '';
+      document.getElementById('log').innerText = '';
+
+      const arrStr = document.getElementById('arrayInput').value.trim();
+      const targetStr = document.getElementById('targetInput').value.trim();
+      const sleepStr = document.getElementById('sleepTimeInput').value.trim();
+
+      nums = arrStr.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+      target = parseInt(targetStr);
+      sleepTime = parseInt(sleepStr);
+
+      if (!nums.length || isNaN(target)) {
+        alert('请输入有效的数组和目标值！');
+        return;
+      }
+
+      if (isNaN(sleepTime) || sleepTime < 0) {
+        alert('请输入有效的 sleep 毫秒值（例如 1000 表示 1秒）');
+        return;
+      }
+
+      renderArray(-1, -1, -1); // 初始渲染
+
+      let left = 0, right = nums.length - 1;
+      while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        renderArray(left, right, mid);
+        logStep(`Step ${++step}: left=${left}, right=${right}, mid=${mid}, value=${nums[mid]}`);
+
+        await sleep(sleepTime);
+
+        if (nums[mid] === target) {
+          logStep(`✅ 找到 target=${target}，位置：${mid}`);
+          renderArray(left, right, mid);
+          return;
+        } else if (nums[mid] < target) {
+          left = mid + 1;
+        } else {
+          right = mid - 1;
+        }
+      }
+
+      logStep(`❌ 未找到 target=${target}`);
+    }
+
+    function renderArray(left, right, mid) {
+      const box = document.getElementById('arrayBox');
+      box.innerHTML = '';
+      nums.forEach((num, i) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        if (i === mid) div.classList.add('mid');
+        else if (i === left) div.classList.add('left');
+        else if (i === right) div.classList.add('right');
+        div.innerText = num;
+        box.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>

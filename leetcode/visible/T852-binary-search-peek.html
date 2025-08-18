@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LeetCode T852 - 山脉数组的峰顶索引可视化</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .input-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 360px;
+      padding: 8px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .array {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 20px auto;
+    }
+
+    .box {
+      width: 40px;
+      height: 40px;
+      margin: 4px;
+      line-height: 40px;
+      text-align: center;
+      background-color: lightgray;
+      border-radius: 6px;
+      position: relative;
+      font-weight: bold;
+    }
+
+    .box.left, .box.m1 { background-color: #a0d911; }
+    .box.mid { background-color: #69c0ff; }
+    .box.right, .box.m2 { background-color: #ff7875; }
+
+    .label {
+      font-size: 12px;
+      position: absolute;
+      top: -18px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .log {
+      background-color: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+      width: 80%;
+      margin: 0 auto;
+      height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #1890ff;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📈 LeetCode T852 - 山脉数组峰顶索引可视化</h1>
+
+<div class="input-section">
+  <input type="text" id="inputArray" value="1,3,5,7,6,4,2" placeholder="输入数组，例如 1,3,5,7,6,4,2" />
+  <button onclick="startBinary()">二分查找</button>
+  <button onclick="startTernary()">三分查找</button>
+</div>
+
+<div class="array" id="array"></div>
+
+<div class="log" id="log"></div>
+
+<a href="index.html">← 返回首页</a>
+
+<script>
+  let arr = [];
+  const arrayEl = document.getElementById("array");
+  const logEl = document.getElementById("log");
+  const inputEl = document.getElementById("inputArray");
+  let timer;
+
+  function renderArray(l = -1, m = -1, r = -1, mode = "none") {
+    arrayEl.innerHTML = "";
+    arr.forEach((val, i) => {
+      const box = document.createElement("div");
+      box.className = "box";
+
+      if (mode === "binary") {
+        if (i === l) box.classList.add("left");
+        if (i === m) box.classList.add("mid");
+        if (i === r) box.classList.add("right");
+      } else if (mode === "ternary") {
+        if (i === l) box.classList.add("m1");
+        if (i === r) box.classList.add("m2");
+      }
+
+      const label = document.createElement("div");
+      label.className = "label";
+
+      if (mode === "binary") {
+        if (i === l) label.innerText = "left";
+        if (i === m) label.innerText = "mid";
+        if (i === r) label.innerText = "right";
+      } else if (mode === "ternary") {
+        if (i === l) label.innerText = "m1";
+        if (i === r) label.innerText = "m2";
+      }
+
+      box.innerText = val;
+      box.appendChild(label);
+      arrayEl.appendChild(box);
+    });
+  }
+
+  function log(msg) {
+    logEl.innerHTML += `<div>> ${msg}</div>`;
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function reset() {
+    clearInterval(timer);
+    logEl.innerHTML = "";
+    try {
+      arr = inputEl.value.split(",").map(s => parseInt(s.trim(), 10));
+      if (arr.some(isNaN)) throw Error("Invalid number");
+    } catch {
+      alert("⚠️ 输入格式错误，请使用英文逗号分隔的整数，例如：1,3,5,7,6");
+      arr = [1, 3, 5, 7, 6, 4, 2];
+      inputEl.value = arr.join(",");
+    }
+    renderArray(); // 初始渲染
+  }
+
+  function startBinary() {
+    reset();
+    let left = 0, right = arr.length - 1;
+
+    timer = setInterval(() => {
+      if (left >= right) {
+        log(`✅ 找到峰值索引：${left}，值为 ${arr[left]}`);
+        renderArray(left, left, right, "binary");
+        clearInterval(timer);
+        return;
+      }
+
+      const mid = Math.floor((left + right) / 2);
+      renderArray(left, mid, right, "binary");
+      log(`left=${left}, mid=${mid}, right=${right}, arr[mid]=${arr[mid]}, arr[mid+1]=${arr[mid + 1]}`);
+
+      if (arr[mid] < arr[mid + 1]) {
+        log("➡️ 上升，移动 left = mid + 1");
+        left = mid + 1;
+      } else {
+        log("⬅️ 下降，移动 right = mid");
+        right = mid;
+      }
+    }, 1000);
+  }
+
+  function startTernary() {
+    reset();
+    let l = 0, r = arr.length - 1;
+
+    timer = setInterval(() => {
+      if (r - l <= 2) {
+        let maxIdx = l;
+        for (let i = l + 1; i <= r; i++) {
+          if (arr[i] > arr[maxIdx]) maxIdx = i;
+        }
+        renderArray(maxIdx, maxIdx, maxIdx);
+        log(`✅ 峰值索引为 ${maxIdx}，值为 ${arr[maxIdx]}`);
+        clearInterval(timer);
+        return;
+      }
+
+      const m1 = l + Math.floor((r - l) / 3);
+      const m2 = r - Math.floor((r - l) / 3);
+      renderArray(m1, -1, m2, "ternary");
+      log(`l=${l}, m1=${m1}, m2=${m2}, r=${r}, arr[m1]=${arr[m1]}, arr[m2]=${arr[m2]}`);
+
+      if (arr[m1] < arr[m2]) {
+        log("➡️ 上升趋势，l = m1");
+        l = m1;
+      } else {
+        log("⬅️ 下降趋势，r = m2");
+        r = m2;
+      }
+    }, 1000);
+  }
+
+  // 页面加载时默认初始化
+  window.onload = () => {
+    inputEl.value = "1,3,5,7,6,4,2";
+    arr = inputEl.value.split(",").map(s => parseInt(s.trim(), 10));
+    renderArray();
+  };
+</script>
+
+</body>
+</html>
