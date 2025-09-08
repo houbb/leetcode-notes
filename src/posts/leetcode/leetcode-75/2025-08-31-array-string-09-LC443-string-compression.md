@@ -2,7 +2,7 @@
 title: LC443. 压缩字符串 string-compression
 date: 2025-08-31 
 categories: [Leetcode-75]
-tags: [leetcode, Leetcode-75, string]
+tags: [leetcode, Leetcode-75, string, two-pointer]
 published: true
 ---
 
