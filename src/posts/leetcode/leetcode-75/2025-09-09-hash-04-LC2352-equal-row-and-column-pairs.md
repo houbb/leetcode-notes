@@ -127,7 +127,7 @@ n == grid.length == grid[i].length
             long hash = 0;
             for (int j = 0; j < n; j++) {
                 // 用 base 累乘避免顺序丢失
-                hash = hash * base + (grid[i][j] + 1000); 
+                hash = hash * base + grid[i][j]; 
                 // +1000 避免负数干扰
             }
             rowMap.put(hash, rowMap.getOrDefault(hash, 0) + 1);
@@ -138,7 +138,7 @@ n == grid.length == grid[i].length
         for (int j = 0; j < n; j++) {
             long hash = 0;
             for (int i = 0; i < n; i++) {
-                hash = hash * base + (grid[i][j] + 1000);
+                hash = hash * base + grid[i][j];
             }
             res += rowMap.getOrDefault(hash, 0);
         }
