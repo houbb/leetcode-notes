@@ -2,7 +2,7 @@
 title: 分享｜如何科学刷题？ by 灵茶山艾府
 date: 2025-08-22 
 categories: [Althgorim]
-tags: [althgorim, sh]
+tags: [althgorim]
 published: true
 ---
 

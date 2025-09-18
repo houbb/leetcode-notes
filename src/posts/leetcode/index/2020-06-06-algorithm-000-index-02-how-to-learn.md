@@ -2,8 +2,8 @@
 
 title: 从零开始的数据结构与算法-02-如何系统有效的学习数据结构与算法？
 date:  2020-06-08
-categories: [Algorithm]
-tags: [algorithm, data-struct, topics, sf]
+categories: [Index]
+tags: [index]
 published: true
 ---
 
