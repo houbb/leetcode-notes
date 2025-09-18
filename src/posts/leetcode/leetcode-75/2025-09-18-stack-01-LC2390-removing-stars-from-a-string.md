@@ -2,7 +2,7 @@
 title: LC2390. 从字符串中移除星号 removing-stars-from-a-string
 date: 2025-08-31 
 categories: [Leetcode-75]
-tags: [leetcode, Leetcode-75, sliding-window]
+tags: [leetcode, Leetcode-75, stack]
 published: true
 ---
 
