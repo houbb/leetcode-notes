@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题之数组遍历-03-遍历 Sliding Window 滑动窗口介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, array, traverse, sf]
 published: true
 ---

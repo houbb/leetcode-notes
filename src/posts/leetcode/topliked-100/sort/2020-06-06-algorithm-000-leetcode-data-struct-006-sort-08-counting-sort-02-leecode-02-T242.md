@@ -2,7 +2,7 @@
 
 title: leetcode sort 排序-08-countingSort 计数排序 242. 有效的字母异位词与 JIT 编译的预热机制
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, sort, sf]
 published: true
 ---

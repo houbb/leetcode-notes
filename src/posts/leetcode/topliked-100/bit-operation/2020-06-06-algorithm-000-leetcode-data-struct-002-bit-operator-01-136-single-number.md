@@ -2,7 +2,7 @@
 
 title: leetcode 002-leetcode.136 single-number 力扣.136 只出现一次的数字 位运算
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bit-operator, sf]
 published: true
 ---

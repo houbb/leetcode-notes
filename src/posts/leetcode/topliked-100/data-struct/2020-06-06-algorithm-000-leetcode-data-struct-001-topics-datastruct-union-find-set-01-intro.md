@@ -2,7 +2,7 @@
 
 title: 进阶数据结构篇专题之 并查集（Union-Find Set / Disjoint Set Union, DSU） 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, union-find-set, sf]
 published: true
 ---

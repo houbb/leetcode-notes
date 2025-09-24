@@ -2,7 +2,7 @@
 
 title: leetcode 005 广度优先搜索（BFS，Breadth-First Search）
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bfs, sf]
 published: true
 ---

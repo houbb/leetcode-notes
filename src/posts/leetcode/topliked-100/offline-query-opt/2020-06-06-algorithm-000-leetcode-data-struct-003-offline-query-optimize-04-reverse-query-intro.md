@@ -2,7 +2,7 @@
 
 title: leetcode offline-query-optimize 离线查询优化-04-逆序查询 reverse query
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, offline-query-optimize, sf]
 published: true
 ---

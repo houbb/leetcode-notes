@@ -2,7 +2,7 @@
 
 title: leetcode 基础篇专题之字符串匹配 string-matching 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, string-matching, sf]
 published: true
 ---

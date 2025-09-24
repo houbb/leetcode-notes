@@ -2,7 +2,7 @@
 
 title: 算法篇专题之树 Tree 02-LC199. 二叉树的右视图 binary-tree-right-side-view
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, tree, binary-tree, sf]
 published: true
 ---

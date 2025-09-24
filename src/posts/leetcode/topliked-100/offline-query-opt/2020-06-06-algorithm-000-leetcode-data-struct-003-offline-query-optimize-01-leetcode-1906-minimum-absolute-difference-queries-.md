@@ -2,7 +2,7 @@
 
 title: leetcode 离线查询优化-01-力扣.1906 查询绝对值差的最小值 7种解法 leetcode.1906 minimum-absolute-difference-queries
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, offline-query-optimize, sf]
 published: true
 ---

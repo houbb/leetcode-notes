@@ -2,7 +2,7 @@
 
 title:  58-差分数组（Difference Array） 力扣 370. 区间加法
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, prefix-sum, difference-array, leetcode]
 published: true
 ---

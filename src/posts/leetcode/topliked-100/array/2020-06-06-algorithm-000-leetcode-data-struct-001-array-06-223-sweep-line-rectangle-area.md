@@ -2,7 +2,7 @@
 
 title: leetcode 扫描线专题 06-leetcode.223 rectangle-area 力扣.223 矩形面积
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, sweep-line, sf]
 published: true
 ---

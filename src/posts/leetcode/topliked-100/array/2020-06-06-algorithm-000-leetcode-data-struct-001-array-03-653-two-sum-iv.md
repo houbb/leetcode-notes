@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题 01-leetcode.653 two-sum IV 力扣 653. 两数之和 IV 二叉树/binary-tree
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, binary-search, two-pointer, tree, binary-tree, sf]
 published: true
 ---

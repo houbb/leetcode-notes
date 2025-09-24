@@ -2,7 +2,7 @@
 
 title: 技巧篇专题之哈希 Hashing 02-TOP100 1. 两数之和
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, hashing, top100, sf]
 published: true
 ---

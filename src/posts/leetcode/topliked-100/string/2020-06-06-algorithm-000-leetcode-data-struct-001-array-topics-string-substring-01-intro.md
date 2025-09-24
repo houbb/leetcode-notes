@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题之子串 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, string, sliding-window, substring, sf]
 published: true
 ---

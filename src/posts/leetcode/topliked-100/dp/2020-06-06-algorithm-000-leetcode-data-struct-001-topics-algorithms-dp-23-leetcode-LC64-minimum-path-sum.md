@@ -2,7 +2,7 @@
 
 title: 算法篇专题之动态规划 dynamic-programming 22-LC64. 最小路径和 minimum-path-sum
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, dynamic-programming, dp, sf]
 published: true
 ---

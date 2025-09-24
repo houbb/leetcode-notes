@@ -2,7 +2,7 @@
 
 title: leetcode 扫描线专题 06-leetcode.252 meeting room 力扣.252 会议室
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, sweep-line, sf]
 published: true
 ---

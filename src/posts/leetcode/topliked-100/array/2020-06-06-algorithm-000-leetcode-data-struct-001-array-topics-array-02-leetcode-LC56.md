@@ -2,7 +2,7 @@
 
 title:  力扣 数组 array-02-LC56. 合并区间
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, greedy, leetcode]
 published: true
 ---

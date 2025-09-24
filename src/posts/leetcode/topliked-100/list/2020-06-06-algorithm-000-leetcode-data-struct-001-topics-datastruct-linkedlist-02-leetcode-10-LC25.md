@@ -2,7 +2,7 @@
 
 title: 算法篇专题之链表 Linkedlist 02-LC25. K 个一组翻转链表 reverse-nodes-in-k-group
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]
 published: true
 ---

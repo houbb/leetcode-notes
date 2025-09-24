@@ -2,7 +2,7 @@
 
 title: 算法篇专题之动态规划 dynamic-programming 24-LC5. 最长回文子串 longest-palindromic-substring
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, dynamic-programming, dp, sf]
 published: true
 ---

@@ -2,7 +2,7 @@
 
 title:  Prefix Sum 二维前缀和 1732. 找到最高海拔 find-the-highest-altitude
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, prefix-sum, prefix-sum-matrix, leetcode]
 published: true
 ---

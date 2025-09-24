@@ -2,7 +2,7 @@
 
 title:  力扣矩阵 matrix -01-LC73. 矩阵置零 set-matrix-zeroes
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, matrix, leetcode]
 published: true
 ---

@@ -2,7 +2,7 @@
 
 title: 算法篇专题之贪心 Greedy 之合并区间 02-LC763. 划分字母区间
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, greedy, sf]
 published: true
 ---

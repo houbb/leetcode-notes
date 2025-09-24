@@ -2,7 +2,7 @@
 
 title: 算法篇专题之链表 Linkedlist 02-LC19 删除链表的倒数第 N 个结点 remove-nth-node-from-end-of-list
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]
 published: true
 ---

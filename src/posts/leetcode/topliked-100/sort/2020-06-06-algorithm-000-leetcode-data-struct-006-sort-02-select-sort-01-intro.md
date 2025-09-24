@@ -2,7 +2,7 @@
 
 title: leetcode sort 排序-02-selectSort 选择排序入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, sort, sf]
 published: true
 ---

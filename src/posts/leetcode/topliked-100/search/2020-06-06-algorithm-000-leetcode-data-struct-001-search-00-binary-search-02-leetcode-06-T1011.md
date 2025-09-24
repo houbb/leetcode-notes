@@ -2,7 +2,7 @@
 
 title:  二分查找法？binary-search-02-leetcode 1011. 在 D 天内送达包裹的能力
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, binary-search, sf]
 published: true
 ---

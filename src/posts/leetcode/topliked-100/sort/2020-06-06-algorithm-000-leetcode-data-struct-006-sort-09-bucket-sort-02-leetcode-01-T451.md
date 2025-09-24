@@ -2,7 +2,7 @@
 
 title: leetcode sort 排序-09-bucket sort 桶排序 451. 根据字符出现频率排序
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, sort, sf]
 published: true
 ---

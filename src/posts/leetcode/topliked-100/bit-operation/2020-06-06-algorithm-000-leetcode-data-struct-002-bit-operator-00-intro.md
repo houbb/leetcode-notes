@@ -2,7 +2,7 @@
 
 title: leetcode bit operator 位运算入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bit-operator, leetcode, sf]
 published: true
 ---

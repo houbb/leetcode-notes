@@ -2,7 +2,7 @@
 
 title: leetcode sort 排序-10-radixSort 基数排序力扣 T164. 最大间距 
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, sort, sf]
 published: true
 ---

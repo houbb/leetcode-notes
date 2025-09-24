@@ -2,7 +2,7 @@
 
 title: 算法篇专题之贪心 Greedy 02-LC121. 买卖股票的最佳时机 best-time-to-buy-and-sell-stock
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, greedy, sf]
 published: true
 ---

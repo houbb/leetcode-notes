@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题 01-力扣.128 最长连续序列 leetcode longest-consecutive-sequence 
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, sf]
 published: true
 ---

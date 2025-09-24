@@ -2,7 +2,7 @@
 
 title: java 位运算介绍 bit operator base intro
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bit-operator, leetcode, sf]
 published: true
 ---

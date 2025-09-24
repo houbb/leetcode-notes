@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题 04-leetcode.16 three-sum-closest 力扣.16 最接近的三数之和 
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, binary-search, sf]
 published: true
 ---

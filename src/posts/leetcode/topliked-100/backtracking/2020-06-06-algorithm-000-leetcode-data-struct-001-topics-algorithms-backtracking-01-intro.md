@@ -2,7 +2,7 @@
 
 title: 算法篇专题之回溯 Backtracking 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, backtracking, sf]
 published: true
 ---

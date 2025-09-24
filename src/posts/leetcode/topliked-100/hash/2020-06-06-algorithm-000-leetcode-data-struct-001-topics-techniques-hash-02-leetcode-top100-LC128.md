@@ -2,7 +2,7 @@
 
 title: 技巧篇专题之哈希 Hashing 02-TOP100 128. 最长连续序列
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, hashing, top100, sf]
 published: true
 ---

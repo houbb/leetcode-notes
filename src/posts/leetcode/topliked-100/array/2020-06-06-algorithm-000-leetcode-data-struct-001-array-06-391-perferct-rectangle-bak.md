@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题 06-leetcode.391 perfect-rectangle 力扣.391 完美矩形 扫描线
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, sweep-line, sf]
 published: true
 ---

@@ -2,7 +2,7 @@
 
 title:  java 如何实现 binary search 二分查找法？
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, binary-search, sf]
 published: true
 ---

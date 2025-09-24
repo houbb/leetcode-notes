@@ -2,7 +2,7 @@
 
 title: 算法篇专题之堆 heap 02-LC295. 数据流的中位数 find-median-from-data-stream
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, heap, sf]
 published: true
 ---

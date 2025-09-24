@@ -2,7 +2,7 @@
 
 title: 算法篇专题之广度优先遍历 BFS Breadth-First Search 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, bfs, sf]
 published: true
 ---

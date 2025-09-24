@@ -2,7 +2,7 @@
 
 title:  力扣 数组 array -01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, leetcode]
 published: true
 ---

@@ -2,7 +2,7 @@
 
 title: leetcode 002-leetcode.260 single-number-iii 力扣.260 只出现一次的数字III
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bit-operator, sf]
 published: true
 ---

@@ -2,7 +2,7 @@
 
 title:  力扣 数组 array-02-LC189 轮转数组 rotate-array
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, leetcode]
 published: true
 ---

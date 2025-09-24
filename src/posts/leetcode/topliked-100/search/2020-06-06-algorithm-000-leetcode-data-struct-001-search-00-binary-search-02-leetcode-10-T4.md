@@ -2,7 +2,7 @@
 
 title:  二分查找法？binary-search-02-leetcode T4 寻找两个正序数组的中位数 median-of-two-sorted-arrays
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, binary-search, top100, sf]
 published: true
 ---

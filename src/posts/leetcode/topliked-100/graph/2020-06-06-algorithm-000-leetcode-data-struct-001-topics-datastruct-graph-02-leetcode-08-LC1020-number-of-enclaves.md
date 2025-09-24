@@ -2,7 +2,7 @@
 
 title: 算法篇专题之图 graph 02-01-LC1020. 飞地的数量 number-of-enclaves
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, graph, sf]
 published: true
 ---

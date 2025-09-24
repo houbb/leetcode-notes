@@ -2,7 +2,7 @@
 
 title: leetcode sort 排序-09-bucket sort 164. 最大间距 
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, sort, sf]
 published: true
 ---

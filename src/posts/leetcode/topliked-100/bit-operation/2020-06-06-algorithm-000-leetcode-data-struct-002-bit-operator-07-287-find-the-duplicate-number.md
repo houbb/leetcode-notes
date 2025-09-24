@@ -2,7 +2,7 @@
 
 title: leetcode 002-leetcode.287 find-the-duplicate-number 力扣.287 寻找重复数
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bit-operator, sf]
 published: true
 ---

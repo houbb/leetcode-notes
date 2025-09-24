@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题之数组遍历-01-遍历 T1089 复写零
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, array, traverse, sf]
 published: true
 ---

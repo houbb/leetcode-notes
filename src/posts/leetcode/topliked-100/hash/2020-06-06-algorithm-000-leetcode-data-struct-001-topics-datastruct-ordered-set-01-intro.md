@@ -2,7 +2,7 @@
 
 title: 算法篇专题之有序集合 ordered set s01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, ordered-set, sf]
 published: true
 ---

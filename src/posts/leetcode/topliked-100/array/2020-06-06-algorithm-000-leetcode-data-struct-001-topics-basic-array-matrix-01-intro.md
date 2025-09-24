@@ -2,7 +2,7 @@
 
 title: leetcode 基础篇专题数组矩阵 array matrix 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, array, matrix, sf]
 published: true
 ---

@@ -2,7 +2,7 @@
 
 title:  二分查找法？binary-search-02-leetcode 153. 寻找旋转排序数组中的最小值
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, binary-search, sf]
 published: true
 ---

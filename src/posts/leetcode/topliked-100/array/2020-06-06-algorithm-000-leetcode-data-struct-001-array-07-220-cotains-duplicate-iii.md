@@ -2,7 +2,7 @@
 
 title: leetcode 002-leetcode.220 contains-duplicate-iii 力扣.220 存在重复的元素 III
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, sort, sf]
 published: true
 ---

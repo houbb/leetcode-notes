@@ -2,7 +2,7 @@
 
 title: leetcode 002-leetcode.137 single-number-ii 力扣.137 只出现一次的数字II 位运算
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bit-operator, sf]
 published: true
 ---

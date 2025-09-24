@@ -2,7 +2,7 @@
 
 title: 技巧篇专题之哈希 Hashing 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, hashing, sf]
 published: true
 ---

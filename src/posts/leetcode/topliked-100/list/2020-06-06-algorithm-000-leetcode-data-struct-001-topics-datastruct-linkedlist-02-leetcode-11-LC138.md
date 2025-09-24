@@ -2,7 +2,7 @@
 
 title: 算法篇专题之链表 Linkedlist 02-LC138 随机链表的复制 copy-list-with-random-pointer
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, linkedlist, top100, sf]
 published: true
 ---

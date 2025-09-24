@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题 01-leetcode.1 two-sum 力扣.1 两数之和 N 种解法
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, binary-search, sf]
 published: true
 ---

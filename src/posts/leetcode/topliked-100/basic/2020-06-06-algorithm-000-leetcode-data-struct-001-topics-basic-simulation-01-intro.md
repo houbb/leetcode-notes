@@ -2,7 +2,7 @@
 
 title: leetcode 基础篇专题之模拟 simulation 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, simulation, sf]
 published: true
 ---

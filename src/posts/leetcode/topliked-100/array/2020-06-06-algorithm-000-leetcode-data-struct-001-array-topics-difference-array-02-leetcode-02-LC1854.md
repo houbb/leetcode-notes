@@ -2,7 +2,7 @@
 
 title:  58-差分数组（Difference Array） 1854. 人口最多的年份 maximum-population-year
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, prefix-sum, difference-array, leetcode]
 published: true
 ---

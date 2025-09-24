@@ -2,7 +2,7 @@
 
 title: 算法篇专题之堆 heap 12-LC215. 数组中的第K个最大元素 kth-largest-element-in-an-array
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, heap, sf]
 published: true
 ---

@@ -2,7 +2,7 @@
 
 title: leetcode 扫描线专题 06-leetcode.850 rectangle-area 力扣.850 矩形面积 II
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, sweep-line, sf]
 published: true
 ---

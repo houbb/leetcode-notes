@@ -2,7 +2,7 @@
 
 title:  什么是差分数组（Difference Array）
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, prefix-sum, difference-array, leetcode]
 published: true
 ---

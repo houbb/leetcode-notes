@@ -2,7 +2,7 @@
 
 title: 技巧篇专题之计数 Counting 01-入门介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, counting, sf]
 published: true
 ---

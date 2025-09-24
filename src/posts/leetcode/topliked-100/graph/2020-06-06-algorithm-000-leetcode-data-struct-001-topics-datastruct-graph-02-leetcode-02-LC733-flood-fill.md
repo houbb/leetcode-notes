@@ -2,7 +2,7 @@
 
 title: 算法篇专题之图 graph 02-01-LC733 图像渲染 flood-fill
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, graph, sf]
 published: true
 ---

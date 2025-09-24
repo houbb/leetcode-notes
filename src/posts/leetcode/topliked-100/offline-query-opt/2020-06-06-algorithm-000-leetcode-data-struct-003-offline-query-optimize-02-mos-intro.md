@@ -2,7 +2,7 @@
 
 title: leetcode offline-query-optimize 离线查询优化-02-莫队算法（Mo's Algorithm）
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, offline-query-optimize, sf]
 published: true
 ---

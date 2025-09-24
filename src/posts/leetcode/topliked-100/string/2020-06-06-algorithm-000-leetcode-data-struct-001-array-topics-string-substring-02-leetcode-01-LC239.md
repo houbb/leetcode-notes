@@ -2,7 +2,7 @@
 
 title: leetcode 数组专题之子串 LC239. 滑动窗口最大值
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, string, sliding-window, substring, sf]
 published: true
 ---

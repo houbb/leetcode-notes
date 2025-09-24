@@ -2,7 +2,7 @@
 
 title: 算法篇专题之栈 stack 03-LC394. 字符串解码 decode-string
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, stack, top100, sf]
 published: true
 ---

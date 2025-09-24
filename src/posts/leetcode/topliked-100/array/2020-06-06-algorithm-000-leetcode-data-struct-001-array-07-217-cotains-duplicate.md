@@ -2,7 +2,7 @@
 
 title: leetcode 002-leetcode.217 contains-duplicate 力扣.217 存在重复的元素
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, array, sort, sf]
 published: true
 ---

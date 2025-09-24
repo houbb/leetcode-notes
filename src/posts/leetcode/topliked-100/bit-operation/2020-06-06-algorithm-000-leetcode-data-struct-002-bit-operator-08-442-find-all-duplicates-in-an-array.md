@@ -2,7 +2,7 @@
 
 title: leetcode 002-leetcode.442 find-all-duplicates-in-an-array 力扣.442 数组中重复的数据
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, bit-operator, sf]
 published: true
 ---

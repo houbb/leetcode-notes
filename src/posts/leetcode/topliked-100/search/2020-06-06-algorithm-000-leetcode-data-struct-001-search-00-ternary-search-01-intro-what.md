@@ -2,7 +2,7 @@
 
 title:  三分查找法 Ternary-search-01-基本概念介绍
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, search, array, data-struct, ternary-search]
 published: true
 ---

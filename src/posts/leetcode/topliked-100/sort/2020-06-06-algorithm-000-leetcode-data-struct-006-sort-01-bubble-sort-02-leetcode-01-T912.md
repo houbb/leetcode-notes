@@ -2,7 +2,7 @@
 
 title: leetcode sort 排序-02-冒泡排序力扣 912. 排序数组
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, sort, leetcode, sf]
 published: true
 ---

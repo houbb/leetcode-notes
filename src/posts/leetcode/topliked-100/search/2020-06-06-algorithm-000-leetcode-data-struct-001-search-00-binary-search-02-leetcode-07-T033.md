@@ -2,7 +2,7 @@
 
 title:  二分查找法？binary-search-02-leetcode 033. 搜索旋转排序数组 search-in-rotated-sorted-array
 date:  2020-06-08
-categories: [Algorithm]
+categories: [TopLiked100]
 tags: [algorithm, data-struct, topics, leetcode, binary-search, sf]
 published: true
 ---
