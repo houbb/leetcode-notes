@@ -1,6 +1,6 @@
 ---
 title: LC1372. 二叉树中的最长交错路径 longest-zigzag-path-in-a-binary-tree 
-date: 2025-09-24 
+date: 2025-09-30 
 categories: [Leetcode-75]
 tags: [leetcode, Leetcode-75, binary-tree]
 published: true
