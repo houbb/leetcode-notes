@@ -221,8 +221,229 @@ targetSum =0
 
 ## 思路
 
-todo...
+如果我们想进一步解决这个问题，就需要用到另一个技巧。
 
-如何实现呢？
+思考的过程也很重要：
+
+### 慢在哪里
+
+对每个节点都做一次 DFS，看看从它出发能不能找到和为 targetSum 的路径。
+
+这样做其实在 重复计算：
+
+比如一条路径 [10 → 5 → -3 → 3]，里面的很多子路径会被重复遍历。
+
+所以瓶颈是：我们没有办法快速知道某一段路径的和是否等于 targetSum。
+
+### 前缀和
+
+这个和 [LC560. 和为 k 的子数组](https://houbb.github.io/leetcode-notes/posts/leetcode/history1/2020-06-06-algorithm-020-leetcode-56-prefix-sum-560-subarray-sum-equals-k.html) 非常类似。
+
+我们把思想迁移到树：
+
+树的路径 = 从 某个祖先节点到当前节点的一条链。其实和「数组的子数组」非常像，只不过树不是线性结构。
+
+1）前缀和
+
+currSum = 从根到当前节点的路径和
+
+prevSum = 从根到某个祖先节点的路径和
+
+如果从 祖先节点之后 到 当前节点 的这段路径和是 targetSum：
+
+```java
+currSum − prevSum = targetSum
+```
+
+改写一下 
+
+```
+prevSum = currSum - targetSum;
+```
+
+2）次数
+
+遍历树的时候，随时记录所有可能的 prevSum（放到哈希表里）。
+
+到某个节点时，检查 `currSum - targetSum` 是否存在。
+
+有多少次出现，就有多少条路径。
+
+## 实现
+
+说了一堆，我们来看下实现
+
+```java
+class Solution {
+    
+    private int count = 0;
+
+    public int pathSum(TreeNode root, int targetSum) {
+        Map<Long, Integer> prefixSumMap = new HashMap<>();
+        prefixSumMap.put(0L, 1); // 空路径前缀和为 0
+        dfs(root, 0L, (long) targetSum, prefixSumMap);
+        return count;
+    }
+
+    private void dfs(TreeNode node, long currSum, long targetSum, Map<Long, Integer> prefixSumMap) {
+        if(node == null) {
+            return;
+        }   
+
+        // 加上当前值
+        currSum += node.val;    
+
+        // 查找从某个前缀节点到当前节点的路径是否等于 targetSum
+        count += prefixSumMap.getOrDefault(currSum - targetSum, 0);
+
+        // 更新 currSum 前缀和的 map+1
+        prefixSumMap.put(currSum, prefixSumMap.getOrDefault(currSum, 0) + 1);
+
+        // 递归左右子树
+        dfs(node.left, currSum, targetSum, prefixSumMap);
+        dfs(node.right, currSum, targetSum, prefixSumMap);
+
+        // 更新 currSum 前缀和的 map -1
+        prefixSumMap.put(currSum, prefixSumMap.get(currSum) - 1);
+    }
+
+}
+```
+
+1) 为什么 `prefixSumMap.put(0L, 1); // 空路径前缀和为 0`?
+
+这个是为了统计从根路径开始的位置。
+
+比如
+
+```
+   5
+  / \
+ 3   2
+```
+
+targetSum = 5，那么在 root 节点的时候，其实已经满足了。
+
+如果不初始化 {0, 1}，会导致这个场景的缺失。
+
+## 效果
+
+4ms 击败 58.47%
+
+## 复杂度
+
+TC: DFS 遍历每个节点一次，O(n)
+
+MC: 最坏情况退化成链表，递归栈 O(n)
+
+# v4-数组模拟 HashMap
+
+## 思路
+
+当卷到 v3 发现还不是最优的时候，那么大概率就是要考虑数组替代 HashMap。
+
+看一下题目是否适合用：
+
+```
+二叉树的节点个数的范围是 [0,1000]
+-10^9 <= Node.val <= 10^9 
+-1000 <= targetSum <= 1000 
+```
+
+最大的问题在于前缀和非常大，所以无法直接用简单的数字实现。
+
+我们可以自己手写简易版 HashMap。
+
+这个是排名1的代码，我们来学习一下。
+
+甚至是 BST，略有一点炫技，也是对数据结构深入理解的体现。
+
+## 实现
+
+```java
+class Solution {
+    private static final int CAPACITY = 1 << 10;
+
+    private final Node[] table = new Node[CAPACITY];
+    private int answer;
+
+    public int pathSum(TreeNode root, int target) {
+        incr(table, 0, 1);
+        helper(root, target, 0);
+        return answer;
+    }
+
+    private void helper(TreeNode root, int target, long prefix) {
+        if (root == null) {
+            return;
+        }
+        prefix += root.val;
+        answer += get(table, prefix - target);
+        incr(table, prefix, 1);
+        helper(root.left, target, prefix);
+        helper(root.right, target, prefix);
+        incr(table, prefix, -1);
+    }
+
+    // 将哈希表 table 中 key 对应的值 + delta
+    private void incr(Node[] table, long key, int delta) {
+        int hash = Long.hashCode(key) & (CAPACITY - 1);
+        Node node = table[hash];
+        Node parent = null;
+        while (node != null) {
+            if (node.key == key) {
+                node.val += delta;
+                return;
+            }
+            parent = node;
+            if (node.key > key) {
+                node = node.left;
+            } else {
+                node = node.right;
+            }
+        }
+        if (parent == null) {
+            table[hash] = new Node(key, delta);
+        } else if (parent.key > key) {
+            parent.left = new Node(key, delta);
+        } else {
+            parent.right = new Node(key, delta);
+        }
+    }
+
+    // 获取哈希表 table 中 key 对应的 val
+    private int get(Node[] table, long key) {
+        int hash = Long.hashCode(key) & (CAPACITY - 1);
+        Node node = table[hash];
+        while (node != null) {
+            if (node.key == key) {
+                return node.val;
+            }
+            if (node.key > key) {
+                node = node.left;
+            } else {
+                node = node.right;
+            }
+        }
+        return 0;
+    }
+
+    private static class Node {
+        private final long key;
+        private int val;
+        private Node left;
+        private Node right;
+
+        private Node(long key, int val) {
+            this.key = key;
+            this.val = val;
+        }
+    }
+}
+```
+
+## 反思
+
+追根到底，如果我们有一题想达到这个高度，底层的实现原理还是无法绕过的。
 
 # 参考资料
