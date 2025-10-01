@@ -11,7 +11,6 @@ published: true
 给定二叉搜索树（BST）的根节点 root 和一个整数值 val。
 
 你需要在 BST 中找到节点值等于 val 的节点。 返回以该节点为根的子树。 如果节点不存在，则返回 null 。
- 
 
 示例 1:
 
@@ -34,7 +33,7 @@ published: true
 root 是二叉搜索树
 1 <= val <= 10^7
 
-# v1-BST
+# v1-递归
 
 ## 思路
 
@@ -65,11 +64,66 @@ public TreeNode searchBST(TreeNode root, int val) {
 
 0ms 100%
 
+## 复杂度
+
+时间复杂度：O(h)，平均 O(log n)，最坏 O(n)
+
+空间复杂度：O(h)，平均 O(log n)，最坏 O(n)
+
 ## 反思
 
 没有太大区分度。
 
 BST 本身这个数据结构还是比较重要的。
 
+# v2-迭代
+
+## 思路
+
+同理，我们可以通过迭代来实现。
+
+## 实现
+
+```java
+public TreeNode searchBST(TreeNode root, int val) {
+        // 递归即可
+        if(root == null) {
+            return null;
+        }       
+        
+        // 不为空
+        TreeNode cur = root;
+        while(cur != null) {
+            if(cur.val == val) {
+                return cur;
+            } else if(cur.val < val) {
+                // 当前小，去右边
+                cur = cur.right;
+            } else {
+                cur = cur.left;
+            }
+            
+        }
+
+        // NOT-FOUND
+        return null;
+}
+```
+
+## 效果
+
+0ms 100%
+
+## 复杂度
+
+时间复杂度：O(h)，平均 O(log n)，最坏 O(n)
+
+空间复杂度：O(1)
+
+## 反思
+
+针对空间限制，迭代的解法其实更好。
+
+最好是同时掌握二者。
 
 # 参考资料
