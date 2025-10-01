@@ -2,7 +2,7 @@
 title: LC841. 钥匙和房间 keys-and-rooms
 date: 2025-09-30
 categories: [Leetcode-75]
-tags: [leetcode, Leetcode-75, binary-tree, bst]
+tags: [leetcode, Leetcode-75, graph, dfs, bfs]
 published: true
 ---
 

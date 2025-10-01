@@ -2,7 +2,7 @@
 title: LC547. 省份数量 number-of-provinces
 date: 2025-09-30
 categories: [Leetcode-75]
-tags: [leetcode, Leetcode-75, binary-tree, bst]
+tags: [leetcode, Leetcode-75, graph, dfs, bfs]
 published: true
 ---
 
