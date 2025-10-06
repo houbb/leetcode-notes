@@ -462,13 +462,15 @@ class Solution {
     public List<List<String>> suggestedProducts(String[] products, String searchWord) {
         // 1. 使用快速排序替代Arrays.sort (针对字符串特化)
         quickSort(products, 0, products.length - 1);
+        //Arrays.sort(products);
         
-        List<List<String>> result = new ArrayList<>(searchWord.length());
-        int low = 0, high = products.length - 1;
         int searchLen = searchWord.length();
+        List<List<String>> result = new ArrayList<>(searchLen);
+        int low = 0, high = products.length - 1;
         
+        char[] chars = searchWord.toCharArray();
         for (int i = 0; i < searchLen; i++) {
-            char c = searchWord.charAt(i);
+            char c = chars[i];
             
             // 2. 优化边界检查：内联字符比较
             int newLow = findLowerBound(products, low, high, c, i);
@@ -556,6 +558,24 @@ class Solution {
 ## 效果
 
 4ms 100%
+
+## 反思
+
+为什么系统的排序未必最优？
+
+主要还是用例的数据问题，这就导致系统排序需要额外的判断。
+
+### 系统排序
+
+其实系统排序堪称优秀：
+
+小数组（<47）时使用插入排序
+
+中等数组使用快速排序
+
+大数据量时使用归并排序保证稳定性
+
+自动检测近乎有序的数据，优化pivot选择
 
 
 # 参考资料
