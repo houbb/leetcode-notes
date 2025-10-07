@@ -3,7 +3,7 @@
 title: Trie (前缀树)
 date: 2025-10-06
 categories: [Althgorim]
-tags: [althgorim, bit-operator]
+tags: [althgorim, trie]
 published: true
 ---
 
