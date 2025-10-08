@@ -12,8 +12,6 @@ published: true
 
 如果存在这样的三元组下标 (i, j, k) 且满足 i < j < k ，使得 nums[i] < nums[j] < nums[k] ，返回 true ；否则，返回 false 。
 
- 
-
 示例 1：
 
 输入：nums = [1,2,3,4,5]
@@ -84,165 +82,53 @@ TC: O(n^3)
 
 如何优化？
 
-# v2-避免 string 创建
+
+# v2-贪心
 
 ## 思路
 
-我们不用 stack 试一下
+核心思想：
 
-## 实现
+我们只需要知道数组中是否存在 三个递增的数字
+
+不需要记录下标或具体子序列
+
+可以用两个变量保存最小值和第二小值：
 
 ```java
-public String reverseWords(String s) {
-        char pre = '\0';
-
-        int n = s.length();
-
-        StringBuilder sb = new StringBuilder();
-
-        Stack<String> stack = new Stack<>();
-        StringBuilder temp = new StringBuilder();
-        for(int i = 0; i < n; i++) {
-            char c = s.charAt(i);
-
-            // 处理
-            if(c != ' ') {
-                temp.append(c);
-            } else {
-                if(temp.length() > 0) {
-                    sb.append(temp.reverse()).append(' ');
-                    // reset
-                    temp.setLength(0);
-                }
-            }
-
-            pre = c;
-        }
-        // 最后也要入队
-        if(temp.length() > 0) {
-            sb.append(temp.reverse()).append(' ');
-            // reset
-            temp.setLength(0);
-        }
-
-
-        // 删除最后一个空格
-        sb.deleteCharAt(sb.length()-1);
-
-        return sb.reverse().toString();
-    }
+first < second < third ?
 ```
 
-## 效果
-
-5ms 击败 68.93%
-
-## 反思
-
-略有提升，但是不多，因为逆序也是比较消耗性的
-
-有没有方法可以避免反转？
-
-
-# v3-单词前插入
-
-## 思路
-
-有的，这个其实是对 stringbuiler 的理解。
-
-我们可以把单词插入到前面，而不是末尾，这样就省的反转了。
+这里并不要求连续。
 
 ## 实现
 
 ```java
- public String reverseWords(String s) {
-    int n = s.length();
-    StringBuilder sb = new StringBuilder();
-    StringBuilder temp = new StringBuilder();
-
-    for (int i = 0; i < n; i++) {
-        char c = s.charAt(i);
-        if (c != ' ') {
-            temp.append(c);
-        } else {
-            if (temp.length() > 0) {
-                if (sb.length() > 0) sb.insert(0, ' '); // 前插空格
-                sb.insert(0, temp); // 前插单词
-                temp.setLength(0);
-            }
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        int n = nums.length;
+        if(n < 3) {
+            return false;
         }
-    }
 
-    // 最后一个单词
-    if (temp.length() > 0) {
-        if (sb.length() > 0) sb.insert(0, ' ');
-        sb.insert(0, temp);
-    }
+        int first = Integer.MAX_VALUE;
+        int second = Integer.MAX_VALUE;
 
-    return sb.toString();
+        for (int num : nums) {
+            if (num <= first) first = num;
+            else if (num <= second) second = num;
+            else return true; // 找到第三个 > second > first
+        }
+
+        return false;
+    }
 }
 ```
 
 ## 效果
 
-5ms 击败 68.93%
+2ms 击败 99.83%
 
 ## 反思
 
-感觉 v3 其实是一种很巧妙的解法了，但是效果一般
-
-怀疑底层还是会涉及到 char[] 数组的移动。
-
-# v4-原始数组处理
-
-## 思路
-
-我们可以用空间换时间。
-
-1）临时数组，用于存储去除多余空格后的字符串
-
-2）逆序遍历原始的数组，单词可以从 i 位置向前，用 j 来找到单词的开头。一直到新的 ' ' 或者开头。从 s[j ... i]，依然是一个完整的单词。
-
-通过 j 寻找，和直接逆序，效果应该是类似的。
-
-## 实现
-
-```java
-public String reverseWords(String s) {
-        int n = s.length();
-        char[] arr = new char[n]; // 不用 n+1
-        int right = 0; // 写入 arr 的位置
-
-        int i = n - 1;
-        while (i >= 0) {
-            // 跳过空格
-            while (i >= 0 && s.charAt(i) == ' ') i--;
-            if (i < 0) break;
-
-            int j = i;
-            // 找到单词起始位置
-            while (j >= 0 && s.charAt(j) != ' ') j--;
-
-            // s[j+1 .. i] 是一个单词，顺序写入 arr
-            if (right > 0) arr[right++] = ' '; // 单词间空格
-            for (int k = j + 1; k <= i; k++) {
-                arr[right++] = s.charAt(k);
-            }
-
-            i = j - 1; // 移动到下一个单词
-        }
-
-        return new String(arr, 0, right);
-    }
-```
-
-## 效果
-
-2ms 击败 97.75%
-
-## 反思
-
-这种写法的技巧性比较强，也体现了我们对于数组的深刻理解。
-
-# 参考资料
-
+这种贪心还是过于优秀了。
