@@ -2,7 +2,7 @@
 title: LC80. 删除有序数组中的重复项 II remove-duplicates-from-sorted-array-ii
 date: 2025-10-09 
 categories: [TopInterview150]
-tags: [leetcode, dp, topInterview150, array]
+tags: [leetcode, topInterview150, array]
 published: true
 ---
 

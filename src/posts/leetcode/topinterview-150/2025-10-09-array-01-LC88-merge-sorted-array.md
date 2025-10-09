@@ -2,7 +2,7 @@
 title: LC88. 合并两个有序数组 merge-sorted-array
 date: 2025-10-09 
 categories: [TopInterview150]
-tags: [leetcode, dp, topInterview150, array]
+tags: [leetcode, topInterview150, array]
 published: true
 ---
 

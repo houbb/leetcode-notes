@@ -2,7 +2,7 @@
 title: LC70. 爬楼梯 climbing-stairs
 date: 2025-08-22 
 categories: [TopInterview150]
-tags: [leetcode, dp, topInterview150]
+tags: [leetcode, topInterview150, dp]
 published: true
 ---
 
