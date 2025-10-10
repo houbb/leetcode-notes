@@ -27,6 +27,8 @@ published: true
 
 > [https://github.com/houbb/leetcode](https://github.com/houbb/leetcode)
 
+> [https://github.com/houbb/leetcode-notes](https://github.com/houbb/leetcode-notes)
+
 # 121. 买卖股票的最佳时机
 
 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。

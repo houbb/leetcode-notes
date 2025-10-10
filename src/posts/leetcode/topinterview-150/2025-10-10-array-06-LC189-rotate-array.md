@@ -271,6 +271,14 @@ A 部分 | B 部分   →   [A|B]
 
 方法不是“剪开再拼”，而是先把整条绳子翻个面（整个翻转），然后再把前后两段各自翻回来——这样两部分就自然互换了位置。
 
+# 开源地址
+
+为了便于大家学习，所有实现均已开源。欢迎 fork + star~
+
+> 笔记 [https://github.com/houbb/leetcode-notes](https://github.com/houbb/leetcode-notes)
+
+> 源码 [https://github.com/houbb/leetcode](https://github.com/houbb/leetcode)
+
 # 参考资料
 
 
