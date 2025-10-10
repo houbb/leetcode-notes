@@ -6,6 +6,20 @@ tags: [leetcode, topInterview150, array]
 published: true
 ---
 
+# 面试 TOP150 数组系列
+
+[LC26. 删除有序数组中的重复项](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-03-LC26-remove-duplicates-from-sorted-array.html)
+
+[LC27. 移除元素](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-02-LC27-remove-element.html)
+
+[LC80. 删除有序数组中的重复项 II](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-04-LC80-remove-duplicates-from-sorted-array-ii.html)
+
+[LC88. 合并两个有序数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-01-LC88-merge-sorted-array.html)
+
+[LC169. 多数元素与 Boyer–Moore 投票算法](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-06-LC169-majority-element.html)
+
+[LC189. 轮转数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-10-array-06-LC189-rotate-array.html)
+
 # LC27. 移除元素 remove-element
 
 给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素。元素的顺序可能发生改变。然后返回 nums 中与 val 不同的元素的数量。
@@ -180,9 +194,14 @@ class Solution {
 
 同时 LC26 和 LC27 的解法可以基本类似。
 
+# 开源地址
 
+为了便于大家学习，所有实现均已开源。欢迎 fork + star~
+
+> 笔记 [https://github.com/houbb/leetcode-notes](https://github.com/houbb/leetcode-notes)
+
+> 源码 [https://github.com/houbb/leetcode](https://github.com/houbb/leetcode)
 
 # 参考资料
 
-https://leetcode.cn/problems/merge-sorted-array/submissions/668896756/?envType=study-plan-v2&envId=top-interview-150
 

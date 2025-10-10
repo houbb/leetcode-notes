@@ -6,6 +6,20 @@ tags: [leetcode, topInterview150, array]
 published: true
 ---
 
+# 面试 TOP150 数组系列
+
+[LC26. 删除有序数组中的重复项](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-03-LC26-remove-duplicates-from-sorted-array.html)
+
+[LC27. 移除元素](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-02-LC27-remove-element.html)
+
+[LC80. 删除有序数组中的重复项 II](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-04-LC80-remove-duplicates-from-sorted-array-ii.html)
+
+[LC88. 合并两个有序数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-01-LC88-merge-sorted-array.html)
+
+[LC169. 多数元素与 Boyer–Moore 投票算法](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-06-LC169-majority-element.html)
+
+[LC189. 轮转数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-10-array-06-LC189-rotate-array.html)
+
 # LC88. 合并两个有序数组 merge-sorted-array
 
 给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
@@ -181,7 +195,13 @@ SC: 没有额外空间
 
 很多解法看起来效果差不多，主要还是用例太仁慈了。
 
-# 参考资料
+# 开源地址
 
-https://leetcode.cn/problems/merge-sorted-array/submissions/668896756/?envType=study-plan-v2&envId=top-interview-150
+为了便于大家学习，所有实现均已开源。欢迎 fork + star~
+
+> 笔记 [https://github.com/houbb/leetcode-notes](https://github.com/houbb/leetcode-notes)
+
+> 源码 [https://github.com/houbb/leetcode](https://github.com/houbb/leetcode)
+
+# 参考资料
 

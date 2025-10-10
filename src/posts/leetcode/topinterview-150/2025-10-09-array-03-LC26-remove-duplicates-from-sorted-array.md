@@ -6,6 +6,20 @@ tags: [leetcode, topInterview150, array]
 published: true
 ---
 
+# 面试 TOP150 数组系列
+
+[LC26. 删除有序数组中的重复项](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-03-LC26-remove-duplicates-from-sorted-array.html)
+
+[LC27. 移除元素](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-02-LC27-remove-element.html)
+
+[LC80. 删除有序数组中的重复项 II](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-04-LC80-remove-duplicates-from-sorted-array-ii.html)
+
+[LC88. 合并两个有序数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-01-LC88-merge-sorted-array.html)
+
+[LC169. 多数元素与 Boyer–Moore 投票算法](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-06-LC169-majority-element.html)
+
+[LC189. 轮转数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-10-array-06-LC189-rotate-array.html)
+
 # LC26. 删除有序数组中的重复项 remove-duplicates-from-sorted-array
 
 给你一个 非严格递增排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
@@ -114,7 +128,14 @@ class Solution {
 
 实际测试可能是以前的用例问题，因为同样的 while 代码，执行耗时依然是 1ms 不变。
 
+# 开源地址
+
+为了便于大家学习，所有实现均已开源。欢迎 fork + star~
+
+> 笔记 [https://github.com/houbb/leetcode-notes](https://github.com/houbb/leetcode-notes)
+
+> 源码 [https://github.com/houbb/leetcode](https://github.com/houbb/leetcode)
+
 # 参考资料
 
-https://leetcode.cn/problems/merge-sorted-array/submissions/668896756/?envType=study-plan-v2&envId=top-interview-150
 

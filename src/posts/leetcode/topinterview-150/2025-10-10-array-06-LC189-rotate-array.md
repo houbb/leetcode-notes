@@ -1,10 +1,24 @@
 ---
 title: LC189. 轮转数组 rotate-array
-date: 2025-10-09 
+date: 2025-10-10
 categories: [TopInterview150]
 tags: [leetcode, topInterview150, array]
 published: true
 ---
+
+# 面试 TOP150 数组系列
+
+[LC26. 删除有序数组中的重复项](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-03-LC26-remove-duplicates-from-sorted-array.html)
+
+[LC27. 移除元素](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-02-LC27-remove-element.html)
+
+[LC80. 删除有序数组中的重复项 II](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-04-LC80-remove-duplicates-from-sorted-array-ii.html)
+
+[LC88. 合并两个有序数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-01-LC88-merge-sorted-array.html)
+
+[LC169. 多数元素与 Boyer–Moore 投票算法](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-09-array-06-LC169-majority-element.html)
+
+[LC189. 轮转数组](https://houbb.github.io/leetcode-notes/posts/leetcode/topinterview-150/2025-10-10-array-06-LC189-rotate-array.html)
 
 # LC189. 轮转数组 rotate-array
 
