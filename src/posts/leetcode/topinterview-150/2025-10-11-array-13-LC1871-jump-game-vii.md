@@ -349,6 +349,13 @@ class Solution {
 
 15ms 击败 26.14%
 
+### 复杂度
+
+| 项目    | 复杂度                                | 说明              |
+| ----- | ---------------------------------- | --------------- |
+| 时间复杂度 | O(n)                               | 滑动窗口避免重复扫描      |
+| 空间复杂度 | O(n)                               | 队列 + visited 数组 |
+
 ### 反思
 
 泪目了，AC 不容易。
@@ -411,6 +418,79 @@ class Solution {
 ### 反思
 
 效果不错。
+
+# v4-dp
+
+## 思路
+
+核心思路一句话：
+
+只要在 `[i - maxJump, i - minJump]` 区间内存在一个可达的 '0'，当前点 i 就可达。
+
+也就是说，我们不需要 BFS，只要顺序遍历一次字符串，用一个「滑动窗口」统计这个区间内是否存在可达点即可。
+
+## 流程
+
+dp[i] = true 表示能跳到位置 i；
+
+初始化：dp[0] = true；
+
+用一个变量 reachableCount 维护当前窗口 `[i - maxJump, i - minJump]` 内的可达点数量；
+
+当我们滑动到下一个位置时：
+
+如果左端点出窗口且是可达点，reachableCount--
+
+如果右端点进入窗口且是可达点，reachableCount++
+
+当 reachableCount > 0 且 s[i] == '0'，说明 dp[i] = true
+
+## 实现
+
+```java
+class Solution {
+    public boolean canReach(String s, int minJump, int maxJump) {
+        int n = s.length();
+        if (s.charAt(n - 1) != '0') return false;
+
+        boolean[] dp = new boolean[n];
+        dp[0] = true;
+        char[] chars = s.toCharArray();
+
+        int reachable = 0;
+        for (int i = 1; i < n; i++) {
+            // 当 i 进入 [minJump, maxJump] 窗口区间时，更新 reachable
+            if (i - minJump >= 0 && dp[i - minJump]) {
+                reachable++;
+            }
+            if (i - maxJump - 1 >= 0 && dp[i - maxJump - 1]) {
+                reachable--;
+            }
+
+            dp[i] = (chars[i] == '0' && reachable > 0);
+        }
+
+        return dp[n - 1];
+    }
+}
+```
+
+## 效果
+
+8ms 击败 86.27%
+
+## 复杂度
+
+| 项目 | 复杂度      | 说明           |
+| -- | -------- | ------------ |
+| 时间 | **O(n)** | 每个点只进出滑动窗口一次 |
+| 空间 | **O(n)** | dp 数组        |
+
+## 反思
+
+在 dp 眼里，也许 dfs 就是一个垃圾吧。
+
+理论上 dfs+mem 接近 dp，但是这里可以发现并不是。
 
 
 
