@@ -1,6 +1,6 @@
 ---
 title: LC380. O(1) 时间插入、删除和获取随机元素 insert-delete-getrandom-o1
-date: 2025-10-17
+date: 2025-10-21
 categories: [TopInterview150]
 tags: [leetcode, topInterview150, array, sort]
 published: true
