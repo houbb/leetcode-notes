@@ -49,8 +49,58 @@ s 中 至少存在一个 单词
 
 # v1-暴力
 
+## 思路
 
-...
+借助 stack 实现逆序
+
+借助 buffer 实现 append
+
+## 实现
+
+```java
+class Solution {
+    public String reverseWords(String s) {
+        Stack<String> stack = new Stack<>();
+
+        // 处理
+        StringBuilder buffer = new StringBuilder();
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if(c == ' ') {
+                if(buffer.length() > 0) {
+                    stack.push(buffer.toString());
+                    buffer.setLength(0);
+                }   
+            } else {
+                buffer.append(c);
+            }
+        }
+        // 还有剩余的
+        if(buffer.length() > 0) {
+            stack.push(buffer.toString());
+        }
+
+        // 拼接
+        StringBuilder result = new StringBuilder();
+        while(!stack.isEmpty()) {
+            result.append(stack.pop()).append(' ');        
+        }
+
+        // 删除最后一个空格
+        result.deleteCharAt(result.length()-1);
+        return result.toString();
+    }
+
+}
+```
+
+## 效果
+
+8ms 击败 36.06%
+
+# v2-优化？
+
+
 
 
 # 开源地址
