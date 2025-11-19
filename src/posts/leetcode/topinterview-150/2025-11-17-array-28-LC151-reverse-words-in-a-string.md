@@ -98,10 +98,122 @@ class Solution {
 
 8ms 击败 36.06%
 
-# v2-优化？
+# v2-反转
+
+## 思路
+
+1）整体反转
+
+2）反转每一个单词
+
+3）去除空格
+
+## 实现
+
+```java
+public class Solution {
+    public String reverseWords(String s) {
+        if (s == null || s.length() == 0) return s;
+        char[] ch = s.toCharArray();
+        int n = ch.length;
+
+        // 1. 整体翻转
+        reverse(ch, 0, n - 1);
+
+        // 2. 单词内部翻转
+        int i = 0;
+        while (i < n) {
+            while (i < n && ch[i] == ' ') i++; // 跳过空格
+            if (i == n) break;
+            int j = i;
+            while (j < n && ch[j] != ' ') j++; // 找单词尾
+            reverse(ch, i, j - 1);             // 翻转单词
+            i = j;
+        }
+
+        // 3. 快慢指针去重空格
+        int slow = 0;
+        for (int fast = 0; fast < n; fast++) {
+            if (ch[fast] != ' ') {              // 遇到非空格
+                if (slow != 0) ch[slow++] = ' '; // 单词间补一个空格
+                while (fast < n && ch[fast] != ' ')
+                    ch[slow++] = ch[fast++];
+            }
+        }
+        // 4. 截取有效部分
+        return new String(ch, 0, slow);
+    }
+
+    // 双指针翻转 [l, r]
+    private void reverse(char[] ch, int l, int r) {
+        while (l < r) {
+            char tmp = ch[l];
+            ch[l++] = ch[r];
+            ch[r--] = tmp;
+        }
+    }
+
+}
+```
+
+## 效果
+
+2ms 击败 98.18%
 
 
+# v3-逆向
 
+## 思路
+
+如何避免反转呢？
+
+从尾巴往前扫，遇到空格就跳过；遇到非空格就定位到当前单词头，把头到尾这一坨原样追加到 sb 里，再在单词后面补一个空格；最后把末尾多补的那个空格删掉即可。
+
+时间复杂度 O(n)，额外空间 O(n)（仅结果占用）。
+
+
+## 实现
+
+```java
+public class Solution {
+    public String reverseWords(String s) {
+        if (s == null || s.length() == 0) return s;
+        char[] ch = s.toCharArray();
+        int n = ch.length;
+        StringBuilder sb = new StringBuilder();
+
+        int r = n - 1;
+        while (r >= 0) {
+            // 1. 跳过尾部空格
+            while (r >= 0 && ch[r] == ' ') r--;
+            if (r < 0) break;
+
+            // 2. 找单词左边界
+            int l = r;
+            while (l >= 0 && ch[l] != ' ') l--;
+
+            // 3. 把单词 [l+1, r] 原样追加
+            sb.append(ch, l + 1, r - l).append(' ');
+
+            // 4. 继续往前
+            r = l;
+        }
+
+        // 5. 删掉最后多补的空格
+        if (sb.length() > 0) sb.setLength(sb.length() - 1);
+        return sb.toString();
+    }
+}
+```
+
+## 效果
+
+3ms 击败 93.00%
+
+
+## 反思
+
+最满足题意的还是方式2
 
 # 开源地址
 
