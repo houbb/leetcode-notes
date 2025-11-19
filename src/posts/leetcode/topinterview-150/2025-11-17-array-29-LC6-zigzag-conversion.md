@@ -127,7 +127,92 @@ class Solution {
 
 7ms 击败 48.78%
 
+# v2-性能优化
 
+## 思路
+
+数组替代 list
+
+提前指定 buffer 的大小，避免再次扩展。
+
+减少charAt调用
+
+## 实现
+
+```java
+class Solution {
+    public String convert(String s, int numRows) {
+        if (numRows == 1) return s;
+        
+        // 预估计每行容量，减少扩容
+        int avgLen = s.length() / numRows + 1;
+        StringBuilder[] rows = new StringBuilder[numRows];
+        for (int i = 0; i < numRows; i++) {
+            rows[i] = new StringBuilder(avgLen);
+        }
+        
+        int curRow = 0;
+        int step = 1;
+        char[] chars = s.toCharArray(); // 减少charAt调用
+        
+        for (char c : chars) {
+            rows[curRow].append(c);
+            curRow += step;
+            if (curRow == 0 || curRow == numRows - 1) {
+                step = -step;
+            }
+        }
+        
+        // 预估计总容量
+        StringBuilder result = new StringBuilder(s.length());
+        for (StringBuilder row : rows) {
+            result.append(row);
+        }
+        return result.toString();
+    }
+}
+```
+
+## 效果
+
+4ms 击败 87.94%
+
+# v3-数学规律
+
+## 思路
+
+这个是最强的，但是不太容易想到。
+
+## 实现
+
+```java
+class Solution {
+    public String convert(String s, int numRows) {
+        if (numRows == 1) return s;
+        
+        StringBuilder result = new StringBuilder(s.length());
+        int n = s.length();
+        int cycleLen = 2 * numRows - 2; // 每个周期的长度
+        
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j + i < n; j += cycleLen) {
+                // 垂直列上的字符
+                result.append(s.charAt(j + i));
+                
+                // 斜线上的字符（不包括第一行和最后一行）
+                if (i != 0 && i != numRows - 1 && j + cycleLen - i < n) {
+                    result.append(s.charAt(j + cycleLen - i));
+                }
+            }
+        }
+        return result.toString();
+    }
+}
+```
+
+## 效果
+
+2ms 99.70%
 
 # 开源地址
 
